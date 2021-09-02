@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <h1>Set Available Dates</h1>
+    <h2>Available Dates Left: <%= left %></h2>
+    <form action="/setDates/createTimeSlot" method='POST'>
+        <input type="text" placeholder="Name" name='nameItem'><br>
+        <input type="text" placeholder="email" name='emailItem'><br>
+        <input type="text" placeholder="location" name='locationItem'><br>
+        <input type="text" placeholder="subject" name='subjectItem'><br>
+        <input type="text" placeholder="duration" name='durationItem'><br>
+        <fieldset><input type="date" placeholder="Enter a Date" name='dateItem'>
+        <input type="time" placeholder="Enter a Time" name='timeItem'><button type="button" class='addDate'>Add</button></fieldset>
+        <ul id='timeSlots'><li>Dates</li></ul>
+        <input type="submit">
+    </form>
+
+    <br>
+
+    
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

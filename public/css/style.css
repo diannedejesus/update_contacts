@@ -1,0 +1,44 @@
+h1{
+    color: red;
+}
+.completed{
+    text-decoration: line-through;
+    color: gray;
+}
+.not{
+    text-decoration: underline;
+}
+
+/*-------------------------------------*/
+/*-----------------dates---------------*/
+/*-------------------------------------*/
+.dayContainer, .timeSlots, .monthContainer{
+    border: 1px solid black;
+}
+
+.monthContainer{
+    text-align: center;
+}
+.timeSlots{
+    margin: .3em;
+    padding: .2em;
+}
+.dayContainer{
+    display: inline-block;
+    width: 18%;
+    margin: .4em;
+}
+
+h3, h2{
+    height: 2em;
+    line-height: 2em;
+    margin: 0;
+}
+h3{
+    background-color:skyblue ;
+}
+
+h2{
+    background-color: cornflowerblue;
+    color: white;
+}
