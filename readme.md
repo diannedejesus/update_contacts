@@ -46,7 +46,7 @@ illustration of people working together
 Learn how to create a low-fidelity wireframe in Lucidchart to include within your software design document. -->
 
 ## Goals and milestones
-- Get the connection between the exchange server and nodejs established.
+- Get the connection between the exchange server and nodejs established. [completed]
 - Get a basic MVC nodejs working for the user and client interfase.
 - Design the data schemas needed
 - Determine the login format for the app.
