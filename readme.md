@@ -2,31 +2,29 @@
 **Built by Dianne De Jesus; No current reviewers**
   
 ## Functional Description
-This application will permit the user to create a custom link with available dates for a client to select a single date. Once the the client selects its date it will be added to the user's calendar. The user will be notified which date was selected by email and the client will recieve a confirmation email.
+This application will permit the user to create a custom link with available dates for a client to select (only a single date can be chosen). Once the client selects a date, it will be added to the user's calendar. The user will be notified which date was selected by email and the client will recieve a confirmation email.
 
-* User Interfase
-The user will be able to created date time slots for a client to select. They will include the clients information and other details pertinate to the appointment. A link will be generated and sent to the client. 
+### User Interfase
+The user will be able to create date/time slots for a client to select. They will include the clients information and other details pertinate to the appointment. A link will be generated and sent to the client by email.
 
-* Client Interfase
-The client will see the times/dates available for the specified appointment and the details for the appointment. When a date is selected they will need to confirm the selection. Once the selection is confirmed the user will recieve an email and the date will be added to their calendar. The client will also recieve an email.
+### Client Interfase
+The client will see the times/dates available for the specified appointment and the details for the appointment. When a date is selected they will need to confirm the selection. Once the selection is confirmed the user will recieve an email and the date will be added to the user's calendar. The client will also recieve an email.
 
 ### User interfase Input / create time slot list
-* enter information
 Data to include:
 - Client: name [string]
 - Appointment: Description [string], duration [number], location [string]
 - Slots: Date [date], time [date]
     - slots will be an array, the user will be able to add and remove slots before saving
 
-* confirm/save
+confirm/save:
 Data will be saved to a database along with unique identifier for the client link
 
-* delete
+delete:
 permitly removes an appointment selection
 
 
 ### Client interfase / select date
-* select time/date slot
 A set of buttons will allow the client choose a sinlge time slot. Once it is confirmed then two emails will be sent. 
 - one to client
 - one to the user
