@@ -1,5 +1,5 @@
 # Booking Office Meetings
-# Built by Dianne De Jesus; No current reviewers
+** Built by Dianne De Jesus; No current reviewers **
   
 ## Functional Description
 This application will permit the user to create a custom link with available dates for a client to select a single date. Once the the client selects its date it will be added to the user's calendar. The user will be notified which date was selected by email and the client will recieve a confirmation email.
