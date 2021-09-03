@@ -21,6 +21,11 @@ User Input:
 Date Selection:
 The user with be able to add as many date/time slots as need, ideally we will be able to verify the selected dates againts the users calendar to verify if the date is already filled. We will not limit or check if the date was included in another client list. The same date can be given to multiple clients, the first to select it get the date.
 
+Date Verification:
+- filled dates will be collected from the users calendar
+- A local copy might help with speed, but update timing will be an issue
+- data must be organised to facilite lookup
+
 confirm/save:
 Data will be saved to a database along with unique identifier for the client link
 
@@ -32,7 +37,7 @@ permitly removes an appointment selection -->
 The client will see the times/dates available for the specified appointment and the details for the appointment. When a date is selected they will need to confirm the selection. Once the selection is confirmed the user will recieve an email and the date will be added to the user's calendar. The client will also recieve an email.
 
 #### Client Interfase Data & Functionality
-A set of buttons will allow the client to choose a sinlge time slot. Once it is confirmed then two emails will be sent.
+A set of buttons will allow the client to choose a sinlge time slot. An option for emailing user if no dates fit the clients schedule. Once it is confirmed then two emails will be sent.
 - one to client
 - one to the user
 
@@ -41,7 +46,7 @@ After the date is selected only the selected date and appointment details will b
 
 <!-- With this section, you’re trying to answer a simple question: What does the software do? Of course, to answer this question thoroughly, you’ll need to dig a little deeper. In your functional description, you should cover error handling, one-time startup procedures, user limitations, and other similar details.  -->
 
-## User interface
+## User/Client Interface
 <!-- There’s a good chance your coding project is going to be an application, which means it will have a user interface. (If your project is a library or something similar, there won’t be an interface.) As clients, UX designers, and programmers discuss and plan the user interface, it’s easy for the lines to get crossed. If the client doesn’t adequately communicate their vision, your teams might build out the user interface only to have the design shot down.  
 
 Here’s the good news: These mishaps are, for the most part, entirely avoidable. You just need to discuss a few questions with the client before you start developing. Do certain elements of the interface change (animations)? Which elements are buttons? How many unique screens can the user navigate to? And, of course, what does all of this actually look like?
@@ -58,9 +63,12 @@ Learn how to create a low-fidelity wireframe in Lucidchart to include within you
 - Get a basic MVC nodejs working for the user and client interfase. [completed]
 - Design the data schemas needed
 - Determine the login format for the app.
+- Verify authentication process for exchange servers
 - Get email and calendar interation with app.
 - [Feature] Verify that date/times don't overlap
+- [Feature] Calendar display
 - [Wishlist] Verify holidays and vacation days
+- [Wishlist] limit access to link by email
 
 
 <!-- Instead of approaching your project as a single drawn-out process, you might find it helpful to break it down into more manageable pieces. (This is true for the project’s timeline and the code itself.) At the most macro level, you have an overarching goal: What problem is your software addressing? Who will be using it?
