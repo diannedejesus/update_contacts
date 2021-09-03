@@ -7,10 +7,7 @@ This application will permit the user to create a custom link with available dat
 ### User Interfase Description
 The user will be able to create date/time slots for a client to select. They will include the clients information and other details pertinate to the appointment. A link will be generated and sent to the client by email.
 
-### Client Interfase Description
-The client will see the times/dates available for the specified appointment and the details for the appointment. When a date is selected they will need to confirm the selection. Once the selection is confirmed the user will recieve an email and the date will be added to the user's calendar. The client will also recieve an email.
-
-### User Interfase Data & Functionality
+#### User Interfase Data & Functionality
 User Input:
 - Client: name [string]
 - Appointment: Description [string], duration [number], location [string]
@@ -20,7 +17,9 @@ User Input:
  Additional Data:
  - unique link id [string]
  - isFilled [boolean] (data availability)
- 
+
+Date Selection:
+The user with be able to add as many date/time slots as need, ideally we will be able to verify the selected dates againts the users calendar to verify if the date is already filled. We will not limit or check if the date was included in another client list. The same date can be given to multiple clients, the first to select it get the date.
 
 confirm/save:
 Data will be saved to a database along with unique identifier for the client link
@@ -29,7 +28,10 @@ Data will be saved to a database along with unique identifier for the client lin
 permitly removes an appointment selection -->
 
 
-### Client Interfase Data & Functionality
+### Client Interfase Description
+The client will see the times/dates available for the specified appointment and the details for the appointment. When a date is selected they will need to confirm the selection. Once the selection is confirmed the user will recieve an email and the date will be added to the user's calendar. The client will also recieve an email.
+
+#### Client Interfase Data & Functionality
 A set of buttons will allow the client to choose a sinlge time slot. Once it is confirmed then two emails will be sent.
 - one to client
 - one to the user
@@ -57,6 +59,8 @@ Learn how to create a low-fidelity wireframe in Lucidchart to include within you
 - Design the data schemas needed
 - Determine the login format for the app.
 - Get email and calendar interation with app.
+- [Feature] Verify that date/times don't overlap
+- [Wishlist] Verify holidays and vacation days
 
 
 <!-- Instead of approaching your project as a single drawn-out process, you might find it helpful to break it down into more manageable pieces. (This is true for the project’s timeline and the code itself.) At the most macro level, you have an overarching goal: What problem is your software addressing? Who will be using it?
