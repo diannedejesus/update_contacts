@@ -24,7 +24,7 @@ module.exports = {
             const todoItems = await TimeSlotDB.find(currentLink).sort({dateTime: 'asc'})
             const isFilled = todoItems[0].filled
             if(isFilled){
-                reservedSlots = await ReservedSlotDB.find({name: todoItems[0].name}).select('dateTime')
+                reservedSlots = await ReservedSlotDB.find({linkId: todoItems[0].linkId}).select('dateTime')
                 reservedSlots = reservedSlots[0].dateTime
             }else{
                 const reservedSlotsData = await ReservedSlotDB.find().select('dateTime')
@@ -60,11 +60,13 @@ module.exports = {
     },
 
     assignTimeSlot: async (req, res)=>{
-        console.log(req.body)
         try{
+            const grabLinkId = await TimeSlotDB.findOne({_id:req.body.idFromJSFile}).select('linkId')
+console.log(grabLinkId)
             await ReservedSlotDB.create({
                 name: req.body.nameFromJSFile,
-                dateTime: req.body.dateTimeFromJSFile,
+                dateTime: new Date(req.body.dateTimeFromJSFile),
+                linkId: grabLinkId.linkId,
             })
             //TODO: Make sure this is modified and the entry is added and not just one of the two
             await TimeSlotDB.findOneAndUpdate({_id:req.body.idFromJSFile},{
