@@ -66,10 +66,9 @@ async function selectTimeSlot(){
 
     try{
         const response = await fetch('../../setDates/assignTimeSlot', {
-            method: 'POST',
+            method: 'PUT',
             headers: {'Content-type': 'application/json'},
             body: JSON.stringify({
-                'nameFromJSFile': name,
                 'dateTimeFromJSFile': dateTime,
                 'idFromJSFile': id,
             })

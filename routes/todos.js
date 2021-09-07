@@ -9,7 +9,7 @@ router.get('/selectTimeSlot/:id', bookingController.selectTimeSlots)
 
 router.post('/createTimeSlot', bookingController.createTimeSlot)
 
-router.post('/assignTimeSlot', bookingController.assignTimeSlot)
+router.put('/assignTimeSlot', bookingController.assignTimeSlot)
 
 router.put('/markComplete', bookingController.markComplete)
 

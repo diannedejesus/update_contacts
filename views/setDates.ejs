@@ -23,9 +23,26 @@
     </form>
 
     <br>
-
-    
-
+<table>
+    <tr>
+        <td>name</td>
+        <td>email</td>
+        <td>location</td>
+        <td>subject</td>
+        <td>duration</td>
+        <td>linkId</td>
+    </tr>
+    <% reservations.forEach( (el) => { %>
+    <tr>
+        <td><%= el.name %></td>
+        <td><%= el.email %></td>
+        <td><%= el.location %></td>
+        <td><%= el.subject %></td>
+        <td><%= el.duration %></td>
+        <td><a href='./selectTimeSlot/<%= el.linkId %>'><%= el.linkId %></a></td>
+    </tr>
+    <% }) %>
+</table>
     <script src="../js/main.js"></script>
 </body>
 </html>

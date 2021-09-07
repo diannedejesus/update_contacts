@@ -1,13 +1,15 @@
-const TimeSlotDB = require('../models/Reservations')
-const ReservedSlotDB = require('../models/appointments')
+const TimeSlotDB = require('../models/TimeSlots')
+const ReservedSlotDB = require('../models/Reservations')
+const { nanoid } = require('nanoid')
 
-module.exports = {
+module.exports = { 
     setDates: async (req,res)=>{
         try{
-            const todoItems = await TimeSlotDB.find().sort({dateTime: 'asc'})
-            const itemsLeft = await TimeSlotDB.countDocuments({filled: false})
+            const slots = await TimeSlotDB.find()
+            const itemsLeft = await TimeSlotDB.countDocuments({selectedSlot: ''})
+            const reservationsMade = await ReservedSlotDB.find()
             //TODO: the items needs to be sorted by date
-            res.render('setDates.ejs', {todos: todoItems, left: itemsLeft})
+            res.render('setDates.ejs', {timeSlots: slots, left: itemsLeft, reservations: reservationsMade})
         }catch(err){
             console.log(err)
         }
@@ -15,27 +17,35 @@ module.exports = {
 
     selectTimeSlots: async (req,res)=>{
         try{
-            let reservedSlots
+            let availableSlots
+            let unavailableSlots = []
+
             currentLink = {}
             if(req.params.id){
                 currentLink = {linkId: req.params.id}
             }
 
-            const todoItems = await TimeSlotDB.find(currentLink).sort({dateTime: 'asc'})
-            const isFilled = todoItems[0].filled
-            if(isFilled){
-                reservedSlots = await ReservedSlotDB.find({linkId: todoItems[0].linkId}).select('dateTime')
-                reservedSlots = reservedSlots[0].dateTime
-            }else{
-                const reservedSlotsData = await ReservedSlotDB.find().select('dateTime')
-                reservedSlots = []
+            const reservation = await ReservedSlotDB.find(currentLink)
+            const timeSlots = await TimeSlotDB.find(currentLink)
+            const reservedSlots = await TimeSlotDB.find().select('selectedSlot')
 
-                for(slots of reservedSlotsData){
-                    reservedSlots.push(slots.dateTime)
+            const isFilled = timeSlots[0].selectedSlot ? true : false
+
+            if(isFilled){
+                availableSlots = timeSlots[0].selectedSlot
+            }else{
+                availableSlots = timeSlots[0].slotChoices
+                
+            }
+
+            for(slots of reservedSlots){
+                if(slots.selectedSlot){
+                    unavailableSlots.push(`${slots.selectedSlot}`)
                 }
             }
+            
             //TODO: the items needs to be sorted by date
-            res.render('selectTimeSlot.ejs', {todos: todoItems, isFilled: isFilled, reserved: reservedSlots})
+            res.render('selectTimeSlot.ejs', {todos: reservation, isFilled: isFilled, timeSlots: availableSlots, reserved: unavailableSlots})
         }catch(err){
             console.log(err)
         }
@@ -43,14 +53,19 @@ module.exports = {
 
     createTimeSlot: async (req, res)=>{
         try{
-            await TimeSlotDB.create({
-                dateTime: req.body.dateTimeItem,
+            const linkId = nanoid()
+
+            await ReservedSlotDB.create({
                 name: req.body.nameItem, 
                 email: req.body.emailItem, 
                 location: req.body.locationItem, 
                 subject: req.body.subjectItem, 
                 duration: req.body.durationItem,
-                filled: false,
+                linkId: linkId,
+            })
+            await TimeSlotDB.create({
+                slotChoices: req.body.dateTimeItem,
+                linkId: linkId,
             })
             console.log('Todo has been added!')
             res.redirect('/setDates')
@@ -61,17 +76,12 @@ module.exports = {
 
     assignTimeSlot: async (req, res)=>{
         try{
-            const grabLinkId = await TimeSlotDB.findOne({_id:req.body.idFromJSFile}).select('linkId')
-console.log(grabLinkId)
-            await ReservedSlotDB.create({
-                name: req.body.nameFromJSFile,
-                dateTime: new Date(req.body.dateTimeFromJSFile),
-                linkId: grabLinkId.linkId,
+            //const grabLinkId = await TimeSlotDB.findOne({_id:req.body.idFromJSFile}).select('linkId')
+//console.log(grabLinkId)
+            await TimeSlotDB.findOneAndUpdate({linkId: req.body.idFromJSFile},{
+                selectedSlot: new Date(req.body.dateTimeFromJSFile),
             })
-            //TODO: Make sure this is modified and the entry is added and not just one of the two
-            await TimeSlotDB.findOneAndUpdate({_id:req.body.idFromJSFile},{
-                filled: true
-            })
+
             console.log('Time Slot Selected')
             res.json('Time Slot Selected')
         }catch(err){

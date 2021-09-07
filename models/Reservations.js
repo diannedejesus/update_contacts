@@ -1,16 +1,12 @@
 const { text } = require('express')
 const mongoose = require('mongoose')
 
-const { nanoid } = require('nanoid')
 
-const TodoSchema = new mongoose.Schema({
-  dateTime: {
-    type: Array,
-    required: true,
-  },
+
+const ReservationSchema = new mongoose.Schema({
   linkId: {
     type: String,
-    default: nanoid(),
+    required: true,
   },
   name: {
     type: String,
@@ -32,10 +28,6 @@ const TodoSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  filled: {
-    type: Boolean,
-    required: true,
-  }
 })
 
-module.exports = mongoose.model('Todo', TodoSchema)
+module.exports = mongoose.model('Reservation', ReservationSchema)

@@ -10,7 +10,7 @@
 <body>
     <h1>Book a Date</h1>
     <p>In order to process your case we require an in person talk with you. Please reserve a time slot that that best fits your schedule.</p>
-    <h2>Selected Date/Time: <%= new Date(reserved).toLocaleString('es-ES', {dateStyle: 'full', timeStyle: 'short', hour12: true}) %></h2>
+    <h2>Selected Date/Time: <%= new Date(timeSlots).toLocaleString('es-ES', {dateStyle: 'full', timeStyle: 'short', hour12: true}) %></h2>
 
     <p id='name'>Name: <%= todos[0].name %></p>
     <p>Email: <%= todos[0].email %></p>
@@ -21,43 +21,43 @@
 <!-- CAncel rest -->
 <% if (!isFilled) { %>
     <section class='monthContainer'>
-        <h2><%= new Date(todos[0].dateTime[0]).toLocaleString('es-ES', { month: 'long'}) %> <%= new Date(todos[0].dateTime[0]).toLocaleString('es-ES', { year: 'numeric'}) %></h2>
+        <h2><%= new Date(timeSlots[0]).toLocaleString('es-ES', { month: 'long'}) %> <%= new Date(timeSlots[0]).toLocaleString('es-ES', { year: 'numeric'}) %></h2>
         <section class='dayContainer'>
-            <h3><%= new Date(todos[0].dateTime[0]).toLocaleString('es-US', { weekday: 'long', day: 'numeric'}) %></h3>
+            <h3><%= new Date(timeSlots[0]).toLocaleString('es-US', { weekday: 'long', day: 'numeric'}) %></h3>
             
-<% todos[0].dateTime.forEach( (el,i) => { %>
-    <% if (i-1 >= 0 && new Date(el).getMonth() !== new Date(todos[0].dateTime[i-1]).getMonth()) { %>
+<% timeSlots.forEach( (el,i) => { %>
+    <% if (i-1 >= 0 && new Date(el).getMonth() !== new Date(timeSlots[i-1]).getMonth()) { %>
                 <!-- Close month and open new month -->
         </section>
     </section>
     <section class='monthContainer'>
         <h2><%= new Date(el).toLocaleString('es-US', { year: 'numeric', month: 'short'}) %></h2>
         <section class='dayContainer'>
-            <h3><%= new Date(el).toLocaleString('es-US', { weekday: 'long', day: 'numeric'}) %></h3>
-            <section class="timeSlots" data-dateTime='<%=el%>' data-name='<%= todos[0].name %>' data-id='<%= todos[0]._id %>'>
+            <h3><%= new Date(el).toLocaleString('es-US', { weekday: 'long', day: 'numeric'}) %> </h3>
+            <section class="timeSlots" data-dateTime='<%=el%>' data-name='<%= todos[0].name %>' data-id='<%= todos[0].linkId %>'>
                 <div class="time"><%= new Date(el).toLocaleString('es-US', { hour: '2-digit', minute: '2-digit'}) %></div>
-                <div class="availability"><%= reserved.includes(el) ? 'filled' : 'available' %></div>
-                <button class='selectSlot'>Select</button>
+                <div class="availability"><%= reserved.includes(`${new Date(el)}`) ? 'filled' : 'available' %></div>
+                <button <%= reserved.includes(`${new Date(el)}`) ? 'disabled' : '' %> class='selectSlot'>Select</button>
             </section>
     <% } else{ %>
      <!-- not a new month -->  
      <%= %>
-        <% if (i-1 >= 0 && new Date(el).getDay() !== new Date(todos[0].dateTime[i-1]).getDay()) { %>
+        <% if (i-1 >= 0 && new Date(el).getDay() !== new Date(timeSlots[i-1]).getDay()) { %>
         <!-- if a different day close day and open new one -->
         </section>
         <section class='dayContainer'> 
-            <h3><%= new Date(el).toLocaleString('es-US', { weekday: 'long', day: 'numeric'}) %></h3>
-            <section class="timeSlots" data-dateTime='<%=el%>' data-name='<%= todos[0].name %>' data-id='<%= todos[0]._id %>'>
+            <h3><%= new Date(el).toLocaleString('es-US', { weekday: 'long', day: 'numeric'}) %> </h3>
+            <section class="timeSlots" data-dateTime='<%=el%>' data-name='<%= todos[0].name %>' data-id='<%= todos[0].linkId %>'>
                 <div class="time"><%= new Date(el).toLocaleString('es-US', { hour: '2-digit', minute: '2-digit'}) %></div>
-                <div class="availability"><%= reserved.includes(el) ? 'filled' : 'available' %></div>
-                <button class='selectSlot'>Select</button>
+                <div class="availability"><%= reserved.includes(`${new Date(el)}`) ? 'filled' : 'available' %></div>
+                <button <%= reserved.includes(`${new Date(el)}`) ? 'disabled' : '' %> class='selectSlot'>Select</button>
             </section>
         <% } else{ %> 
         <!-- if not a different day add timeslot -->   
-            <section class="timeSlots" data-dateTime='<%=el%>' data-name='<%= todos[0].name %>' data-id='<%= todos[0]._id %>'>
+            <section class="timeSlots" data-dateTime='<%=el%>' data-name='<%= todos[0].name %>' data-id='<%= todos[0].linkId %>'>
                 <div class="time"><%= new Date(el).toLocaleString('es-US', { hour: '2-digit', minute: '2-digit'}) %></div>
-                <div class="availability"><%= reserved.includes(el) ? 'filled' : 'available' %></div>
-                <button <%= reserved.includes(el) ? 'disabled' : '' %> class='selectSlot'>Select</button>
+                <div class="availability"><%= reserved.includes(`${new Date(el)}`) ? 'filled' : 'available' %></div>
+                <button <%= reserved.includes(`${new Date(el)}`) ? 'disabled' : '' %> class='selectSlot'>Select</button>
             </section>
         <% } %>
     <% } %>
