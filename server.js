@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const connectDB = require('./config/database')
 const homeRoutes = require('./routes/home')
-const bookingRoutes = require('./routes/todos')
+const bookingRoutes = require('./routes/reservations')
 
 require('dotenv').config({path: './config/.env'})
 

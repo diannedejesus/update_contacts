@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const bookingController = require('../controllers/todos')
+const bookingController = require('../controllers/reservations')
 
 router.get('/', bookingController.setDates)
 
