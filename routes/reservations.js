@@ -1,13 +1,14 @@
 const express = require('express')
 const router = express.Router()
 const bookingController = require('../controllers/reservations')
+const {ensureAuth, ensureGuest} = require('../middleware/auth');
 
-router.get('/', bookingController.setDates)
+router.get('/', ensureAuth, bookingController.setDates)
 
 router.get('/selectTimeSlot', bookingController.selectTimeSlots)
 router.get('/selectTimeSlot/:id', bookingController.selectTimeSlots)
 
-router.post('/createTimeSlot', bookingController.createTimeSlot)
+router.post('/createTimeSlot', ensureAuth, bookingController.createTimeSlot)
 
 router.put('/assignTimeSlot', bookingController.assignTimeSlot)
 
