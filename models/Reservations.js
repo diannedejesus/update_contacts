@@ -4,6 +4,10 @@ const mongoose = require('mongoose')
 
 
 const ReservationSchema = new mongoose.Schema({
+  owner: {
+    type: String,
+    required: true,
+  },
   linkId: {
     type: String,
     required: true,

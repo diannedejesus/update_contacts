@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
+    <button class='signout'>signout</button>
     <h1>Set Available Dates</h1>
     <h2>Available Dates Left: <%= left %></h2>
     <form action="/setDates/createTimeSlot" method='POST'>
@@ -21,7 +22,7 @@
         <ul id='timeSlots'><li>Dates</li></ul>
         <input type="submit">
     </form>
-
+    
     <br>
 <table>
     <tr>
@@ -40,6 +41,12 @@
         <td><%= el.subject %></td>
         <td><%= el.duration %></td>
         <td><a href='setDates/selectTimeSlot/<%= el.linkId %>'><%= el.linkId %></a></td>
+        <td><% timeSlots.forEach( (ele) => { %>
+            <% if (ele.linkId === el.linkId) { %> 
+                <%= ele.selectedSlot ? 'Reserved' : 'Unreserved' %>
+            <% } %>   
+        <% }) %>
+        </td>
     </tr>
     <% }) %>
 </table>

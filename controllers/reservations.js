@@ -5,9 +5,10 @@ const { nanoid } = require('nanoid')
 module.exports = { 
     setDates: async (req,res)=>{
         try{
+            console.log(req.user)
             const slots = await TimeSlotDB.find()
             const itemsLeft = await TimeSlotDB.countDocuments({selectedSlot: ''})
-            const reservationsMade = await ReservedSlotDB.find()
+            const reservationsMade = await ReservedSlotDB.find({owner: req.user.email})
             //TODO: the items needs to be sorted by date
             res.render('setDates.ejs', {timeSlots: slots, left: itemsLeft, reservations: reservationsMade})
         }catch(err){
@@ -54,8 +55,9 @@ module.exports = {
     createTimeSlot: async (req, res)=>{
         try{
             const linkId = nanoid()
-
+            console.log(req.user)
             await ReservedSlotDB.create({
+                owner: req.user.email, 
                 name: req.body.nameItem, 
                 email: req.body.emailItem, 
                 location: req.body.locationItem, 

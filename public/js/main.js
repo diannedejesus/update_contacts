@@ -1,10 +1,12 @@
 const deleteBtn = document.querySelectorAll('.del')
+const signoutBtn = document.querySelector('.signout')
 const addDateBtn = document.querySelector('.addDate')
 const selectedSlot = document.querySelectorAll('.selectSlot')
 const todoItem = document.querySelectorAll('span.not')
 const todoComplete = document.querySelectorAll('span.completed')
 
 if(addDateBtn){addDateBtn.addEventListener('click', addTimeSlot)}
+if(signoutBtn){signoutBtn.addEventListener('click', signout)}
 
 Array.from(selectedSlot).forEach((el)=>{
     el.addEventListener('click', selectTimeSlot)
@@ -34,6 +36,18 @@ async function deleteTodo(){
         })
         const data = await response.json()
         console.log(data)
+        location.reload()
+    }catch(err){
+        console.log(err)
+    }
+}
+
+async function signout(){
+    try{
+        const response = await fetch('signup/logout', {
+            method: 'get',
+            headers: {'Content-type': 'application/json'},
+        })
         location.reload()
     }catch(err){
         console.log(err)
