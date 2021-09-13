@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const connectDB = require('./config/database')
 const homeRoutes = require('./routes/home')
+const calendarRoutes = require('./routes/calendar')
 const bookingRoutes = require('./routes/reservations')
 //routes path
 const loginRoutes = require('./routes/login') //import auth routes from local modules
@@ -41,7 +42,8 @@ app.use('/', homeRoutes)
 app.use('/setDates', bookingRoutes)
 app.use('/login', loginRoutes)
 app.use('/signup', signupRoutes)
- 
+app.use('/calendar', calendarRoutes)
+
 app.listen(process.env.PORT, ()=>{
     console.log('Server is running, you better catch it!')
 })    
