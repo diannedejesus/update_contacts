@@ -10,6 +10,14 @@ const UserInfoSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  calendarEmail: {
+    type: String,
+    unique: false,
+  },
+  calendarPassword: {
+    type: String,
+    required: false,
+  },
 })
 
 module.exports = mongoose.model('UserInfo', UserInfoSchema)

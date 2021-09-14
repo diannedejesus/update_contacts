@@ -1,11 +1,11 @@
 const TimeSlotDB = require('../models/TimeSlots')
 const ReservedSlotDB = require('../models/Reservations')
+const ewsOptions = require('../ewsConnections')
 const { nanoid } = require('nanoid')
 
 module.exports = { 
     setDates: async (req,res)=>{
         try{
-            console.log(req.user)
             const slots = await TimeSlotDB.find()
             const itemsLeft = await TimeSlotDB.countDocuments({selectedSlot: ''})
             const reservationsMade = await ReservedSlotDB.find({owner: req.user.email})
@@ -35,8 +35,7 @@ module.exports = {
             if(isFilled){
                 availableSlots = timeSlots[0].selectedSlot
             }else{
-                availableSlots = timeSlots[0].slotChoices
-                
+                availableSlots = timeSlots[0].slotChoices  
             }
 
             for(slots of reservedSlots){
@@ -55,7 +54,7 @@ module.exports = {
     createTimeSlot: async (req, res)=>{
         try{
             const linkId = nanoid()
-            console.log(req.user)
+
             await ReservedSlotDB.create({
                 owner: req.user.email, 
                 name: req.body.nameItem, 
@@ -77,12 +76,25 @@ module.exports = {
     },
 
     assignTimeSlot: async (req, res)=>{
+        
         try{
-            //const grabLinkId = await TimeSlotDB.findOne({_id:req.body.idFromJSFile}).select('linkId')
-//console.log(grabLinkId)
             await TimeSlotDB.findOneAndUpdate({linkId: req.body.idFromJSFile},{
                 selectedSlot: new Date(req.body.dateTimeFromJSFile),
             })
+
+            const reservationData = await ReservedSlotDB.findOne({linkId: req.body.idFromJSFile})
+            const endDate = new Date(req.body.dateTimeFromJSFile).getTime() + (30 * 60000) //TODO use the duration but first set a standard for definition
+
+            const options = {
+                'Subject': reservationData.subject,  //
+                'Body': `${reservationData.name} ${reservationData.email} ${reservationData.duration}`, //
+                'Start': new Date(req.body.dateTimeFromJSFile).toISOString(), //
+                'End': new Date(endDate).toISOString(), //
+                'Location': reservationData.location, //
+            }
+            //save to calendar
+            ewsOptions.addDates(req.user.calendarPassword, req.user.calendarEmail, options)
+            ewsOptions.sendEmail(req.user.calendarPassword, req.user.calendarEmail, options)
 
             console.log('Time Slot Selected')
             res.json('Time Slot Selected')
