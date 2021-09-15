@@ -30,15 +30,8 @@ module.exports = {
 
         const ewsFunction = 'CreateItem';
         const ewsArgs = {
-            "attributes" : {
-                "SendMeetingInvitations" : "SendToAllAndSaveCopy"
-            },
-            'SavedItemFolderId': {
-                'DistinguishedFolderId': {
-                    'attributes': {
-                        'Id':'calendar'
-                    }
-                } 
+            'attributes': {
+                'SendMeetingInvitations': 'SendToAllAndSaveCopy'
             },
             'Items': {
                 'CalendarItem': {
@@ -46,6 +39,13 @@ module.exports = {
                     'ReminderMinutesBeforeStart': 60,
                     'IsAllDayEvent':false,
                     'LegacyFreeBusyStatus': 'Busy',
+                    // 'RequiredAttendees': {
+                    //     'Attendee': {
+                    //         'Mailbox': {
+                    //             'EmailAddress': 'djesus@gurabopr.com'
+                    //         }
+                    //     }
+                    // }, //can't get it to send email to attendees
                     ...options
                 }
             }
@@ -108,11 +108,11 @@ module.exports = {
                   "attributes": {
                     "BodyType" : "Text"
                   },
-                  "$value": "You have selected the date ${options.start} - ${options.end} for your appointment. Like the selection page indicated the apppointment will be at ${options.location}. We will be discussing: ${options.subject}." //Body: name email duration
+                  "$value": `You have selected the date ${options.Start} - ${options.End} for your appointment. Like the selection page indicated the apppointment will be at ${options.Location}. We will be discussing: ${options.Subject}.` //Body: name email
                 },
                 "ToRecipients" : {
                   "Mailbox" : {
-                    "EmailAddress" : "djs.dianne@gmail.com"
+                    "EmailAddress" : "djs.dianne@gmail.com" //options.Email
                   }
                 },
                 "IsRead": "false"
