@@ -48,9 +48,9 @@ module.exports = {
     req.body.email = validator.normalizeEmail(req.body.email, { gmail_remove_dots: false });
 
     const algorithm = "aes-256-cbc"; 
-    const initVector = 'testerkey1234567' //crypto.randomBytes(16); // generate 16 bytes of random data
+    const initVector = process.env.initVector //crypto.randomBytes(16); // generate 16 bytes of random data
     const message = req.body.password;  // protected data
-    const Securitykey = 'testerkey12345678901234567891234'//crypto.randomBytes(32); // secret key generate 32 bytes of random data
+    const Securitykey = process.env.Skey //crypto.randomBytes(32); // secret key generate 32 bytes of random data
     const cipher = crypto.createCipheriv(algorithm, Securitykey, initVector); // the cipher function
 
     // encrypt the message

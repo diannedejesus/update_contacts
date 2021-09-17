@@ -86,11 +86,11 @@ module.exports = {
             const endDate = new Date(req.body.dateTimeFromJSFile).getTime() + (Number(durationTime[0]) * 60000) //TODO use the duration but first set a standard for definition
 
             const options = {
-                'Subject': reservationData.subject,  //
-                'Body': `${reservationData.name} ${reservationData.email}`, //
-                'Start': new Date(req.body.dateTimeFromJSFile).toISOString(), //
-                'End': new Date(endDate).toISOString(), //
-                'Location': reservationData.location, //
+                'Subject': reservationData.subject,
+                'Body': `${reservationData.name} ${reservationData.email}`,
+                'Start': new Date(req.body.dateTimeFromJSFile).toISOString(),
+                'End': new Date(endDate).toISOString(),
+                'Location': reservationData.location,
                 'Email': reservationData.email,
             }
             //save to calendar

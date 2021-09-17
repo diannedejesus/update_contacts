@@ -7,7 +7,7 @@ module.exports = {
         console.log(password, email, options)
         const algorithm = "aes-256-cbc"; 
         // the decipher function
-        const decipher = crypto.createDecipheriv(algorithm, 'testerkey12345678901234567891234', 'testerkey1234567');
+        const decipher = crypto.createDecipheriv(algorithm, process.env.Skey, process.env.initVector);
         let decryptedData = decipher.update(password, "hex", "utf-8");
 
         decryptedData += decipher.final("utf8");
