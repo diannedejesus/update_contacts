@@ -1,5 +1,10 @@
 h1{
-    color: red;
+    color:black;
+    background-color:lightcoral;
+    height: 2.5em;
+    line-height: 2.5em;
+    padding-left: .5em;
+    margin: 0;
 }
 .completed{
     text-decoration: line-through;
@@ -7,6 +12,10 @@ h1{
 }
 .not{
     text-decoration: underline;
+}
+
+header{
+    padding: 1em;
 }
 
 /*-------------------------------------*/
@@ -18,14 +27,18 @@ h1{
 
 .monthContainer{
     text-align: center;
+    width: 60%;
+    margin: 1rem auto;
 }
+
 .timeSlots{
     margin: .3em;
     padding: .2em;
 }
+
 .dayContainer{
     display: inline-block;
-    width: 18%;
+    width: 20%;
     margin: .4em;
 }
 
@@ -33,6 +46,7 @@ h3, h2{
     height: 2em;
     line-height: 2em;
     margin: 0;
+    padding-left: .5em;
 }
 h3{
     background-color:skyblue ;
@@ -41,4 +55,13 @@ h3{
 h2{
     background-color: cornflowerblue;
     color: white;
+}
+
+p{
+    font-size: 1.4rem;
+    margin: 1rem;
+}
+p+p{
+    border-top: 1px solid grey;
+    padding-top: 1rem;
 }

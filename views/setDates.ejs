@@ -8,8 +8,10 @@
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-    <button class='signout'>signout</button>
-    <a href='/login/configure' class='button'>configure email/calendar</a>
+    <header>
+        <button class='signout'>signout</button>
+        <a href='/login/configure' class='button'>configure email/calendar</a>
+    </header>
     <h1>Set Available Dates</h1>
     <h2>Available Dates Left: <%= left %></h2>
     <form action="/setDates/createTimeSlot" method='POST'>

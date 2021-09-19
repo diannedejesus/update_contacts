@@ -54,7 +54,7 @@ module.exports = {
     createTimeSlot: async (req, res)=>{
         try{
             const linkId = nanoid()
-            console.log(req.user)
+
             await ReservedSlotDB.create({
                 owner: req.user.email, 
                 name: req.body.nameItem, 
@@ -77,9 +77,25 @@ module.exports = {
 
     assignTimeSlot: async (req, res)=>{
         try{
-            await TimeSlotDB.findOneAndUpdate({linkId: req.body.idFromJSFile},{
-                selectedSlot: new Date(req.body.dateTimeFromJSFile),
-            })
+            // await TimeSlotDB.findOneAndUpdate({linkId: req.body.idFromJSFile},{
+            //     selectedSlot: new Date(req.body.dateTimeFromJSFile),
+            // })
+
+            const reservationData = await ReservedSlotDB.findOne({linkId: req.body.idFromJSFile})
+            let durationTime = reservationData.duration.split(' ')
+            const endDate = new Date(req.body.dateTimeFromJSFile).getTime() + (Number(durationTime[0]) * 60000) //TODO use the duration but first set a standard for definition
+
+            const options = {
+                'Subject': reservationData.subject,
+                'Body': `${reservationData.name} ${reservationData.email}`,
+                'Start': new Date(req.body.dateTimeFromJSFile).toISOString(),
+                'End': new Date(endDate).toISOString(),
+                'Location': reservationData.location,
+                'Email': reservationData.email,
+            }
+            //save to calendar
+            ewsOptions.addDates(req.user.calendarPassword, req.user.calendarEmail, options)
+            ewsOptions.sendEmail(req.user.calendarPassword, req.user.calendarEmail, options)
 
             const reservationData = await ReservedSlotDB.findOne({linkId: req.body.idFromJSFile})
             const endDate = new Date(req.body.dateTimeFromJSFile).getTime() + (30 * 60000) //TODO use the duration but first set a standard for definition

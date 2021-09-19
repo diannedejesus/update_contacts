@@ -10,11 +10,11 @@ const UserInfoSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  calendarPassword: {
-    type: String,
-    required: false,
-  },
   calendarEmail: {
+    type: String,
+    unique: false,
+  },
+  calendarPassword: {
     type: String,
     required: false,
   },
