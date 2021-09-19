@@ -10,18 +10,22 @@
 <body>
     <h1>Book a Date</h1>
     <p>In order to process your case we require an in person talk with you. Please reserve a time slot that that best fits your schedule.</p>
-    <h2>Selected Date/Time: <%= new Date(timeSlots).toLocaleString('es-ES', {dateStyle: 'full', timeStyle: 'short', hour12: true}) %></h2>
-
-    <p id='name'>Name: <%= todos[0].name %></p>
-    <p>Email: <%= todos[0].email %></p>
-    <p>Duration: <%= todos[0].duration %></p>
-    <p>Subject Matter: <%= todos[0].subject %></p>
+    <% if (isFilled) { %>
+        <h2>Selected Date/Time: <%= new Date(timeSlots).toLocaleString('es-ES', {dateStyle: 'full', timeStyle: 'short', hour12: true}) %></h2>
+    <% } %>
+    
+    <h2>Appointment Information</h2>
+    <p id='name'><strong>Name:</strong> <%= todos[0].name %></p>
+    <p><strong>Email:</strong> <%= todos[0].email %></p>
+    <p><strong>Duration:</strong> <%= todos[0].duration %></p>
+    <p><strong>Subject Matter:</strong> <%= todos[0].subject %></p>
     <br>
 
 <!-- CAncel rest -->
+<h2>Available Dates</h2>
 <% if (!isFilled) { %>
     <section class='monthContainer'>
-        <h2><%= new Date(timeSlots[0]).toLocaleString('es-ES', { month: 'long'}) %> <%= new Date(timeSlots[0]).toLocaleString('es-ES', { year: 'numeric'}) %></h2>
+        <h3><%= new Date(timeSlots[0]).toLocaleString('es-ES', { month: 'long'}) %> <%= new Date(timeSlots[0]).toLocaleString('es-ES', { year: 'numeric'}) %></h3>
         <section class='dayContainer'>
             <h3><%= new Date(timeSlots[0]).toLocaleString('es-US', { weekday: 'long', day: 'numeric'}) %></h3>
             
