@@ -9,51 +9,85 @@
 </head>
 <body>
     <header>
-        <button class='signout'>signout</button>
-        <a href='/login/configure' class='button'>configure email/calendar</a>
+        <a href='/signup/logout' class='signout'>signout</a>
+        <a href='/login/configure' class='button'>configure</a>
     </header>
-    <h1>Set Available Dates</h1>
-    <h2>Available Dates Left: <%= left %></h2>
-    <form action="/setDates/createTimeSlot" method='POST'>
-        <input type="text" placeholder="Name" name='nameItem'><br>
-        <input type="text" placeholder="email" name='emailItem'><br>
-        <input type="text" placeholder="location" name='locationItem'><br>
-        <input type="text" placeholder="subject" name='subjectItem'><br>
-        <input type="text" placeholder="duration" name='durationItem'><br>
-        <fieldset><input type="date" placeholder="Enter a Date" name='dateItem'>
-        <input type="time" placeholder="Enter a Time" name='timeItem'><button type="button" class='addDate'>Add</button></fieldset>
-        <ul id='timeSlots'><li>Dates</li></ul>
-        <input type="submit">
-    </form>
-    
-    <br>
-<table>
-    <tr>
-        <td>name</td>
-        <td>email</td>
-        <td>location</td>
-        <td>subject</td>
-        <td>duration</td>
-        <td>linkId</td>
-    </tr>
-    <% reservations.forEach( (el) => { %>
-    <tr>
-        <td><%= el.name %></td>
-        <td><%= el.email %></td>
-        <td><%= el.location %></td>
-        <td><%= el.subject %></td>
-        <td><%= el.duration %></td>
-        <td><a href='../setDates/selectTimeSlot/<%= el.linkId %>'><%= el.linkId %></a></td>
-        <td><% timeSlots.forEach( (ele) => { %>
-            <% if (ele.linkId === el.linkId) { %> 
-                <%= ele.selectedSlot ? 'Reserved' : 'Unreserved' %>
-            <% } %>   
-        <% }) %>
-        </td>
-        <td><a>Send Email</a></td>
-    </tr>
-    <% }) %>
-</table>
+   
+    <main>
+        <h1>Set Available Dates</h1>
+        <section>
+            <form action="/setDates/createTimeSlot" method='POST'>
+                <fieldset>
+                    <label for='nameItem'>Name of Client</label> <label for='emailItem'>Client Email</label>
+                    <input type="text" placeholder="Name" id='nameItem' name='nameItem'>
+                    <input type="text" placeholder="Email" id='emailItem' name='emailItem'>
+
+                    <label for='subjectItem'>Topic of appointment</label> <label for='locationItem'>Location of appointment</label>
+                    <input type="text" placeholder="Subject" id='subjectItem' name='subjectItem'> <input type="text" placeholder="Location" id='locationItem' name='locationItem'>
+                    
+                    <label for='durationItem'>Duration of appointment</label>
+                    <input type="text" placeholder="duration" id='durationItem' name='durationItem'>
+                    <select name='timeframeItem'>
+                        <option value='minutes'>minutes</option>
+                        <option value='hours'>hours</option>
+                    </select>
+
+                    <fieldset id='appointmentDates'>
+                        <legend for='appointmentDates'>Available dates/time for appointment</legend>
+                        <div>
+                            <label for='dateItem'>Date</label>
+                            <label for="timeItem">Time</label>
+                        </div>
+                        <input type="date" placeholder="Enter a Date" id='dateItem' name='dateItem'>
+                        <input type="time" placeholder="Enter a Time" id='timeItem' name='timeItem'>
+
+                        <input type="button" class='addDate' value='Add'>
+
+                        <ul id='timeSlots'><li>Dates:</li></ul>
+                    </fieldset>
+                
+                    <input type="submit">
+                </fieldset>
+            </form>
+        </section>
+        <section>
+            <h2>Created Reservations</h2>
+            <h3>Unreserved Dates: <%= left %></h3>
+            <table>
+                <tr>
+                    <th>name</th>
+                    <th>email</th>
+                    <th>location</th>
+                    <th>subject</th>
+                    <th>duration</th>
+                    <th>linkId</th>
+                    <th>availability</th>
+                    <th>action</th>
+                </tr>
+                <% reservations.forEach( (el) => { %>
+                <tr>
+                    <td><%= el.name %></td>
+                    <td><%= el.email %></td>
+                    <td><%= el.location %></td>
+                    <td><%= el.subject %></td>
+                    <td><% if(el.duration <= 60){ %>
+                        <%= el.duration %> min
+                    <% }else{ %>
+                       <%= el.duration/60 %> hours
+                    <% } %>
+                    <td><a href='../setDates/selectTimeSlot/<%= el.linkId %>'><%= el.linkId %></a></td>
+                    <td><% timeSlots.forEach( (ele) => { %>
+                        <% if (ele.linkId === el.linkId) { %> 
+                            <%= ele.selectedSlot ? 'Reserved' : 'Unreserved' %>
+                        <% } %>   
+                    <% }) %>
+                    </td>
+                    <td><a>Send Email</a></td>
+                </tr>
+                <% }) %>
+            </table>
+        </section>
+    </main> 
     <script src="../js/main.js"></script>
 </body>
 </html>

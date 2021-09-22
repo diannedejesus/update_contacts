@@ -54,6 +54,11 @@ module.exports = {
     createTimeSlot: async (req, res)=>{
         try{
             const linkId = nanoid()
+            let duration = req.body.durationItem
+            
+            if(req.body.timeframItem === 'hours'){
+                duration = duration * 60
+            }
 
             await ReservedSlotDB.create({
                 owner: req.user.email, 
@@ -61,7 +66,7 @@ module.exports = {
                 email: req.body.emailItem, 
                 location: req.body.locationItem, 
                 subject: req.body.subjectItem, 
-                duration: req.body.durationItem,
+                duration: duration,
                 linkId: linkId,
             })
             await TimeSlotDB.create({
@@ -83,7 +88,7 @@ module.exports = {
 
             const reservationData = await ReservedSlotDB.findOne({linkId: req.body.idFromJSFile})
             let durationTime = reservationData.duration.split(' ')
-            const endDate = new Date(req.body.dateTimeFromJSFile).getTime() + (Number(durationTime[0]) * 60000) //TODO use the duration but first set a standard for definition
+           const endDate = new Date(req.body.dateTimeFromJSFile).getTime() + (Number(durationTime[0]) * 60000) //TODO use the duration but first set a standard for definition
 
             const options = {
                 'Subject': reservationData.subject,
@@ -96,19 +101,6 @@ module.exports = {
             //save to calendar
             ewsOptions.addDates(req.user.calendarPassword, req.user.calendarEmail, options)
             ewsOptions.sendEmail(req.user.calendarPassword, req.user.calendarEmail, options)
-
-            const reservationData = await ReservedSlotDB.findOne({linkId: req.body.idFromJSFile})
-            const endDate = new Date(req.body.dateTimeFromJSFile).getTime() + (30 * 60000) //TODO use the duration but first set a standard for definition
-
-            const options = {
-                'Subject': reservationData.subject,  //
-                'Body': `${reservationData.name} ${reservationData.email} ${reservationData.duration}`, //
-                'Start': new Date(req.body.dateTimeFromJSFile).toISOString(), //
-                'End': new Date(endDate).toISOString(), //
-                'Location': reservationData.location, //
-            }
-            //save to calendar
-            ewsOptions.addDates(req.user.calendarPassword, req.user.calendarEmail, options)
 
             console.log('Time Slot Selected')
             res.json('Time Slot Selected')

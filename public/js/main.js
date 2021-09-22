@@ -59,8 +59,6 @@ function addTimeSlot(){
     const selectedTime = document.querySelector("[name='timeItem']").value
     const dateList = document.querySelector('#timeSlots')
 
-    
-
     if(selectedDate !== '' || selectedTime !== '' ){
         let newItem = document. createElement("li")
         let newFormItem = document. createElement("input")

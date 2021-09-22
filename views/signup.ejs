@@ -4,17 +4,29 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Appointment Links</title>
+    <link rel="stylesheet" href="../css/normalize.css">
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-    <h1>Create an account</h1>
-<p></p>
-    <form class="signup-form" action="/signup" method="POST">
-        <input type="text" name='email' placeholder="email">
-        <input type="text" name='password' placeholder="password">
-        <input type="text" name='confirmPassword' placeholder="confirm password">
-        <input type="submit">
-    </form>
-    <a href="/">Login</a>
+    <main class='signin clearfix'>
+
+        <section class='logon'>
+            <h1>Create an account</h1>
+
+            <form class="signup-form" action="/signup" method="POST">
+                <input type="text" name='email' placeholder="email">
+                <input type="text" name='password' placeholder="password">
+                <input type="text" name='confirmPassword' placeholder="confirm password">
+                <input type="submit">
+            </form>
+
+        </section>
+        <section class='signup'>
+            <h1>Welcome, back!</h1>
+            <p>If you already have an account then use this link to login.</p>
+            <a href="/">Login</a>
+        </section>
+    </main>
 </body>
 </html>

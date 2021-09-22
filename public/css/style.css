@@ -1,8 +1,35 @@
+/* Box Model Hack */
+* {
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+  }
+  
+  /* Clear fix hack */
+  .clearfix:after {
+       content: ".";
+       display: block;
+       clear: both;
+       visibility: hidden;
+       line-height: 0;
+       height: 0;
+  }
+  
+  .clear {
+      clear: both;
+  }
+
+/******************************************
+/* BASE STYLES
+/*******************************************/
+
+
+
 h1{
     color:black;
     background-color:lightcoral;
-    height: 2.5em;
-    line-height: 2.5em;
+    height: 2em;
+    line-height: 2em;
     padding-left: .5em;
     margin: 0;
 }
@@ -16,6 +43,61 @@ h1{
 
 header{
     padding: 1em;
+}
+section{
+    padding: 10px;
+}
+
+label{
+    display: inline-block;
+    width: 49%;
+}
+
+input, select{
+    margin-bottom: 1em;
+    border: 1px solid lightgrey;
+    height: 2em;
+    width: 48%;
+}
+input[type='submit']{
+    margin-top: 1em;
+    border: 1px solid rgb(70, 103, 163);
+    background-color: transparent;
+    height: 3em;
+    width: 30%;
+    font-variant: small-caps;
+    font-weight: 900;
+    font-size: large;
+    color: rgb(70, 103, 163);
+}
+input[type='submit']:hover{
+    border: 1px solid rgb(70, 103, 163);
+    background-color: cornflowerblue;
+    color: white;
+}
+
+#appointmentDates label{
+    display: inline-block;
+    padding-left: 5px;
+    width: 32%;
+}
+label[for='durationItem']{
+    width: 100%;
+}
+
+#appointmentDates input, select{
+    display: inline-block;
+    width: 32%;
+}
+
+
+ul{
+    list-style: none;
+    padding: 0;
+}
+
+select{
+    width: fit-content;
 }
 
 /*-------------------------------------*/
@@ -65,3 +147,67 @@ p+p{
     border-top: 1px solid grey;
     padding-top: 1rem;
 }
+table{
+    border-collapse: collapse;
+    width: 100%;
+}
+td, th{
+    border: 1px solid black;
+    padding: .5em .2em;
+}
+th{
+    text-transform: uppercase;
+    text-align: left;
+}
+
+/******************************************
+/* Signin Page
+/*******************************************/
+
+.signin{
+    margin: 1em auto;
+    width: 70%;
+}
+.logon{
+    width: 60%;
+    border: 10px solid lightcoral;
+    border-radius: 10px 0 0 10px;
+}
+.signup{
+    width: 40%;
+    background-color: lightcoral;
+    border-radius: 0 10px 10px 0 ;
+}
+
+.signin input{
+    display: block;
+    margin: 2em auto;
+    height: 3em;
+}
+
+.signin section{
+    text-align: center;
+}
+
+.logon, .signup{
+   float: left;
+   margin: 0;
+   padding: 0;
+   height: 450px;
+}
+
+.signin h1{
+    background-color: transparent;
+}
+
+.signup a{
+    border: 2px solid white;
+    padding: .5em 4em;
+    border-radius: 20px;
+    color: white;
+    text-transform: uppercase;
+    font-weight: bolder;
+    text-decoration: none;
+}
+
+
