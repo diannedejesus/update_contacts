@@ -4,7 +4,6 @@ const NTLMAuth = require('httpntlm').ntlm;
 
 module.exports = {
     addDates: async function(password, email, options) {
-        console.log(password, email, options)
         const algorithm = "aes-256-cbc"; 
         // the decipher function
         const decipher = crypto.createDecipheriv(algorithm, process.env.Skey, process.env.initVector);
@@ -39,13 +38,13 @@ module.exports = {
                     'ReminderMinutesBeforeStart': 60,
                     'IsAllDayEvent':false,
                     'LegacyFreeBusyStatus': 'Busy',
-                    // 'RequiredAttendees': {
-                    //     'Attendee': {
-                    //         'Mailbox': {
-                    //             'EmailAddress': 'djesus@gurabopr.com'
-                    //         }
-                    //     }
-                    // }, //can't get it to send email to attendees
+                    'RequiredAttendees': {
+                        'Attendee': {
+                            'Mailbox': {
+                                'EmailAddress': 'djesus@gurabopr.com'
+                            }
+                        }
+                    }, //can't get it to send email to attendees
                     ...options
                 }
             }
@@ -63,14 +62,12 @@ module.exports = {
     },
 
     sendEmail: async function(password, email, options) {
-        console.log(password, email, options)
         const algorithm = "aes-256-cbc"; 
         // the decipher function
-        const decipher = crypto.createDecipheriv(algorithm, 'testerkey12345678901234567891234', 'testerkey1234567');
+        const decipher = crypto.createDecipheriv(algorithm, process.env.Skey, process.env.initVector);
         let decryptedData = decipher.update(password, "hex", "utf-8");
 
         decryptedData += decipher.final("utf8");
-
 
         // store the ntHashedPassword and lmHashedPassword to reuse later for reconnecting
         const ntHashedPassword = NTLMAuth.create_NT_hashed_password(decryptedData);
@@ -108,11 +105,11 @@ module.exports = {
                   "attributes": {
                     "BodyType" : "Text"
                   },
-                  "$value": `You have selected the date ${options.Start} - ${options.End} for your appointment. Like the selection page indicated the apppointment will be at ${options.Location}. We will be discussing: ${options.Subject}.` //Body: name email
+                  "$value": options.Body
                 },
                 "ToRecipients" : {
                   "Mailbox" : {
-                    "EmailAddress" : "djs.dianne@gmail.com" //options.Email
+                    "EmailAddress" : options.Email
                   }
                 },
                 "IsRead": "false"
@@ -120,6 +117,8 @@ module.exports = {
             }
         };
 
+        //console.log(ewsArgs.Items.Message.Body.$value)
+        //console.log(ewsArgs.Items.Message.ToRecipients.Mailbox.EmailAddress)
         // query EWS and print resulting JSON to console
         ews.run(ewsFunction, ewsArgs)
         .then(result => {

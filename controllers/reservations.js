@@ -87,10 +87,11 @@ module.exports = {
             // })
 
             const reservationData = await ReservedSlotDB.findOne({linkId: req.body.idFromJSFile})
-            let durationTime = reservationData.duration.split(' ')
-           const endDate = new Date(req.body.dateTimeFromJSFile).getTime() + (Number(durationTime[0]) * 60000) //TODO use the duration but first set a standard for definition
+            let durationTime = reservationData.duration
+            const endDate = new Date(req.body.dateTimeFromJSFile).getTime() + (Number(durationTime) * 60000) //TODO use the duration but first set a standard for definition
 
             const options = {
+                'Name': reservationData.name,
                 'Subject': reservationData.subject,
                 'Body': `${reservationData.name} ${reservationData.email}`,
                 'Start': new Date(req.body.dateTimeFromJSFile).toISOString(),
@@ -98,9 +99,26 @@ module.exports = {
                 'Location': reservationData.location,
                 'Email': reservationData.email,
             }
+
+            const optionsEmailUser = {
+                'Name': reservationData.name,
+                'Subject': reservationData.subject,
+                'Body': `Hello ${req.user.email},\n\n${options.Name} has selected the date ${new Date(req.body.dateTimeFromJSFile).toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} ${new Date(options.Start).toLocaleString('en-US', { hour: '2-digit', minute: '2-digit'})} - ${new Date(endDate).toLocaleString('en-US', { hour: '2-digit', minute: '2-digit'})} for their appointment. \n\nThe apppointment will be at ${reservationData.location} and you will be discussing: ${reservationData.subject}.\n\n`, //Body: name email
+                'Start': new Date(req.body.dateTimeFromJSFile).toISOString(),
+                'End': new Date(endDate).toISOString(),
+                'Location': reservationData.location,
+                'Email': req.user.calendarEmail,
+            }
+
+            const optionsEmailClient = {
+                'Name': reservationData.name,
+                'Body': `Hello ${options.Name},\n\nYou have selected the date ${new Date(req.body.dateTimeFromJSFile).toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} ${new Date(options.Start).toLocaleString('en-US', { hour: '2-digit', minute: '2-digit'})} - ${new Date(endDate).toLocaleString('en-US', { hour: '2-digit', minute: '2-digit'})} for your appointment. \n\nLike the selection page indicated the apppointment will be at ${reservationData.location}. \n\nWe will be discussing: ${reservationData.subject}.\n\n`, //Body: name email
+                'Email': reservationData.email,
+            }
             //save to calendar
             ewsOptions.addDates(req.user.calendarPassword, req.user.calendarEmail, options)
-            ewsOptions.sendEmail(req.user.calendarPassword, req.user.calendarEmail, options)
+            ewsOptions.sendEmail(req.user.calendarPassword, req.user.calendarEmail, optionsEmailClient)
+            ewsOptions.sendEmail(req.user.calendarPassword, req.user.calendarEmail, optionsEmailUser)
 
             console.log('Time Slot Selected')
             res.json('Time Slot Selected')
