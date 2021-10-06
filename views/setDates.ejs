@@ -61,7 +61,7 @@
                     <th>subject</th>
                     <th>duration</th>
                     <th>linkId</th>
-                    <th>availability</th>
+                    <th>status</th>
                     <th>action</th>
                 </tr>
                 <% reservations.forEach( (el) => { %>
@@ -82,7 +82,7 @@
                         <% } %>   
                     <% }) %>
                     </td>
-                    <td><a>Send Email</a></td>
+                    <td data-id='<%= el.linkId %>'><a class='sendMail'>Send Email</a></td>
                 </tr>
                 <% }) %>
             </table>

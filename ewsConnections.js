@@ -100,7 +100,7 @@ module.exports = {
             "Items" : {
               "Message" : {
                 "ItemClass": "IPM.Note",
-                "Subject" : "An Appointment has been reserved",
+                "Subject" : options.Subject,
                 "Body" : {
                   "attributes": {
                     "BodyType" : "Text"

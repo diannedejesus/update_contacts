@@ -51,6 +51,28 @@ module.exports = {
         }
     },
 
+    resendEmail: async (req, res)=>{
+
+        try{
+            const reservationData = await ReservedSlotDB.findOne({linkId: req.body.idFromJSFile})
+            //let durationTime = reservationData.duration
+
+            const optionsEmailClient = {
+                'Name': reservationData.name,
+                'Body': `Hello ${reservationData.name},\n\nOur office needs to meet with you to complete some documentation or discuss a topic pertinate to your case. Please use the following link to schedule your appointment. \n\nIf none of these times/dates work with your schedule then please email or call us so we can find a time that works. \n\nWe will be discussing: ${reservationData.subject} and we estimate the meeting will be ${reservationData.duration}\n\n http://localhost:3000/setDates/selectTimeSlot/${reservationData.linkId}\n\n`, //Body: name email
+                'Email': reservationData.email,
+                'Subject': 'We need you to schedule an appointment',
+            }
+
+            ewsOptions.sendEmail(req.user.calendarPassword, req.user.calendarEmail, optionsEmailClient)
+
+            console.log('Email Sent')
+            res.json('Email Sent')
+        }catch(err){
+            console.log(err)
+        }
+    },
+
     createTimeSlot: async (req, res)=>{
         try{
             const linkId = nanoid()
@@ -73,6 +95,10 @@ module.exports = {
                 slotChoices: req.body.dateTimeItem,
                 linkId: linkId,
             })
+
+            req.body.idFromJSFile = linkId
+            module.exports.resendEmail(req)
+
             console.log('Todo has been added!')
             res.redirect('/setDates')
         }catch(err){
@@ -102,7 +128,7 @@ module.exports = {
 
             const optionsEmailUser = {
                 'Name': reservationData.name,
-                'Subject': reservationData.subject,
+                'Subject': 'An Appointment Date and Time has Been Reserved',
                 'Body': `Hello ${req.user.email},\n\n${options.Name} has selected the date ${new Date(req.body.dateTimeFromJSFile).toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} ${new Date(options.Start).toLocaleString('en-US', { hour: '2-digit', minute: '2-digit'})} - ${new Date(endDate).toLocaleString('en-US', { hour: '2-digit', minute: '2-digit'})} for their appointment. \n\nThe apppointment will be at ${reservationData.location} and you will be discussing: ${reservationData.subject}.\n\n`, //Body: name email
                 'Start': new Date(req.body.dateTimeFromJSFile).toISOString(),
                 'End': new Date(endDate).toISOString(),
@@ -111,7 +137,7 @@ module.exports = {
             }
 
             const optionsEmailClient = {
-                'Name': reservationData.name,
+                'Name': 'Your Appointment Date and Time has Been Reserved',
                 'Body': `Hello ${options.Name},\n\nYou have selected the date ${new Date(req.body.dateTimeFromJSFile).toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} ${new Date(options.Start).toLocaleString('en-US', { hour: '2-digit', minute: '2-digit'})} - ${new Date(endDate).toLocaleString('en-US', { hour: '2-digit', minute: '2-digit'})} for your appointment. \n\nLike the selection page indicated the apppointment will be at ${reservationData.location}. \n\nWe will be discussing: ${reservationData.subject}.\n\n`, //Body: name email
                 'Email': reservationData.email,
             }
@@ -122,30 +148,6 @@ module.exports = {
 
             console.log('Time Slot Selected')
             res.json('Time Slot Selected')
-        }catch(err){
-            console.log(err)
-        }
-    },
-
-
-    markComplete: async (req, res)=>{
-        try{
-            await TimeSlotDB.findOneAndUpdate({_id:req.body.todoIdFromJSFile},{
-                filled: true
-            })
-            console.log('Marked Complete')
-            res.json('Marked Complete')
-        }catch(err){
-            console.log(err)
-        }
-    },
-    markIncomplete: async (req, res)=>{
-        try{
-            await TimeSlotDB.findOneAndUpdate({_id:req.body.todoIdFromJSFile},{
-                filled: false
-            })
-            console.log('Marked Incomplete')
-            res.json('Marked Incomplete')
         }catch(err){
             console.log(err)
         }

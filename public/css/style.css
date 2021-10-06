@@ -61,18 +61,18 @@ input, select{
 }
 input[type='submit']{
     margin-top: 1em;
-    border: 1px solid rgb(70, 103, 163);
+    border: 1px solid rgb(182, 97, 97);
     background-color: transparent;
     height: 3em;
     width: 30%;
     font-variant: small-caps;
     font-weight: 900;
     font-size: large;
-    color: rgb(70, 103, 163);
+    color: lightcoral;
 }
 input[type='submit']:hover{
-    border: 1px solid rgb(70, 103, 163);
-    background-color: cornflowerblue;
+    border: 1px solid rgb(182, 97, 97);
+    background-color: lightcoral;
     color: white;
 }
 
@@ -201,6 +201,8 @@ th{
 }
 
 .signup a{
+    display:inline-block;
+    margin-top: 1em;
     border: 2px solid white;
     padding: .5em 4em;
     border-radius: 20px;
@@ -208,6 +210,11 @@ th{
     text-transform: uppercase;
     font-weight: bolder;
     text-decoration: none;
+}
+
+.signup a:hover{
+    color: lightcoral;
+    background-color: white;
 }
 
 
