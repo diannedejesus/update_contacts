@@ -1,47 +1,57 @@
-# Booking Office Meetings
+# UPDATE CONTACT
 **Built by Dianne De Jesus; No current reviewers**
   
+## Description
+Create a unique link for a client list which will permit them to update their contact information.
+
 ## Functional Description
-This application will permit the user to create a custom link with available dates for a client to select (only a single date can be chosen). Once the client selects a date, it will be added to the user's calendar. The user will be notified which date was selected by email and the client will recieve a confirmation email.
+The application will connect to an outlook exchange account and import the contact list, timestamping the import. The list will be filtered by job title. Then a unique access link will be generated for each contact. This link will be used as an identifer for the contact. Then a separate database will be filled for the user application. It will contain only name and link/identifier for security purposes.
+- the import will be timestamped the day of import or have the last modified date.
+- filtering by job title since that is the field we use to identify type of contact.
+- connection by outlook exchange since that is what the company uses, through the soap protocal and EWS
+- the number of contacts will be less then 100 so the access link can be unique but managable as a manual entry
+- the data will be used to fill a separate database, the user data entry has no need to access all the contact information so that will be kept seperate with other none sensitive information.
 
-### User Interfase Description
-The user will be able to create date/time slots for a client to select. They will include the clients information and other details pertinate to the appointment. A link will be generated and sent to the client by email.
-
-#### User Interfase Data & Functionality
-User Input:
-- Client: name [string]
-- Appointment: Description [string], duration [number], location [string]
-- Slots: Date [date], time [date]
-    - slots will be saved as an array, the user will be able to add and remove slots before saving
- 
- Additional Data:
- - unique link id [string]
- - isFilled [boolean] (data availability)
-
-Date Selection:
-The user with be able to add as many date/time slots as need, ideally we will be able to verify the selected dates againts the users calendar to verify if the date is already filled. We will not limit or check if the date was included in another client list. The same date can be given to multiple clients, the first to select it get the date.
-
-Date Verification:
-- filled dates will be collected from the users calendar
-- A local copy might help with speed, but update timing will be an issue
-- data must be organised to facilite lookup
-
-confirm/save:
-Data will be saved to a database along with unique identifier for the client link
-
-<!-- delete:
-permitly removes an appointment selection -->
+The user application will consist of a form where the user will be able enter and submit their contact information. If they use a unique link then their name will be auto filled. Clear instruction will be placed onscreen and warnings will show up to explain the importance of updating their data.
+- The instruction will state that in order to erase information and not replace it, they will need to call or email us.
+- if the unique link is not used then the linkid will be left empty and a match will be found during the verification process. 
 
 
-### Client Interfase Description
-The client will see the times/dates available for the specified appointment and the details for the appointment. When a date is selected they will need to confirm the selection. Once the selection is confirmed the user will recieve an email and the date will be added to the user's calendar. The client will also recieve an email.
+When the form is submitted it will be added to a submit database with a timestamp where it can be reviewed before updating the outlook database. The user will recieve a visual confirmation of the submitted data and if an email was provided then we will send a confirmation by email.
+- form can be submitted partially filled but needs at least name
+- the person will be informed of importance of updating all information, especially email if partially full.
+- repeated data will just be stored in database, this is not an issue due to the small scale use of the application.
+- The visual confirmation is a thanks page with the information displayed with time and date for printing and we will indicate that an email was sent (if no error occurred and if an email is on file).
 
-#### Client Interfase Data & Functionality
-A set of buttons will allow the client to choose a sinlge time slot. An option for emailing user if no dates fit the clients schedule. Once it is confirmed then two emails will be sent.
-- one to client
-- one to the user
 
-After the date is selected only the selected date and appointment details will be displayed.
+The application will also track the click through information of the links. How many times the link was accessed and if information was submitted.
+- This will be stored in the names database since it has a simple reference to each contact and ideally not have any repeated info like the submitted databse.
+- as soon as the link is accessed the access count is incremented. If possible a measure can be implemented to avoid multiple counts for same session but should not be an issue if this is not possible.
+- if the submit button is pressed without errors the submit count will be incremented.
+
+### Databases
+* historic data/initial import
+    - name
+    - phones
+    - postal address
+    - email
+    - link
+    - timestamp
+* name reference (reference for main access aka not through unique link)
+    - name
+    - link
+    - access count
+    - submitted count
+* submitted information
+    - name
+    - phones
+    - postal address
+    - email
+    - email use
+    - link
+    - timestamp
+    - synced
+
 
 
 <!-- With this section, you’re trying to answer a simple question: What does the software do? Of course, to answer this question thoroughly, you’ll need to dig a little deeper. In your functional description, you should cover error handling, one-time startup procedures, user limitations, and other similar details.  -->
@@ -59,16 +69,17 @@ illustration of people working together
 Learn how to create a low-fidelity wireframe in Lucidchart to include within your software design document. -->
 
 ## Goals and milestones
-- Get the connection between the exchange server and nodejs established. [completed]
-- Get a basic MVC nodejs working for the user and client interfase. [completed]
-- Design the data schemas needed
-- Determine the login format for the app.
-- Verify authentication process for exchange servers
-- Get email and calendar interation with app.
-- [Feature] Verify that date/times don't overlap
-- [Feature] Calendar display
-- [Wishlist] Verify holidays and vacation days
-- [Wishlist] limit access to link by email
+- outlook conection implementation
+- id generator
+- timestamp handler
+- click through handler
+- user view
+- receipt/submit view
+- admin view
+- database implementation
+- [additional Feature] dashboard with visualizations
+- [additional Feature] 
+- [Wishlist] 
 
 
 <!-- Instead of approaching your project as a single drawn-out process, you might find it helpful to break it down into more manageable pieces. (This is true for the project’s timeline and the code itself.) At the most macro level, you have an overarching goal: What problem is your software addressing? Who will be using it?

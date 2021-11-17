@@ -14,55 +14,20 @@
     </header>
    
     <main>
-        <h1>Set Available Dates</h1>
-        <section>
-            <form action="/setDates/createTimeSlot" method='POST'>
-                <fieldset>
-                    <label for='nameItem'>Name of Client</label> <label for='emailItem'>Client Email</label>
-                    <input type="text" placeholder="Name" id='nameItem' name='nameItem'>
-                    <input type="text" placeholder="Email" id='emailItem' name='emailItem'>
-
-                    <label for='subjectItem'>Topic of appointment</label> <label for='locationItem'>Location of appointment</label>
-                    <input type="text" placeholder="Subject" id='subjectItem' name='subjectItem'> <input type="text" placeholder="Location" id='locationItem' name='locationItem'>
-                    
-                    <label for='durationItem'>Duration of appointment</label>
-                    <input type="text" placeholder="duration" id='durationItem' name='durationItem'>
-                    <select name='timeframeItem'>
-                        <option value='minutes'>minutes</option>
-                        <option value='hours'>hours</option>
-                    </select>
-
-                    <fieldset id='appointmentDates'>
-                        <legend for='appointmentDates'>Available dates/time for appointment</legend>
-                        <div>
-                            <label for='dateItem'>Date</label>
-                            <label for="timeItem">Time</label>
-                        </div>
-                        <input type="date" placeholder="Enter a Date" id='dateItem' name='dateItem'>
-                        <input type="time" placeholder="Enter a Time" id='timeItem' name='timeItem'>
-
-                        <input type="button" class='addDate' value='Add'>
-
-                        <ul id='timeSlots'><li>Dates:</li></ul>
-                    </fieldset>
-                
-                    <input type="submit">
-                </fieldset>
-            </form>
-        </section>
+        <h1>Contact List</h1>
         <section>
             <h2>Created Reservations</h2>
             <h3>Unreserved Dates: <%= left %></h3>
             <table>
                 <tr>
-                    <th>name</th>
-                    <th>email</th>
-                    <th>location</th>
-                    <th>subject</th>
-                    <th>duration</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone Numbers</th>
+                    <th>Mailing Address</th>
+                    <th>X---duration</th>
                     <th>linkId</th>
-                    <th>status</th>
-                    <th>action</th>
+                    <th>X---status</th>
+                    <th>X---action</th>
                 </tr>
                 <% reservations.forEach( (el) => { %>
                 <tr>
