@@ -1,16 +1,76 @@
 const TimeSlotDB = require('../models/TimeSlots')
-const ReservedSlotDB = require('../models/Reservations')
+const HistoricImportDB = require('../models/HistoricImport')
 const ewsOptions = require('../ewsConnections')
 const { nanoid } = require('nanoid')
 
 module.exports = { 
     setDates: async (req,res)=>{
         try{
-            const slots = await TimeSlotDB.find()
-            const itemsLeft = await TimeSlotDB.countDocuments({selectedSlot: ''})
-            const reservationsMade = await ReservedSlotDB.find({owner: req.user.email})
-            //TODO: the items needs to be sorted by date
-            res.render('setDates.ejs', {timeSlots: slots, left: itemsLeft, reservations: reservationsMade})
+            const reservationsMade = await HistoricImportDB.find()
+            res.render('setDates.ejs', { reservations: reservationsMade })
+        }catch(err){
+            console.log(err)
+        }
+    },
+
+    import: async (req, res)=>{
+        try{
+            const dbFilled = await HistoricImportDB.count()
+            console.log(dbFilled)
+            if(dbFilled <= 0){
+                const contact = await ewsOptions.getContacts(req.user.calendarPassword, req.user.calendarEmail)
+                let collection = []
+
+                for(items of contact.ResponseMessages.FindItemResponseMessage.RootFolder.Items.Contact){
+                    if(items.JobTitle === 'Landlord'){
+                        let currentEntry = {
+                        name: {
+                            firstName: items.CompleteName.FirstName,
+                            middleInitial: items.CompleteName.MiddleName,
+                            lastName: items.CompleteName.LastName,
+                        },
+                            email: items.EmailAddresses ? items.EmailAddresses.Entry[0]['$value'] : undefined,
+                            phones: [],
+                            
+                            address: {
+                                street: items.PhysicalAddresses ? items.PhysicalAddresses.Entry[0].Street : '',
+                                city: items.PhysicalAddresses ? items.PhysicalAddresses.Entry[0].City : '',
+                                state: items.PhysicalAddresses ? items.PhysicalAddresses.Entry[0].State : '',
+                                zipcode: items.PhysicalAddresses ? items.PhysicalAddresses.Entry[0].PostalCode : '',
+                            },
+                            timestamp: new Date(),
+                            accessLink: nanoid(10),
+                        }
+                        if(items.PhoneNumbers){
+                            for(numbers of items.PhoneNumbers.Entry){
+                                currentEntry.phones.push({
+                                    number: numbers['$value'], 
+                                    numberType: numbers.attributes.Key
+                                })
+                            }
+                        }
+
+                        collection.push(currentEntry)
+                    }
+                }
+
+
+                HistoricImportDB.insertMany(collection)
+                .then(function (docs) {
+                    //res.json(docs);
+                    console.log(docs)
+                })
+                .catch(function (err) {
+                    //res.status(500).send(err);
+                    console.log(err)
+                });
+
+                console.log('imported')
+                //res.json('imported')
+                res.redirect('/')
+            }else{
+                //error do you wish to replace database
+            }
         }catch(err){
             console.log(err)
         }

@@ -19,12 +19,14 @@
     "express-session": "^1.17.2",
     "httpntlm": "^1.7.7",
     "mongodb": "^3.6.5",
-    "mongoose": "^5.12.3",
+    "mongoose": "^6.0.13",
     "nanoid": "^3.1.25",
     "node-ews": "^3.4.2",
-    "nodemon": "^2.0.7",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
-    "validator": "^13.6.0"
+    "validator": "^13.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }

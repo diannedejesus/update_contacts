@@ -69,7 +69,8 @@ illustration of people working together
 Learn how to create a low-fidelity wireframe in Lucidchart to include within your software design document. -->
 
 ## Goals and milestones
-- outlook conection implementation
+- outlook connection implementation
+    * import contacts
 - id generator
 - timestamp handler
 - click through handler
@@ -80,6 +81,10 @@ Learn how to create a low-fidelity wireframe in Lucidchart to include within you
 - [additional Feature] dashboard with visualizations
 - [additional Feature] 
 - [Wishlist] 
+
+## Bugs and Issues
+- EWS Restriction filter not working
+- EWS Selecting only needed properties not clear when mutiple are needed
 
 
 <!-- Instead of approaching your project as a single drawn-out process, you might find it helpful to break it down into more manageable pieces. (This is true for the project’s timeline and the code itself.) At the most macro level, you have an overarching goal: What problem is your software addressing? Who will be using it?

@@ -4,6 +4,7 @@ const bookingController = require('../controllers/reservations')
 const {ensureAuth, ensureGuest} = require('../middleware/auth');
 
 router.get('/', ensureAuth, bookingController.setDates)
+router.get('/import', ensureAuth, bookingController.import)
 router.get('/selectTimeSlot', bookingController.selectTimeSlots)
 router.get('/selectTimeSlot/:id', bookingController.selectTimeSlots)
 

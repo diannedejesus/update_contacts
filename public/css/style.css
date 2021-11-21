@@ -139,14 +139,7 @@ h2{
     color: white;
 }
 
-p{
-    font-size: 1.4rem;
-    margin: 1rem;
-}
-p+p{
-    border-top: 1px solid grey;
-    padding-top: 1rem;
-}
+
 table{
     border-collapse: collapse;
     width: 100%;
