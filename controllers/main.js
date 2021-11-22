@@ -1,4 +1,4 @@
-const TimeSlotDB = require('../models/TimeSlots')
+const NameReferenceDB = require('../models/NameReference')
 const HistoricImportDB = require('../models/HistoricImport')
 const ewsOptions = require('../ewsConnections')
 const { nanoid } = require('nanoid')
@@ -67,10 +67,32 @@ module.exports = {
 
                 console.log('imported')
                 //res.json('imported')
-                res.redirect('/')
+                res.redirect('/setdates')
             }else{
                 //error do you wish to replace database
             }
+        }catch(err){
+            console.log(err)
+        }
+    },
+
+    fillReference: async (req,res)=>{
+        try{
+            const data = await HistoricImportDB.find({}, 'name accessLink');
+            console.log(data)
+
+            NameReferenceDB.insertMany(data)
+                .then(function (docs) {
+                    //res.json(docs);
+                    console.log(docs)
+                })
+                .catch(function (err) {
+                    //res.status(500).send(err);
+                    console.log(err)
+                });
+            
+            console.log('filled')
+            res.json('filled')
         }catch(err){
             console.log(err)
         }

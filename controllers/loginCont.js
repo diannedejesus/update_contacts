@@ -2,11 +2,13 @@ const validator = require('validator');
 const passport = require('passport');
 const crypto = require ("crypto");
 const User = require('../models/UserInfo');
+const HistoricImportDB = require('../models/HistoricImport')
 
 module.exports = {
   getPage: async (req, res) => {
     res.render('index', {msg: 'none'});
   },
+
   postLogin: async (req, res, next) => {
     const errors = [];
     if(!validator.isEmail(req.body.email)) errors.push({msg: 'email is invalid'});
@@ -32,11 +34,17 @@ module.exports = {
       })
     })(req, res, next)
   },
-  getConfigureCalendar: async (req, res) => {
-    res.render('configure', {msg: 'none'});
+
+  getConfigure: async (req, res) => {
+    //allow for removal of credentials
+    //implement flash for errors
+
+    const dataCount = await HistoricImportDB.count()
+
+    res.render('configure', { dataCount, accountName: req.user.calendarEmail });
   },
 
-  configureCalendar: async (req, res) => {
+  submitCredentials: async (req, res) => {
     const errors = [];
     if(!validator.isEmail(req.body.email)) errors.push({msg: 'email is invalid'});
     if(validator.isEmpty(req.body.password)) errors.push({msg: 'password field cant be blank'});
@@ -46,6 +54,7 @@ module.exports = {
       console.log('errors', errors)
       return res.redirect('/');
     }
+
     req.body.email = validator.normalizeEmail(req.body.email, { gmail_remove_dots: false });
 
     const algorithm = "aes-256-cbc"; 
@@ -55,12 +64,10 @@ module.exports = {
     const cipher = crypto.createCipheriv(algorithm, Securitykey, initVector); // the cipher function
 
     // encrypt the message
-    // input encoding
-    // output encoding
     let encryptedData = cipher.update(message, "utf-8", "hex");
     encryptedData += cipher.final("hex");
 
-    console.log("Encrypted message: " + encryptedData);
+    // console.log("Encrypted message: " + encryptedData);
     
     //add to user info
     await User.findOneAndUpdate({email: req.user.email}, {calendarEmail: req.body.email, calendarPassword: encryptedData})

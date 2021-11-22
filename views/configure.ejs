@@ -4,17 +4,26 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Configure</title>
 </head>
 <body>
-    <h1>Configure your Email and Calendar</h1>  
+    <header>
+        <a href='/' class='button'>home</a>
+        <a href='/signup/logout' class='signout'>signout</a>
+        <a href='/login/configure' class='button'>configure</a>
+    </header>
+   
+    <h1>Configure</h1>  
 
-    <p>MS Exchange Calendar</p>
+    <p>MS Exchange Credentials</p>
+    <p>Currently stored credentials: <%= accountName %></p>
     <form class="login-form" action="../login/configure" method="POST">
         <input type="text" name='email' placeholder="email">
         <input type="text" name='password' placeholder="password">
         <input type="submit">
     </form>
-    
+    <h2>Import</h2>
+    <p>You have imported <%= dataCount %> contacts. Do you wish to add new contacts to this list, edit the current contacts or replace the list?</p>
+    <button>Add Contacts</button> <button>Edit List</button> <button>Replace Data</button> <a href='/setDates/import' class='button'>import Data</a>
 </body>
 </html>

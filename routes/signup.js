@@ -1,4 +1,4 @@
-const express = require('express') //copied and pasted from microsoft nothing new needs to be changed
+const express = require('express')
 const passport = require('passport')
 const router = express.Router()
 const signCont = require('../controllers/signCont');

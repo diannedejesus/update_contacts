@@ -86,7 +86,34 @@ Learn how to create a low-fidelity wireframe in Lucidchart to include within you
 - EWS Restriction filter not working
 - EWS Selecting only needed properties not clear when mutiple are needed
 
+<!-- NOTES
+### Initial loading of information
+The idea behind this app is that the person can load information from another resourse they use for contacts like ms exchange. The will enter their credentials which will be verified. When the user selects to import the information they can choose a field by which to limit the import. And can select which fields to use.
 
+When the information is loaded it will be placed in two databases, one will contain the full information selected. A unique link will be generated for each entry. Then the name and associated unique link will be used to fill a seperate database. The app will count how many items were load into the two db and confirm to the user that the data was load. It will reload to a page that displays the data.
+
+ 
+- divide the databases so that the user only have access to the minimun amount of data.
+- verfiy credentials for reading contacts
+- find the structure of the information to use for limiting the import. Try to implement dynamicly.
+    - will also be used to define the information to select from the data.
+- count the amount of data that was loaded into the database for display.
+
+### Historic data display vs current data
+The historic database will only have two options posibly three. You will be able to update the timestamp to make how recent the data was changed, you can mark fields as disabled for data that is not relevent to the update process. Might posibly allow the addition of new entries for data that was not in the initial import.
+
+Current data might be a manipulation of the submitted database and the historic database or a whole new database for this purpose. It will show what data has been submitted and what data has been passed on to outlook.
+
+### Configure Page
+- Allow for user to remove or replace the credetials for their contact storage.
+- Allow for deleting and replacing the entire database
+- Allow for user to add a new entry to historic list
+- Allow for editing list by enabling and disabling certain contacts.
+- Have it so you can import only if you dont have data or it verifies if you really want to import since this can cause duplicates
+
+
+
+ -->
 <!-- Instead of approaching your project as a single drawn-out process, you might find it helpful to break it down into more manageable pieces. (This is true for the project’s timeline and the code itself.) At the most macro level, you have an overarching goal: What problem is your software addressing? Who will be using it?
 
 Below that, you have a set of milestones. Milestones are essentially checkpoints—they help stakeholders know when certain aspects of the project will be completed. These milestones are for both internal use and external use. Within your team, they help keep your engineering team on track. You can also use them to show the client measurable steps your teams are taking to finish the project.  -->

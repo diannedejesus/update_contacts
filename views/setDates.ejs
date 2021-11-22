@@ -11,7 +11,6 @@
     <header>
         <a href='/signup/logout' class='signout'>signout</a>
         <a href='/login/configure' class='button'>configure</a>
-        <a href='/setDates/import' class='button'>import</a>
     </header>
    
     <main>
@@ -37,7 +36,7 @@
                     </td>
                     <td>
                         <p><%= el.address.street %></p>
-                        <p><%= el.address.city %>, <%= el.address.state %> <%= el.address.zip %></p>
+                        <p><%= el.address.city %>, <%= el.address.state %> <%= el.address.zipcode %></p>
                     </td>
                     <td><%= el.accessLink %></td>
                     <td><%= el.timestamp %></td>
