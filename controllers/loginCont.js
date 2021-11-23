@@ -44,6 +44,22 @@ module.exports = {
     res.render('configure', { dataCount, accountName: req.user.calendarEmail });
   },
 
+  editList: async (req, res) => {
+    //allow for removal of credentials
+    //implement flash for errors
+
+    const allContacts = await HistoricImportDB.find()
+    res.render('import_database', { allContacts });
+  },
+
+  toggleContact: async (req, res) => {
+      const contactState = await HistoricImportDB.find({accessLink: req.query.accessLink}, 'disabled')
+
+      await HistoricImportDB.findOneAndUpdate({accessLink: req.query.accessLink}, {disabled: !contactState[0].disabled})
+
+      res.redirect(req.get('referer'));
+  },
+
   submitCredentials: async (req, res) => {
     const errors = [];
     if(!validator.isEmail(req.body.email)) errors.push({msg: 'email is invalid'});

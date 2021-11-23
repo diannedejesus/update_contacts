@@ -4,50 +4,52 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Contacts</title>
+    <title>Edit Contacts</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
     <header>
         <a href='/signup/logout' class='signout'>signout</a>
-        <a href='/login/configure' class='button'>configure</a>
+        <a href='/login/configure'>configure</a>
     </header>
    
     <main>
         <h1>Contact List</h1>
         <section>
-            <h2>Created Reservations</h2>
-            <h3>Unreserved Dates: <%= left %></h3>
             <table>
                 <tr>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone Numbers</th>
                     <th>Mailing Address</th>
-                    <th>X---duration</th>
                     <th>linkId</th>
-                    <th>X---status</th>
-                    <th>X---action</th>
+                    <th>timestamp</th>
+                    <th>Enable/Disable</th>
                 </tr>
-                <% reservations.forEach( (el) => { %>
+                <% allContacts.forEach( (el) => { %>
                 <tr>
-                    <td><%= el.name %></td>
+                    <td><%= el.name.firstName %> <%= el.name.middleInitial %> <%= el.name.lastName %> <%= el.name.secondLastName %></td>
                     <td><%= el.email %></td>
-                    <td><%= el.location %></td>
-                    <td><%= el.subject %></td>
-                    <td><% if(el.duration <= 60){ %>
-                        <%= el.duration %> min
-                    <% }else{ %>
-                       <%= el.duration/60 %> hours
-                    <% } %>
-                    <td><a href='../setDates/selectTimeSlot/<%= el.linkId %>'><%= el.linkId %></a></td>
-                    <td><% timeSlots.forEach( (ele) => { %>
-                        <% if (ele.linkId === el.linkId) { %> 
-                            <%= ele.selectedSlot ? 'Reserved' : 'Unreserved' %>
-                        <% } %>   
-                    <% }) %>
+                    <td>
+                        <ul>
+                        <% el.phones.forEach( phone => { %>
+                            <li><%= phone.numberType %>: <%= phone.number %></li>
+                        <% }) %>
+                        </ul>
                     </td>
-                    <td data-id='<%= el.linkId %>'><a class='sendMail'>Send Email</a></td>
+                    <td>
+                        <%= el.address.street %><br>
+                        <%= el.address.city %>, <%= el.address.state %> <%= el.address.zipcode %>
+                    </td>
+                    <td><%= el.accessLink %></td>
+                    <td><%= el.timestamp %></td>
+                    <td>
+                        <% if (el.disabled === false) { %>
+                            <a href='/login/toggleContact?accessLink=<%= el.accessLink %>' class='button'>Disable Access</a>
+                        <% } else { %>
+                            <a href='/login/toggleContact?accessLink=<%= el.accessLink %>' class='button'>Enable Access</a>
+                        <% } %>
+                    </td>
                 </tr>
                 <% }) %>
             </table>

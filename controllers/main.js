@@ -98,36 +98,16 @@ module.exports = {
         }
     },
 
-    selectTimeSlots: async (req,res)=>{
+    updateInfo: async (req,res)=>{
         try{
-            let availableSlots
-            let unavailableSlots = []
+            let data, contactName
 
-            currentLink = {}
             if(req.params.id){
-                currentLink = {linkId: req.params.id}
+                data = await NameReferenceDB.find({accessLink: req.params.id}, 'name');
+                console.log(data)
+                contactName = {first: data[0].name.firstName, middle: data[0].name.middleInitial, last:data[0].name.lastName}
             }
-
-            const reservation = await ReservedSlotDB.find(currentLink)
-            const timeSlots = await TimeSlotDB.find(currentLink)
-            const reservedSlots = await TimeSlotDB.find().select('selectedSlot')
-
-            const isFilled = timeSlots[0].selectedSlot ? true : false
-
-            if(isFilled){
-                availableSlots = timeSlots[0].selectedSlot
-            }else{
-                availableSlots = timeSlots[0].slotChoices  
-            }
-
-            for(slots of reservedSlots){
-                if(slots.selectedSlot){
-                    unavailableSlots.push(`${slots.selectedSlot}`)
-                }
-            }
-            
-            //TODO: the items needs to be sorted by date
-            res.render('selectTimeSlot.ejs', {todos: reservation, isFilled: isFilled, timeSlots: availableSlots, reserved: unavailableSlots})
+            res.render('updateInformation.ejs', {name: contactName})
         }catch(err){
             console.log(err)
         }

@@ -10,7 +10,7 @@
 <body>
     <header>
         <a href='/signup/logout' class='signout'>signout</a>
-        <a href='/login/configure' class='button'>configure</a>
+        <a href='/login/configure'>configure</a>
     </header>
    
     <main>
@@ -26,7 +26,7 @@
                     <th>timestamp</th>
                 </tr>
                 <% reservations.forEach( (el) => { %>
-                <tr>
+                <tr class="<%= el.disabled ? 'disabled' : 'enabled' %>">
                     <td><%= el.name.firstName %> <%= el.name.middleInitial %> <%= el.name.lastName %> <%= el.name.secondLastName %></td>
                     <td><%= el.email %></td>
                     <td>
@@ -38,7 +38,13 @@
                         <p><%= el.address.street %></p>
                         <p><%= el.address.city %>, <%= el.address.state %> <%= el.address.zipcode %></p>
                     </td>
-                    <td><%= el.accessLink %></td>
+                    <td>
+                        <% if (el.disabled === false) { %>
+                            <%= el.accessLink %>
+                        <% } else { %>
+                            Disabled
+                        <% } %>
+                    </td>
                     <td><%= el.timestamp %></td>
                 </tr>
                 <% }) %>

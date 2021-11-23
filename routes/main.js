@@ -6,15 +6,14 @@ const {ensureAuth, ensureGuest} = require('../middleware/auth');
 router.get('/', ensureAuth, bookingController.setDates)
 router.get('/import', ensureAuth, bookingController.import)
 router.get('/fill', ensureAuth, bookingController.fillReference)
+router.get('/updateInfo', ensureAuth, bookingController.updateInfo)
+router.get('/updateInfo/:id', ensureAuth, bookingController.updateInfo)
 
-router.get('/selectTimeSlot', bookingController.selectTimeSlots)
-router.get('/selectTimeSlot/:id', bookingController.selectTimeSlots)
+// router.post('/createTimeSlot', ensureAuth, bookingController.createTimeSlot)
+// router.post('/resendEmail', ensureAuth, bookingController.resendEmail)
 
-router.post('/createTimeSlot', ensureAuth, bookingController.createTimeSlot)
-router.post('/resendEmail', ensureAuth, bookingController.resendEmail)
+// router.put('/assignTimeSlot', bookingController.assignTimeSlot)
 
-router.put('/assignTimeSlot', bookingController.assignTimeSlot)
-
-router.delete('/deleteDates', bookingController.deleteDates)
+// router.delete('/deleteDates', bookingController.deleteDates)
 
 module.exports = router

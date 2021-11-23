@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Information</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <h1>Update Contact Information</h1>
+    <p>Our offices is updating all contact information to ensure that your services are not interrupted, please provide us with your current information. If you wish to have your information removed from our list then please call or email us.</p>
+    
+    <form>
+        <h2>1. Contact Name</h2>
+        <label for='firstname'>Name</label>
+        <input id='firstname' type='text' placeholder="Juana" <%= name.first ? `value=${name.first}` : '' %>>
+        <label for='middleinitial'>Initial</label>
+        <input id='middleinitial' type='text' placeholder="S" <%= name.middle ? `value=${name.middle}` : '' %>>
+        <label for='lastname'>Last Names</label>
+        <input id='lastname' type='text' placeholder="del Pueblo Santa" <%= name.last ? `value=${name.last}` : '' %>>
+
+        <h2>2. Postal Address</h2>
+        <label for='urbName'>Urb Name</label>
+        <input id='urbName' type='text' placeholder="Urb. Santa Juanita">
+        <label for='streetaddr'>Street Address</label>
+        <input id='streetaddr' type='text' placeholder="345 Calle Ricon Nuevo">
+        <label for='city'>City</label>
+        <input id='city' type='text' placeholder="Rincon">
+        <label for='state'>State</label>
+        <input id='state' type='text' placeholder="PR">
+        <label for='zip'>Zip Code</label>
+        <input id='zip' type='text' placeholder="00999-45302"> 
+
+        <h2>3. Phone Numbers</h2>
+        <label for='number'>number</label>
+        <input id='number' type='text' placeholder="787-555-5555"> 
+        <label for='type'>Type</label>
+        <input id='type' type='text' placeholder="type"> 
+        
+        <h2>4. Email Address</h2>
+        <label for='email'>email</label>
+        <input id='email' type='text' placeholder="email@email.com"> 
+        <label for='selector'>Use</label>
+        <input id='selector' type='checkbox'>
+
+        <input type="submit" value="Submit">
+    </form>
+
+
+
+
+<!-- CAncel rest -->
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>

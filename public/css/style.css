@@ -23,8 +23,6 @@
 /* BASE STYLES
 /*******************************************/
 
-p{margin:0;}
-
 h1{
     color:black;
     background-color:lightcoral;
@@ -211,3 +209,26 @@ th{
 }
 
 
+/* --------------------------------------------------
+-----------------------------------------------------
+----------------------------------------------------*/
+
+.button {
+    padding: .8em;
+    margin: .3em;
+    
+    color: rgb(37, 55, 88);
+    background-color: cornflowerblue;
+    font-weight: 900;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.button:hover{
+    color: rgb(202, 227, 255);
+}
+
+.disabled{
+    background-color: lightgray;
+    color: grey;
+}

@@ -10,5 +10,8 @@ router.post('/', loginCont.postLogin);
 router.get('/configure', ensureAuth, loginCont.getConfigure);
 router.post('/configure', ensureAuth, loginCont.submitCredentials);
 
+router.get('/editList', ensureAuth, loginCont.editList);
+router.get('/toggleContact', ensureAuth, loginCont.toggleContact);
+
 module.exports = router
  

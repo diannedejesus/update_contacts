@@ -88,7 +88,7 @@ Learn how to create a low-fidelity wireframe in Lucidchart to include within you
 
 <!-- NOTES
 ### Initial loading of information
-The idea behind this app is that the person can load information from another resourse they use for contacts like ms exchange. The will enter their credentials which will be verified. When the user selects to import the information they can choose a field by which to limit the import. And can select which fields to use.
+The idea behind this part of the app is that the user can load information from another resourse for contacts like ms exchange. They will enter their credentials which will be verified. When the user selects to import the information they can choose a field by which to limit the import. And can select which fields to use.
 
 When the information is loaded it will be placed in two databases, one will contain the full information selected. A unique link will be generated for each entry. Then the name and associated unique link will be used to fill a seperate database. The app will count how many items were load into the two db and confirm to the user that the data was load. It will reload to a page that displays the data.
 
@@ -105,12 +105,17 @@ The historic database will only have two options posibly three. You will be able
 Current data might be a manipulation of the submitted database and the historic database or a whole new database for this purpose. It will show what data has been submitted and what data has been passed on to outlook.
 
 ### Configure Page
-- Allow for user to remove or replace the credetials for their contact storage.
-- Allow for deleting and replacing the entire database
-- Allow for user to add a new entry to historic list
-- Allow for editing list by enabling and disabling certain contacts.
-- Have it so you can import only if you dont have data or it verifies if you really want to import since this can cause duplicates
+- Credentials: add or remove access to your contacts.
+    - Might elimanate the storage of this data and just ask user to verify everytime they want to access
+- Delete and/or replace the local list of contacts (will erase all data)
+- Import only works if no data is present, this to avoid duplicates
+        - [additional] add duplicate detector
+- Allow user to add a new entry to historic list (data can be added or disabled/enabled)
+- [completed] Option for editing list. User can enable and disable contacts as a visual way of indicating these contacts do not need to be updated.
+    - [additional] allow for adding a reason for disabling
 
+### Update Page
+- Seperate the field for last names, for visual representation since outlook only permits one field so it will still be stored as one value.
 
 
  -->

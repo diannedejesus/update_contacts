@@ -5,12 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Configure</title>
+    <link rel="stylesheet" href="../css/normalize.css">
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
     <header>
-        <a href='/' class='button'>home</a>
+        <a href='/'>home</a>
         <a href='/signup/logout' class='signout'>signout</a>
-        <a href='/login/configure' class='button'>configure</a>
+        <a href='/login/configure'>configure</a>
     </header>
    
     <h1>Configure</h1>  
@@ -24,6 +26,6 @@
     </form>
     <h2>Import</h2>
     <p>You have imported <%= dataCount %> contacts. Do you wish to add new contacts to this list, edit the current contacts or replace the list?</p>
-    <button>Add Contacts</button> <button>Edit List</button> <button>Replace Data</button> <a href='/setDates/import' class='button'>import Data</a>
+    <a href='#' class='button'>Add Contacts</a> <a href='/login/editList' class='button'>Edit List</a> <a href='#' class='button'>Replace Data</a> <a href='/setDates/import' class='button'>Import Data</a>
 </body>
 </html>

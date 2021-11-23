@@ -1,6 +1,9 @@
+const { text } = require('express')
 const mongoose = require('mongoose')
 
-const HistoricImportSchema = new mongoose.Schema({
+
+
+const SubmittedInformationSchema = new mongoose.Schema({
   name: {
     firstName: {
       type: String,
@@ -24,6 +27,9 @@ const HistoricImportSchema = new mongoose.Schema({
   email: {
     type: String,
   },
+  emailUsee: {
+    type: Boolean,
+  },
 
   address: {
     street: String,
@@ -39,11 +45,10 @@ const HistoricImportSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-
-  disabled: {
-    type: Boolean,
-    default: false,
+  syncedDate: {
+    type: Date,
+    required: true,
   },
 })
 
-module.exports = mongoose.model('HistoricImport', HistoricImportSchema)
+module.exports = mongoose.model('SubmittedInformation', SubmittedInformationSchema)
