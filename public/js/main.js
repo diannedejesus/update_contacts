@@ -1,41 +1,37 @@
-const deleteBtn = document.querySelectorAll('.del')
+// const deleteBtn = document.querySelectorAll('.del')
 const signoutBtn = document.querySelector('.signout')
-const addDateBtn = document.querySelector('.addDate')
-const selectedSlot = document.querySelectorAll('.selectSlot')
-const sendMail = document.querySelectorAll('.sendMail')
+const addNumberBtn = document.querySelector('.addNumber')
 
-if(addDateBtn){addDateBtn.addEventListener('click', addTimeSlot)}
+// const sendMail = document.querySelectorAll('.sendMail')
+
+if(addNumberBtn){addNumberBtn.addEventListener('click', addNumber)}
 if(signoutBtn){signoutBtn.addEventListener('click', signout)}
 
-Array.from(selectedSlot).forEach((el)=>{
-    el.addEventListener('click', selectTimeSlot)
-})
+// Array.from(sendMail).forEach((el)=>{
+//     el.addEventListener('click', resendEmail)
+// })
 
-Array.from(sendMail).forEach((el)=>{
-    el.addEventListener('click', resendEmail)
-})
+// Array.from(deleteBtn).forEach((el)=>{
+//     el.addEventListener('click', deleteTodo)
+// })
 
-Array.from(deleteBtn).forEach((el)=>{
-    el.addEventListener('click', deleteTodo)
-})
-
-async function deleteTodo(){
-    const todoId = this.parentNode.dataset.id
-    try{
-        const response = await fetch('../setDates/deleteDates', {
-            method: 'delete',
-            headers: {'Content-type': 'application/json'},
-            body: JSON.stringify({
-                'todoIdFromJSFile': todoId
-            })
-        })
-        const data = await response.json()
-        console.log(data)
-        location.reload()
-    }catch(err){
-        console.log(err)
-    }
-}
+// async function deleteTodo(){
+//     const todoId = this.parentNode.dataset.id
+//     try{
+//         const response = await fetch('../setDates/deleteDates', {
+//             method: 'delete',
+//             headers: {'Content-type': 'application/json'},
+//             body: JSON.stringify({
+//                 'todoIdFromJSFile': todoId
+//             })
+//         })
+//         const data = await response.json()
+//         console.log(data)
+//         location.reload()
+//     }catch(err){
+//         console.log(err)
+//     }
+// }
 
 async function signout(){
     try{
@@ -49,60 +45,78 @@ async function signout(){
     }
 }
 
-function addTimeSlot(){
-    const selectedDate = document.querySelector("[name='dateItem']").value
-    const selectedTime = document.querySelector("[name='timeItem']").value
-    const dateList = document.querySelector('#timeSlots')
+function addNumber(){
+    const numberList = document.querySelector('#numberSlots')
+    let currentNumbers = []
+    let nextField = []
+    const numTypes = ['Home', 'Business', 'Mobile', 'Other']
 
-    if(selectedDate !== '' || selectedTime !== '' ){
-        let newItem = document. createElement("li")
-        let newFormItem = document. createElement("input")
-        newFormItem.type = 'hidden'
-        newFormItem.name = 'dateTimeItem'
-        newFormItem.value = `${selectedDate} ${selectedTime}`
-        newItem.appendChild(document.createTextNode(`${selectedDate} ${selectedTime}`))
-        this.parentNode.appendChild(newFormItem)
-        dateList.appendChild(newItem)
+    for(items of numberList.children){
+        if(items.name === 'type'){
+            currentNumbers.push(items.value)
+        }
     }
+    
+        
+    let numberLabel = document.createElement("label")
+    numberLabel.for = 'number' + (currentNumbers.length + 1)
+    numberLabel.appendChild(document.createTextNode('Number'))
+    nextField.push(numberLabel)
+
+    let newInput = document.createElement("input")
+    newInput.id = 'number' + (currentNumbers.length + 1)
+    newInput.name = 'number'
+    newInput.type = 'text'
+    newInput.placeholder = '787-555-5555'
+    nextField.push(newInput)
+
+    let typeLabel = document.createElement("label")
+    typeLabel.for = 'type' +(currentNumbers.length + 1)
+    typeLabel.appendChild(document.createTextNode('Type'))
+    nextField.push(typeLabel)
+
+    let newSelect = document.createElement("select")
+    newSelect.id = 'type' + (currentNumbers.length + 1)
+    newSelect.name = 'type'
+    console.log(newSelect)
+    let option = []
+    
+    for(let i=0; i<numTypes.length; i++){
+        let currentOption = document.createElement("option")
+        currentOption.value = numTypes[i]
+        currentOption.appendChild(document.createTextNode(numTypes[i]))
+
+        //option.push(currentOption)
+        newSelect.appendChild(currentOption)
+    }
+
+    nextField.push(newSelect)
+
+    for(let i=0; i<nextField.length; i++){
+        numberList.appendChild(nextField[i])
+    }
+
+
 }
 
-async function selectTimeSlot(){
-    const name = this.parentNode.dataset.name
-    const dateTime = this.parentNode.dataset.datetime
-    const id = this.parentNode.dataset.id
 
-    try{
-        const response = await fetch('../../setDates/assignTimeSlot', {
-            method: 'PUT',
-            headers: {'Content-type': 'application/json'},
-            body: JSON.stringify({
-                'dateTimeFromJSFile': dateTime,
-                'idFromJSFile': id,
-            })
-        })
-        const data = await response.json()
-        console.log(data)
-        location.reload()
-    }catch(err){
-        console.log(err)
-    }
-}
 
-async function resendEmail(){
-    const id = this.parentNode.dataset.id
 
-    try {
-        const response = await fetch('../../setDates/resendEmail', {
-            method: 'POST',
-            headers: {'Content-type': 'application/json'},
-            body: JSON.stringify({
-                'idFromJSFile': id,
-            })
-        })
-        const data = await response.json()
-        console.log(data)
-        location.reload()
-    } catch (error) {
-        console.log(error)
-    }
-}
+// async function resendEmail(){
+//     const id = this.parentNode.dataset.id
+
+//     try {
+//         const response = await fetch('../../setDates/resendEmail', {
+//             method: 'POST',
+//             headers: {'Content-type': 'application/json'},
+//             body: JSON.stringify({
+//                 'idFromJSFile': id,
+//             })
+//         })
+//         const data = await response.json()
+//         console.log(data)
+//         location.reload()
+//     } catch (error) {
+//         console.log(error)
+//     }
+// }

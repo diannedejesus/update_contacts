@@ -1,6 +1,7 @@
 const NameReferenceDB = require('../models/NameReference')
 const HistoricImportDB = require('../models/HistoricImport')
 const ewsOptions = require('../ewsConnections')
+const validator = require('validator');
 const { nanoid } = require('nanoid')
 
 module.exports = { 
@@ -101,13 +102,15 @@ module.exports = {
     updateInfo: async (req,res)=>{
         try{
             let data, contactName
-
+            const currentErrors = req.session.error
+            req.session.error = ''
+            
             if(req.params.id){
                 data = await NameReferenceDB.find({accessLink: req.params.id}, 'name');
-                console.log(data)
+                //console.log(data)
                 contactName = {first: data[0].name.firstName, middle: data[0].name.middleInitial, last:data[0].name.lastName}
             }
-            res.render('updateInformation.ejs', {name: contactName})
+            res.render('updateInformation.ejs', {name: contactName, errors: currentErrors})
         }catch(err){
             console.log(err)
         }
@@ -135,34 +138,72 @@ module.exports = {
         }
     },
 
-    createTimeSlot: async (req, res)=>{
+    submitInfo: async (req, res)=>{
         try{
-            const linkId = nanoid()
-            let duration = req.body.durationItem
-            
-            if(req.body.timeframItem === 'hours'){
-                duration = duration * 60
+            req.session.error = [] //error handling
+            if(req.body){
+                if(validator.isEmpty(req.body.firstname.trim()) || validator.isEmpty(req.body.lastname.trim())){
+                    req.session.error.push('Name and last name can not be empty')
+                }
+
+                if(req.body.urbName.trim() || req.body.streetaddr.trim() || req.body.city.trim() || req.body.state.trim() || req.body.zip.trim()){
+                    if(validator.isEmpty(req.body.urbName.trim()) || validator.isEmpty(req.body.streetaddr.trim()) || validator.isEmpty(req.body.city.trim()) || validator.isEmpty(req.body.state.trim()) || validator.isEmpty(req.body.zip.trim())){
+                        req.session.error.push('Address is incomplete you must fill all fields')
+                    }else{
+                        req.session.error.push('address field filled')
+                    }
+                }
+
+                if(validator.isEmpty(req.body.urbName.trim()) || validator.isEmpty(req.body.streetaddr.trim()) || validator.isEmpty(req.body.city.trim()) || validator.isEmpty(req.body.state.trim()) || validator.isEmpty(req.body.zip.trim())){
+                    req.session.error.push('warning: not including an address can potential lead to missed comunications from our office and can affect you payments.')
+                }
+//todo::will need to create a loop
+console.log(req.body)
+                if(req.body.number.length <= 0){
+                    req.session.error.push('warning: not including a phone number can potential lead to missed comunications from our office and can affect you payments.')
+                }else if(!validator.isMobilePhone(req.body.number.trim())){
+                    req.session.error.push('The number entered is not a valid.')
+                }
+                if(!req.body.type || validator.isEmpty(req.body.type.trim())){
+                    req.session.error.push('Some went wrong number does not have a type')
+                }
+
+                if(validator.isEmpty(req.body.email.trim())){
+                    req.session.error.push('warning: Our office needs an email in order to process your contracts, we will not be using this email for comunication purpose unless you authorize us.')
+                }else if(!validator.isEmail(req.body.email.trim())){
+                    req.session.error.push('not a valid email')
+                }else if(!req.body.selector || validator.isEmpty(req.body.selector)){
+                    req.session.error.push('select an option')
+                } 
             }
+            //req.session.error = 'This is an error'
+            //console.log(req.session.error)
+            //const linkId = nanoid()
+            // let duration = req.body.durationItem
+            
+            // if(req.body.timeframItem === 'hours'){
+            //     duration = duration * 60
+            // }
 
-            await ReservedSlotDB.create({
-                owner: req.user.email, 
-                name: req.body.nameItem, 
-                email: req.body.emailItem, 
-                location: req.body.locationItem, 
-                subject: req.body.subjectItem, 
-                duration: duration,
-                linkId: linkId,
-            })
-            await TimeSlotDB.create({
-                slotChoices: req.body.dateTimeItem,
-                linkId: linkId,
-            })
+            // await ReservedSlotDB.create({
+            //     owner: req.user.email, 
+            //     name: req.body.nameItem, 
+            //     email: req.body.emailItem, 
+            //     location: req.body.locationItem, 
+            //     subject: req.body.subjectItem, 
+            //     duration: duration,
+            //     linkId: linkId,
+            // })
+            // await TimeSlotDB.create({
+            //     slotChoices: req.body.dateTimeItem,
+            //     linkId: linkId,
+            // })
 
-            req.body.idFromJSFile = linkId
-            module.exports.resendEmail(req)
+            // req.body.idFromJSFile = linkId
+            // module.exports.resendEmail(req)
 
             console.log('Todo has been added!')
-            res.redirect('/setDates')
+            res.redirect(req.get('referer'))
         }catch(err){
             console.log(err)
         }

@@ -27,7 +27,7 @@ const SubmittedInformationSchema = new mongoose.Schema({
   email: {
     type: String,
   },
-  emailUsee: {
+  emailUse: {
     type: Boolean,
   },
 
@@ -39,15 +39,14 @@ const SubmittedInformationSchema = new mongoose.Schema({
   },
   accessLink: {
     type: String,
-    unique: true,
   },
+
   timestamp: {
     type: Date,
     required: true,
   },
   syncedDate: {
     type: Date,
-    required: true,
   },
 })
 

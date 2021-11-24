@@ -8,6 +8,7 @@ router.get('/import', ensureAuth, bookingController.import)
 router.get('/fill', ensureAuth, bookingController.fillReference)
 router.get('/updateInfo', ensureAuth, bookingController.updateInfo)
 router.get('/updateInfo/:id', ensureAuth, bookingController.updateInfo)
+router.post('/updateInfo', ensureAuth, bookingController.submitInfo)
 
 // router.post('/createTimeSlot', ensureAuth, bookingController.createTimeSlot)
 // router.post('/resendEmail', ensureAuth, bookingController.resendEmail)

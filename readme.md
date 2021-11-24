@@ -116,7 +116,10 @@ Current data might be a manipulation of the submitted database and the historic 
 
 ### Update Page
 - Seperate the field for last names, for visual representation since outlook only permits one field so it will still be stored as one value.
-
+- integrate USPS address validity verification
+- permit user to post a name to associate number too
+- [additional] Limit the type of phone numbers to match outlooks limits
+- unify number and type array to avoid errors match number and type
 
  -->
 <!-- Instead of approaching your project as a single drawn-out process, you might find it helpful to break it down into more manageable pieces. (This is true for the project’s timeline and the code itself.) At the most macro level, you have an overarching goal: What problem is your software addressing? Who will be using it?
