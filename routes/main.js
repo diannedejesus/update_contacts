@@ -7,6 +7,7 @@ router.get('/', ensureAuth, bookingController.setDates)
 router.get('/import', ensureAuth, bookingController.import)
 router.get('/fill', ensureAuth, bookingController.fillReference)
 router.get('/updateInfo', ensureAuth, bookingController.updateInfo)
+//router.get('/receiptPage', ensureAuth, bookingController.receiptPage)
 router.get('/updateInfo/:id', ensureAuth, bookingController.updateInfo)
 router.post('/updateInfo', ensureAuth, bookingController.submitInfo)
 

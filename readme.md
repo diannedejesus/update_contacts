@@ -71,6 +71,7 @@ Learn how to create a low-fidelity wireframe in Lucidchart to include within you
 ## Goals and milestones
 - outlook connection implementation
     * import contacts
+    * send email
 - id generator
 - timestamp handler
 - click through handler
@@ -85,6 +86,9 @@ Learn how to create a low-fidelity wireframe in Lucidchart to include within you
 ## Bugs and Issues
 - EWS Restriction filter not working
 - EWS Selecting only needed properties not clear when mutiple are needed
+- check for additional text when fields are blank
+    - displaying address
+    - adding address to db
 
 <!-- NOTES
 ### Initial loading of information
@@ -120,6 +124,8 @@ Current data might be a manipulation of the submitted database and the historic 
 - permit user to post a name to associate number too
 - [additional] Limit the type of phone numbers to match outlooks limits
 - unify number and type array to avoid errors match number and type
+- modify form verification code, either integrate a pgk or move it to make it more cleaner and change the way it process information to make it more intuitive for the user. Posible not use sessions for this data.
+
 
  -->
 <!-- Instead of approaching your project as a single drawn-out process, you might find it helpful to break it down into more manageable pieces. (This is true for the project’s timeline and the code itself.) At the most macro level, you have an overarching goal: What problem is your software addressing? Who will be using it?

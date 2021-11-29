@@ -1,5 +1,6 @@
 const NameReferenceDB = require('../models/NameReference')
 const HistoricImportDB = require('../models/HistoricImport')
+const SubmittedInformationDB = require('../models/SubmittedInformation')
 const ewsOptions = require('../ewsConnections')
 const validator = require('validator');
 const { nanoid } = require('nanoid')
@@ -102,15 +103,19 @@ module.exports = {
     updateInfo: async (req,res)=>{
         try{
             let data, contactName
-            const currentErrors = req.session.error
-            req.session.error = ''
-            
+            const currentErrors = req.session.error.concat(req.session.warning)
+            const formInformation = req.session.body
+            req.session.error = []
+            req.session.body = []
+            req.session.warning = []
+
             if(req.params.id){
                 data = await NameReferenceDB.find({accessLink: req.params.id}, 'name');
-                //console.log(data)
                 contactName = {first: data[0].name.firstName, middle: data[0].name.middleInitial, last:data[0].name.lastName}
             }
-            res.render('updateInformation.ejs', {name: contactName, errors: currentErrors})
+
+            console.log('update information')
+            res.render('updateInformation.ejs', {name: contactName, errors: currentErrors, bodyFill: formInformation, id: req.params.id})
         }catch(err){
             console.log(err)
         }
@@ -141,69 +146,140 @@ module.exports = {
     submitInfo: async (req, res)=>{
         try{
             req.session.error = [] //error handling
+            req.session.warning = [] //error handling
+            let dataSubmit = false
+
             if(req.body){
+                req.session.body = req.body //pass filled info
+                //Name field
                 if(validator.isEmpty(req.body.firstname.trim()) || validator.isEmpty(req.body.lastname.trim())){
-                    req.session.error.push('Name and last name can not be empty')
+                    req.session.error.push('Error: Name and last name can not be empty')
+                    req.session.body.submit = ''
                 }
 
-                if(req.body.urbName.trim() || req.body.streetaddr.trim() || req.body.city.trim() || req.body.state.trim() || req.body.zip.trim()){
+                //address field
+                if(req.body.streetaddr.trim() || req.body.city.trim() || req.body.state.trim() || req.body.zip.trim()){
                     if(validator.isEmpty(req.body.urbName.trim()) || validator.isEmpty(req.body.streetaddr.trim()) || validator.isEmpty(req.body.city.trim()) || validator.isEmpty(req.body.state.trim()) || validator.isEmpty(req.body.zip.trim())){
-                        req.session.error.push('Address is incomplete you must fill all fields')
+                        req.session.error.push('Error: Address is incomplete you must fill all fields')
+                        req.session.body.submit = ''
                     }else{
-                        req.session.error.push('address field filled')
+                        //req.session.warning.push('address field filled')
                     }
                 }
 
                 if(validator.isEmpty(req.body.urbName.trim()) || validator.isEmpty(req.body.streetaddr.trim()) || validator.isEmpty(req.body.city.trim()) || validator.isEmpty(req.body.state.trim()) || validator.isEmpty(req.body.zip.trim())){
-                    req.session.error.push('warning: not including an address can potential lead to missed comunications from our office and can affect you payments.')
+                    req.session.warning.push('warning: not including an address can potential lead to missed comunications from our office and can affect you payments.')
                 }
-//todo::will need to create a loop
-console.log(req.body)
+
+                //phone number field
                 if(req.body.number.length <= 0){
-                    req.session.error.push('warning: not including a phone number can potential lead to missed comunications from our office and can affect you payments.')
-                }else if(!validator.isMobilePhone(req.body.number.trim())){
-                    req.session.error.push('The number entered is not a valid.')
+                    req.session.warning.push('warning: not including a phone number can potential lead to missed comunications from our office and can affect your payments.')
+                }else if(Array.isArray(req.body.number)){
+                    for(items of req.body.number){
+                        if(!validator.isMobilePhone(items.trim())){
+                            req.session.error.push(`Error: The number ${items} is not a valid number.`)
+                            req.session.body.submit = ''
+                        }
+                    }
+                }else{
+                    if(!validator.isMobilePhone(req.body.number.trim())){
+                        req.session.error.push(`Error: The number ${req.body.number} is not a valid number.`)
+                        req.session.body.submit = ''
+                    }
                 }
-                if(!req.body.type || validator.isEmpty(req.body.type.trim())){
-                    req.session.error.push('Some went wrong number does not have a type')
+                
+                //phone type errors, these should never showup since one is always selected by default
+                if(req.body.number && req.body.number.length <= 0){
+                    if(req.body.type && req.body.type.length <= 0){
+                        req.session.warning.push('warning: no phone number type selected.')
+                    }else if(Array.isArray(req.body.type)){
+                        for(items of req.body.type){
+                            if(!validator.isEmpty(items.trim())){
+                                req.session.warning.push('warning: Something went wrong, a number does not have a type')
+                            }
+                        }
+                    }else{
+                        if(!validator.isEmpty(req.body.type.trim())){
+                            req.session.warning.push('warning: Some went wrong, a type was not selected')
+                        }
+                    }
                 }
 
+                //email field
                 if(validator.isEmpty(req.body.email.trim())){
-                    req.session.error.push('warning: Our office needs an email in order to process your contracts, we will not be using this email for comunication purpose unless you authorize us.')
+                    req.session.warning.push('warning: Our office needs an email in order to process your contracts, we will not be using this email for comunication purpose unless you authorize us.')
                 }else if(!validator.isEmail(req.body.email.trim())){
-                    req.session.error.push('not a valid email')
+                    req.session.error.push('Error: not a valid email')
+                    req.session.warning.push('warning: select an option')
+                    req.session.body.submit = ''
                 }else if(!req.body.selector || validator.isEmpty(req.body.selector)){
-                    req.session.error.push('select an option')
+                    req.session.error.push('Error: please select how we may use the submitted email')
                 } 
-            }
-            //req.session.error = 'This is an error'
-            //console.log(req.session.error)
-            //const linkId = nanoid()
-            // let duration = req.body.durationItem
             
-            // if(req.body.timeframItem === 'hours'){
-            //     duration = duration * 60
-            // }
+                
+            
+                //when to permit submit //must have name and last name and must not have invalid info
+                if(req.session.error.length <= 0){
+                    console.log('no errors found')
+                    if(req.session.warning.length <= 0){
+                        console.log('data submitted')
+                        //ok to submit info first time
+                        dataSubmit = true
+                        console.log('receipt')
+                        res.render('receipt.ejs', {bodyFill: req.body})
+                    }else if(req.body.submit.toLowerCase() === 'submit anyway'){
+                        //submit data with warnings
+                        console.log('parcial data submitted')
+                        dataSubmit = true
+                    }else{
+                        console.log('warnings found, please verify before submitting data')
+                        res.redirect(req.get('referer'))
+                    }
+                }else{
+                    console.log('errors found, do not submit data')
+                    res.redirect(req.get('referer'))
+                }
+                
+            
+            } //end form error handler
 
-            // await ReservedSlotDB.create({
-            //     owner: req.user.email, 
-            //     name: req.body.nameItem, 
-            //     email: req.body.emailItem, 
-            //     location: req.body.locationItem, 
-            //     subject: req.body.subjectItem, 
-            //     duration: duration,
-            //     linkId: linkId,
-            // })
-            // await TimeSlotDB.create({
-            //     slotChoices: req.body.dateTimeItem,
-            //     linkId: linkId,
-            // })
 
-            // req.body.idFromJSFile = linkId
-            // module.exports.resendEmail(req)
+            //build phone array
+            let phoneNumbers = []
+            if(req.body.number.length > 0 && req.body.number.length === req.body.type.length){
+                for(let i=0; i<req.body.number.length; i++){
+                    phoneNumbers.push({number: req.body.number[i], numberType: req.body.type[i]}) 
+                }
+            }else if(req.body.number){
+                phoneNumbers.push({number: req.body.number, numberType: req.body.type}) 
+            }
+            //console.log(phoneNumbers)
 
-            console.log('Todo has been added!')
-            res.redirect(req.get('referer'))
+            if(false){
+                await SubmittedInformationDB.create({
+                    name: {
+                        firstName: req.body.firstname,
+                        middleInitial: req.body.middleinitial,
+                        lastName: req.body.lastname,
+                    }, 
+                    phones:phoneNumbers,
+                    email: req.body.email, 
+                    emailUse: req.body.selector === 'no' ? false : true, 
+                    address: {
+                        street: req.body.urbName + '/n' + req.body.streetaddr, 
+                        city: req.body.city, 
+                        state: req.body.state, 
+                        zipcode: req.body.zip, 
+                    },
+                    timestamp: new Date(),
+                //    syncedDate: 
+                    accessLink: req.body.accessLink,
+                })
+               // res.render('receipt.ejs', {bodyFill: req.body})
+            }
+
+            console.log('submitted!')
+            
         }catch(err){
             console.log(err)
         }

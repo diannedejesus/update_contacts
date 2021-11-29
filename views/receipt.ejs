@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Information</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <h1>Contact Information Submitted</h1>
+    <p>Thankyou for updating your information.</p>
+ 
+   
+    <h2>1. Contact Name</h2>
+    <h3><%= bodyFill.firstname ? bodyFill.firstname : '' %> 
+        <%= bodyFill.middleinitial ? bodyFill.middleinitial : '' %>
+        <%= bodyFill.lastname ? bodyFill.lastname : '' %>
+    </h3>
+
+    <h2>2. Postal Address</h2>
+    <p><%= bodyFill.urbName ? bodyFill.urbName : '' %><br>
+    <%= bodyFill.streetaddr ? bodyFill.streetaddr : '' %><br>
+    <%= bodyFill.city ? `${bodyFill.city},` : '' %> <%= bodyFill.state ? bodyFill.state : '' %> <%= bodyFill.zip ? bodyFill.zip : '' %></p>
+
+    <h2>3. Phone Numbers</h2>
+
+        <% if( typeof bodyFill.number === 'object'){ %>     
+            <% for(let i=0; i<bodyFill.number.length; i++) { %>
+                <p><%= bodyFill.type[i] ? `${bodyFill.type[i]}:` : '' %> <%= bodyFill.number[i] %></p>
+            <% } %>
+        <% } else { %>
+            <p><%= bodyFill.type ? `${bodyFill.type}:` : '' %> <%= bodyFill.number %></p>
+        <% } %>
+
+
+    <h2>4. Email Address</h2>
+    <p><%= bodyFill.email ? bodyFill.email : '' %></p>
+    <p>Can we use this email to comunicate with you for official purposes? <%= bodyFill.selector ?  bodyFill.selector : '' %></p>
+
+
+
+
+
+
+<!-- Cancel rest -->
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>
