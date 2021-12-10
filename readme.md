@@ -6,13 +6,13 @@ Create a unique link for a client list which will permit them to update their co
 
 ## Functional Description
 The application will connect to an outlook exchange account and import the contact list, timestamping the import. The list will be filtered by job title. Then a unique access link will be generated for each contact. This link will be used as an identifer for the contact. Then a separate database will be filled for the user application. It will contain only name and link/identifier for security purposes.
-- the import will be timestamped the day of import or have the last modified date.
+- the import will be timestamped the day of import or have the last modified date (doesn't seem that the last modified date is available on exchange)
 - filtering by job title since that is the field we use to identify type of contact.
 - connection by outlook exchange since that is what the company uses, through the soap protocal and EWS
-- the number of contacts will be less then 100 so the access link can be unique but managable as a manual entry
+- the number of contacts will be less then 200 so the access link can be unique but managable as a manual entry
 - the data will be used to fill a separate database, the user data entry has no need to access all the contact information so that will be kept seperate with other none sensitive information.
 
-The user application will consist of a form where the user will be able enter and submit their contact information. If they use a unique link then their name will be auto filled. Clear instruction will be placed onscreen and warnings will show up to explain the importance of updating their data.
+The user application will consist of a form where the user will be able to enter and submit their contact information. If they use a unique link then their name will be auto filled. Clear instruction will be placed onscreen and warnings will show up to explain the importance of updating their data.
 - The instruction will state that in order to erase information and not replace it, they will need to call or email us.
 - if the unique link is not used then the linkid will be left empty and a match will be found during the verification process. 
 
@@ -27,7 +27,7 @@ When the form is submitted it will be added to a submit database with a timestam
 The application will also track the click through information of the links. How many times the link was accessed and if information was submitted.
 - This will be stored in the names database since it has a simple reference to each contact and ideally not have any repeated info like the submitted databse.
 - as soon as the link is accessed the access count is incremented. If possible a measure can be implemented to avoid multiple counts for same session but should not be an issue if this is not possible.
-- if the submit button is pressed without errors the submit count will be incremented.
+- maybe count failed submits and why they failed
 
 ### Databases
 * historic data/initial import
@@ -37,6 +37,7 @@ The application will also track the click through information of the links. How 
     - email
     - link
     - timestamp
+    - disabled
 * name reference (reference for main access aka not through unique link)
     - name
     - link
@@ -69,19 +70,25 @@ illustration of people working together
 Learn how to create a low-fidelity wireframe in Lucidchart to include within your software design document. -->
 
 ## Goals and milestones
-- outlook connection implementation
-    * import contacts
-    * send email
-- id generator
-- timestamp handler
-- click through handler
-- user view
-- receipt/submit view
-- admin view
-- database implementation
-- [additional Feature] dashboard with visualizations
-- [additional Feature] 
-- [Wishlist] 
+[completed] connect to outlook
+[partial] filter data (selection from outlook not working)
+[completed] import contacts with timestamps
+[ ] send email
+[completed] generate unique link
+[complete] fill names database
+
+[ ] click through handler
+[completed] user view / form 
+[completed] form error handling
+[ ] receipt/submit view
+[ ] find / link contacts with submits with no reference id
+[ ] admin view
+[ ] review changes view
+[ ] database implementation
+[ ][additional Feature] collect submit fails with reason for fail
+[ ][additional Feature] click through handler, session detection
+[ ][additional Feature] compare and submit contact changes
+[ ][Wishlist] dashboard with visualizations
 
 ## Bugs and Issues
 - EWS Restriction filter not working
@@ -97,11 +104,13 @@ The idea behind this part of the app is that the user can load information from 
 When the information is loaded it will be placed in two databases, one will contain the full information selected. A unique link will be generated for each entry. Then the name and associated unique link will be used to fill a seperate database. The app will count how many items were load into the two db and confirm to the user that the data was load. It will reload to a page that displays the data.
 
  
-- divide the databases so that the user only have access to the minimun amount of data.
-- verfiy credentials for reading contacts
+- seperate database with distint permision levels to avoid access to private data
+- create process to verfiy credentials for reading and editiong contacts
 - find the structure of the information to use for limiting the import. Try to implement dynamicly.
     - will also be used to define the information to select from the data.
 - count the amount of data that was loaded into the database for display.
+- add a reference for empty link counting
+- Generate unique link
 
 ### Historic data display vs current data
 The historic database will only have two options posibly three. You will be able to update the timestamp to make how recent the data was changed, you can mark fields as disabled for data that is not relevent to the update process. Might posibly allow the addition of new entries for data that was not in the initial import.

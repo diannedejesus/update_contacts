@@ -109,9 +109,12 @@ module.exports = {
             req.session.body = []
             req.session.warning = []
 
-            if(req.params.id){
+            if(formInformation.legnth === 0 && req.params.id){
+                await NameReferenceDB.findOneAndUpdate({accessLink: req.params.id}, {$inc: {accessCount: 1}})
                 data = await NameReferenceDB.find({accessLink: req.params.id}, 'name');
                 contactName = {first: data[0].name.firstName, middle: data[0].name.middleInitial, last:data[0].name.lastName}
+            }else if(formInformation.legnth === 0){
+                await NameReferenceDB.findOneAndUpdate({accessLink: ''}, {$inc: {accessCount: 1}})
             }
 
             console.log('update information')
@@ -226,7 +229,6 @@ module.exports = {
                         //ok to submit info first time
                         dataSubmit = true
                         console.log('receipt')
-                        res.render('receipt.ejs', {bodyFill: req.body})
                     }else if(req.body.submit.toLowerCase() === 'submit anyway'){
                         //submit data with warnings
                         console.log('parcial data submitted')
@@ -275,7 +277,10 @@ module.exports = {
                 //    syncedDate: 
                     accessLink: req.body.accessLink,
                 })
-               // res.render('receipt.ejs', {bodyFill: req.body})
+
+                res.render('receipt.ejs', {bodyFill: req.body})
+            }else if(dataSubmit === true) {
+                res.render('receipt.ejs', {bodyFill: req.body})
             }
 
             console.log('submitted!')
