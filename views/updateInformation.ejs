@@ -18,68 +18,82 @@
     <h1>Update Contact Information</h1>
     <p>Our offices is updating all contact information to ensure that your services are not interrupted, please provide us with your current information. If you wish to have your information removed from our list then please call or email us.</p>
  
-    <form method='POST' action='/setDates/updateInfo'>
-        <h2>1. Contact Name</h2>
-        <label for='firstname'>Name</label>
-        <input id='firstname' name='firstname'type='text' placeholder="Juana" <%= bodyFill.firstname ? `value=${bodyFill.firstname}` : name ? `value=${name.first}` : '' %>>
-        <label for='middleinitial'>Initial</label>
-        <input id='middleinitial' name='middleinitial' type='text' placeholder="S" <%= bodyFill.middleinitial ? `value=${bodyFill.middleinitial}` : name ? `value=${name.middle}` : '' %>>
-        <label for='lastname'>Last Names</label>
-        <input id='lastname' name='lastname' type='text' placeholder="del Pueblo Santa" <%= bodyFill.lastname ? `value=${bodyFill.lastname}` : name ? `value=${name.last}` : '' %>>
-
-        <h2>2. Postal Address</h2>
-        <label for='urbName'>Urb Name</label>
-        <input id='urbName' name='urbName' type='text' placeholder="Urb. Santa Juanita" <%= bodyFill.urbName ? `value=${bodyFill.urbName}` : '' %>>
-        <label for='streetaddr'>Street Address</label>
-        <input id='streetaddr' name='streetaddr' type='text' placeholder="345 Calle Ricon Nuevo" <%= bodyFill.streetaddr ? `value=${bodyFill.streetaddr}` : '' %>>
-        <label for='city'>City</label>
-        <input id='city' name='city' type='text' placeholder="Rincon" <%= bodyFill.city ? `value=${bodyFill.city}` : '' %>>
-        <label for='state'>State</label>
-        <input id='state' name='state' type='text' placeholder="PR" <%= bodyFill.state ? `value=${bodyFill.state}` : '' %>>
-        <label for='zip'>Zip Code</label>
-        <input id='zip' name='zip' type='text' placeholder="00999-45302" <%= bodyFill.zip ? `value=${bodyFill.zip}` : '' %>>
-
+    <form method='POST' action='/updateInfo'>
+        <section class='contactName'>
+            <h2>1. Contact Name</h2>
+            <label for='firstname'>Name</label>
+            <input id='firstname' name='firstname'type='text' placeholder="Juana" <%= bodyFill.firstname ? `value=${bodyFill.firstname}` : name ? `value=${name.first}` : '' %>>
+            <label for='middleinitial'>Initial</label>
+            <input id='middleinitial' name='middleinitial' type='text' size='1' placeholder="S" <%= bodyFill.middleinitial ? `value=${bodyFill.middleinitial}` : name ? `value=${name.middle}` : '' %>>
+            <label for='lastname'>Last Names</label>
+            <input id='lastname' name='lastname' type='text' placeholder="del Pueblo Santa" <%= bodyFill.lastname ? `value=${bodyFill.lastname}` : name ? `value=${name.last}` : '' %>>
+        </section>
+        <section class='postalAddress'>
+            <h2>2. Postal Address</h2>
+            <div class='addressMain'>
+                <label for='urbName'>Urb Name</label>
+                <input id='urbName' name='urbName' type='text' placeholder="Urb. Santa Juanita" <%= bodyFill.urbName ? `value=${bodyFill.urbName}` : '' %>>
+                <label for='streetaddr'>Street Address</label>
+                <input id='streetaddr' name='streetaddr' type='text' placeholder="345 Calle Ricon Nuevo" <%= bodyFill.streetaddr ? `value=${bodyFill.streetaddr}` : '' %>>
+            </div>
+            <div class='stateInfo'>
+                <label for='city'>City</label>
+                <input id='city' name='city' type='text' placeholder="Rincon" <%= bodyFill.city ? `value=${bodyFill.city}` : '' %>>
+            </div>
+            <div class='stateInfo'>
+                <label for='state'>State</label>
+                <input id='state' name='state' type='text' placeholder="PR" <%= bodyFill.state ? `value=${bodyFill.state}` : '' %>>
+            </div>
+            <div class='stateInfo'>
+                <label for='zip'>Zip Code</label>
+                <input id='zip' name='zip' type='text' placeholder="00999-45302" <%= bodyFill.zip ? `value=${bodyFill.zip}` : '' %>>
+            </div>
+        </section>
+        <section class='phoneNumbers'>
         <h2>3. Phone Numbers</h2>
-        <div id='numberSlots'>
-            <% if( typeof bodyFill.number === 'object'){ %>     
-                <% for(let i=0; i<bodyFill.number.length; i++) { %>
-                    <label for='number1'>number</label>
-                    <input id='number1' name='number' type='text' placeholder="787-555-5555" value='<%= bodyFill.number[i] %>'>
+            <div id='numberSlots'>
+                <% if( typeof bodyFill.number === 'object'){ %>     
+                    <% for(let i=0; i<bodyFill.number.length; i++) { %>
+                        <label for='number1'>Number</label>
+                        <input id='number1' name='number' type='text' placeholder="787-555-5555" value='<%= bodyFill.number[i] %>'>
+                        <label for='type1'>Type</label>
+                        <select id='type1' name='type'>
+                            <option value='Home' <%= bodyFill.type[i] === 'Home' ? 'selected' : '' %>>Home</option>
+                            <option value='Mobile' <%= bodyFill.type[i] === 'Mobile' ? 'selected' : '' %>>Mobile</option>
+                            <option value='Business' <%= bodyFill.type[i] === 'Business' ? 'selected' : '' %>>Business</option>
+                            <option value='Other' <%= bodyFill.type[i] === 'Other' ? 'selected' : '' %>>Other</option>
+                        </select>
+                    <% } %>
+                <% } else { %>
+                    <label for='number1'>Number</label>
+                    <input id='number1' name='number' type='text' placeholder="787-555-5555" value='<%= bodyFill.number %>'>
                     <label for='type1'>Type</label>
                     <select id='type1' name='type'>
-                        <option value='Home' <%= bodyFill.type[i] === 'Home' ? 'selected' : '' %>>Home</option>
-                        <option value='Mobile' <%= bodyFill.type[i] === 'Mobile' ? 'selected' : '' %>>Mobile</option>
-                        <option value='Business' <%= bodyFill.type[i] === 'Business' ? 'selected' : '' %>>Business</option>
-                        <option value='Other' <%= bodyFill.type[i] === 'Other' ? 'selected' : '' %>>Other</option>
+                        <option value='Home' <%= bodyFill.type === 'Home' ? 'selected' : '' %>>Home</option>
+                            <option value='Mobile' <%= bodyFill.type === 'Mobile' ? 'selected' : '' %>>Mobile</option>
+                            <option value='Business' <%= bodyFill.type === 'Business' ? 'selected' : '' %>>Business</option>
+                            <option value='Other' <%= bodyFill.type === 'Other' ? 'selected' : '' %>>Other</option>
                     </select>
                 <% } %>
-            <% } else { %>
-                <label for='number1'>number</label>
-                <input id='number1' name='number' type='text' placeholder="787-555-5555" value='<%= bodyFill.number %>'>
-                <label for='type1'>Type</label>
-                <select id='type1' name='type'>
-                    <option value='Home' <%= bodyFill.type === 'Home' ? 'selected' : '' %>>Home</option>
-                        <option value='Mobile' <%= bodyFill.type === 'Mobile' ? 'selected' : '' %>>Mobile</option>
-                        <option value='Business' <%= bodyFill.type === 'Business' ? 'selected' : '' %>>Business</option>
-                        <option value='Other' <%= bodyFill.type === 'Other' ? 'selected' : '' %>>Other</option>
-                </select>
-            <% } %>
-        </div>
-        <button class='addNumber' type="button">Add Number</button>
+            </div>
+            <button class='addNumber' type="button">Add Number</button>
+        </section>
+        <section class='emailAddress'>
+            <h2>4. Email Address</h2>
+            <label for='email'>Email</label>
+            <input id='email' name='email' type='text' placeholder="email@email.com" <%= bodyFill.email ? `value=${bodyFill.email}` : '' %>> 
+            <p>Can we use this email to comunicate with you for official purposes?</p>
 
-        <h2>4. Email Address</h2>
-        <label for='email'>email</label>
-        <input id='email' name='email' type='text' placeholder="email@email.com" <%= bodyFill.email ? `value=${bodyFill.email}` : '' %>> 
-        <p>Can we use this email to comunicate with you for official purposes?</p>
-
-        <label for="huey">Yes</label>
-        <input type="radio" id="huey" name="selector" value="yes" <%= bodyFill.selector === 'yes' ? 'Checked' : '' %>>
-      
-        <label for="dewey">No</label>
-        <input type="radio" id="dewey" name="selector" value="no" <%= bodyFill.selector === 'no' ? 'Checked' : '' %>>
-      
-        <input type="hidden" name='accessLink' value="<%= id %>">
-        <input type="submit" name='submit' value="<%= bodyFill.submit ? 'Submit Anyway' : 'Submit' %>">
+            <label for="huey">Yes</label>
+            <input type="radio" id="huey" name="selector" value="yes" <%= bodyFill.selector === 'yes' ? 'Checked' : '' %>>
+        
+            <label for="dewey">No</label>
+            <input type="radio" id="dewey" name="selector" value="no" <%= bodyFill.selector === 'no' ? 'Checked' : '' %>>
+        </section>
+        <section class='submitButton'>
+            <input type="hidden" name='accessLink' value="<%= id %>">
+            <input type="submit" name='submit' value="<%= bodyFill.submit ? 'Submit Anyway' : 'Submit' %>">
+        </section>
     </form>
 
 

@@ -45,7 +45,7 @@ module.exports = {
           if (err) {
             return next(err)
           }
-          res.redirect('/setDates')
+          res.redirect('/dashboard')
         })
       })
     })

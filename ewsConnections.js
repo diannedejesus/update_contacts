@@ -103,7 +103,7 @@ module.exports = {
                 "Subject" : options.Subject,
                 "Body" : {
                   "attributes": {
-                    "BodyType" : "Text"
+                    "BodyType" : "HTML"
                   },
                   "$value": options.Body
                 },

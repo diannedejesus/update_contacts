@@ -73,14 +73,14 @@ Learn how to create a low-fidelity wireframe in Lucidchart to include within you
 [completed] connect to outlook
 [partial] filter data (selection from outlook not working)
 [completed] import contacts with timestamps
-[ ] send email
+[completed] send email
 [completed] generate unique link
 [complete] fill names database
 
 [ ] click through handler
 [completed] user view / form 
 [completed] form error handling
-[ ] receipt/submit view
+[completed] receipt/submit view
 [ ] find / link contacts with submits with no reference id
 [ ] admin view
 [ ] review changes view

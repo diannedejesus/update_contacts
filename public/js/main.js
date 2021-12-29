@@ -62,6 +62,7 @@ function addNumber(){
     numberLabel.for = 'number' + (currentNumbers.length + 1)
     numberLabel.appendChild(document.createTextNode('Number'))
     nextField.push(numberLabel)
+    nextField.push(document.createTextNode(' '))
 
     let newInput = document.createElement("input")
     newInput.id = 'number' + (currentNumbers.length + 1)
@@ -69,11 +70,13 @@ function addNumber(){
     newInput.type = 'text'
     newInput.placeholder = '787-555-5555'
     nextField.push(newInput)
+    nextField.push(document.createTextNode(' '))
 
     let typeLabel = document.createElement("label")
     typeLabel.for = 'type' +(currentNumbers.length + 1)
     typeLabel.appendChild(document.createTextNode('Type'))
     nextField.push(typeLabel)
+    nextField.push(document.createTextNode(' '))
 
     let newSelect = document.createElement("select")
     newSelect.id = 'type' + (currentNumbers.length + 1)

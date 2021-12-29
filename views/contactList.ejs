@@ -31,12 +31,14 @@
                     <td><%= el.email %></td>
                     <td>
                         <% el.phones.forEach( phone => { %>
-                            <p><%= phone.numberType %>: <%= phone.number %></p>
+                            <p class='table'><%= phone.numberType %>: <%= phone.number %></p>
                         <% }) %>
                     </td>
                     <td>
-                        <p><%= el.address.street %></p>
-                        <p><%= el.address.city %>, <%= el.address.state %> <%= el.address.zipcode %></p>
+                        <% if(el.address) { %>
+                            <p class='table'><%= el.address.street %></p>
+                            <p class='table'><%= el.address.city %>, <%= el.address.state %> <%= el.address.zipcode %></p>
+                        <% } %>
                     </td>
                     <td>
                         <% if (el.disabled === false) { %>

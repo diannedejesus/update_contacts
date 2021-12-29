@@ -2,7 +2,8 @@ const express = require('express')
 const app = express()
 const connectDB = require('./config/database')
 const homeRoutes = require('./routes/home')
-const bookingRoutes = require('./routes/main')
+const dashboardRoutes = require('./routes/main')
+const updateInfoRoutes = require('./routes/updateInformation')
 //routes path
 const loginRoutes = require('./routes/login') //import auth routes from local modules
 const signupRoutes = require('./routes/signup')
@@ -29,7 +30,6 @@ app.use(
       resave: false,
       saveUninitialized: false,
       store: MongoStore.create({ mongoUrl: process.env.DB_STRING})
-      //forget about session storage now
     })
   )
 
@@ -38,7 +38,8 @@ app.use(passport.initialize()) //setting up passport
 app.use(passport.session())
 
 app.use('/', homeRoutes)
-app.use('/setDates', bookingRoutes)
+app.use('/dashboard', dashboardRoutes)
+app.use('/updateInfo', updateInfoRoutes)
 app.use('/login', loginRoutes)
 app.use('/signup', signupRoutes)
 

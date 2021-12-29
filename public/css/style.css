@@ -23,6 +23,11 @@
 /* BASE STYLES
 /*******************************************/
 
+html, body{
+    height: 100%;
+    font-size: 1.03rem;
+}
+
 h1{
     color:black;
     background-color:lightcoral;
@@ -31,6 +36,76 @@ h1{
     padding-left: .5em;
     margin: 0;
 }
+
+h3, h2{
+    height: 2em;
+    line-height: 2em;
+    margin: 0;
+    margin-bottom: .5em;;
+    padding-left: .5em;
+}
+
+h3{
+    background-color:skyblue ;
+}
+
+h2{
+    background-color: cornflowerblue;
+    color: white;
+}
+
+input, select{
+    font-size: .95rem;
+}
+
+
+/******************************************
+/* FORM STYLES
+/*******************************************/
+
+section{
+    width: 48%;
+    height: 15em;
+    padding: .5em;
+    float: left;
+}
+
+.contactName input, .addressMain input{
+    display: block;
+    margin-bottom: 1em;
+    border: 1px solid lightgrey;
+    height: 2em;
+    width: 100%;
+}
+
+.stateInfo{
+    display: inline-block;
+    width: 30.5%;
+}
+
+.phoneNumbers input, .phoneNumbers select{
+    display: inline-block;
+    width: 40%;
+}
+
+.phoneNumbers select{
+    margin-bottom: .5em;
+}
+
+.phoneNumbers button{
+    margin: .5em;
+    padding: .4em;
+    float: right;
+}
+
+.submitButton{
+    height: fit-content;
+}
+
+/******************************************
+/* OLD STYLES
+/*******************************************/
+/* 
 .completed{
     text-decoration: line-through;
     color: gray;
@@ -42,11 +117,11 @@ h1{
 header{
     padding: 1em;
 }
-section{
+/* section{
     padding: 10px;
-}
+} */
 
-label{
+/* label{
     display: inline-block;
     width: 49%;
 }
@@ -96,12 +171,12 @@ ul{
 
 select{
     width: fit-content;
-}
+} */
 
 /*-------------------------------------*/
 /*-----------------dates---------------*/
 /*-------------------------------------*/
-.dayContainer, .timeSlots, .monthContainer{
+/* .dayContainer, .timeSlots, .monthContainer{
     border: 1px solid black;
 }
 
@@ -122,20 +197,6 @@ select{
     margin: .4em;
 }
 
-h3, h2{
-    height: 2em;
-    line-height: 2em;
-    margin: 0;
-    padding-left: .5em;
-}
-h3{
-    background-color:skyblue ;
-}
-
-h2{
-    background-color: cornflowerblue;
-    color: white;
-}
 
 
 table{
@@ -149,25 +210,24 @@ td, th{
 th{
     text-transform: uppercase;
     text-align: left;
-}
+} */ 
 
 /******************************************
 /* Signin Page
 /*******************************************/
+main{
+    height: 100%;
+    width: 100%;
+}
 
-.signin{
-    margin: 1em auto;
-    width: 70%;
-}
 .logon{
-    width: 60%;
-    border: 10px solid lightcoral;
-    border-radius: 10px 0 0 10px;
+    width: 70%;
+    background-color: rgb(245, 242, 237);
 }
+
 .signup{
-    width: 40%;
+    width: 30%;
     background-color: lightcoral;
-    border-radius: 0 10px 10px 0 ;
 }
 
 .signin input{
@@ -184,7 +244,7 @@ th{
    float: left;
    margin: 0;
    padding: 0;
-   height: 450px;
+   height: 100%;
 }
 
 .signin h1{
@@ -213,7 +273,7 @@ th{
 -----------------------------------------------------
 ----------------------------------------------------*/
 
-.button {
+/* .button {
     padding: .8em;
     margin: .3em;
     
@@ -232,3 +292,7 @@ th{
     background-color: lightgray;
     color: grey;
 }
+
+p.table{
+    margin: 0;
+} */
