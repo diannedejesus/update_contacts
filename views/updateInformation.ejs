@@ -21,12 +21,27 @@
     <form method='POST' action='/updateInfo'>
         <section class='contactName'>
             <h2>1. Contact Name</h2>
-            <label for='firstname'>Name</label>
-            <input id='firstname' name='firstname'type='text' placeholder="Juana" <%= bodyFill.firstname ? `value=${bodyFill.firstname}` : name ? `value=${name.first}` : '' %>>
-            <label for='middleinitial'>Initial</label>
-            <input id='middleinitial' name='middleinitial' type='text' size='1' placeholder="S" <%= bodyFill.middleinitial ? `value=${bodyFill.middleinitial}` : name ? `value=${name.middle}` : '' %>>
-            <label for='lastname'>Last Names</label>
-            <input id='lastname' name='lastname' type='text' placeholder="del Pueblo Santa" <%= bodyFill.lastname ? `value=${bodyFill.lastname}` : name ? `value=${name.last}` : '' %>>
+            
+
+            <% if(name && name.middle && name.middle.includes('/')){ %>
+                <label for='firstname1'>Name 1</label>
+                <input id='firstname1' name='names' type='text' placeholder="Juana" value="<%= (name.first +' '+ name.middle +' '+ name.last).split('/')[0] %>">
+                <label for='firstname2'>Name 2</label>
+                <input id='firstname2' name='names' type='text' placeholder="Juana" value="<%= (name.first +' '+ name.middle +' '+ name.last).split('/')[1] %>">
+            <% } else if(bodyFill && bodyFill.names) { %>
+                <label for='firstname1'>Name 1</label>
+                <input id='firstname1' name='names' type='text' placeholder="Juana" value="<%= bodyFill.names[0] %>">
+                <label for='firstname2'>Name 2</label>
+                <input id='firstname2' name='names' type='text' placeholder="Juana" value="<%= bodyFill.names[1] %>">
+            <% } else { %>
+                <label for='firstname'>Name</label>
+                <input id='firstname' name='firstname'type='text' placeholder="Juana" <%= bodyFill.firstname ? `value=${bodyFill.firstname}` : name ? `value=${name.first}` : '' %>>
+                <label for='middleinitial'>Initial</label>
+                <input id='middleinitial' name='middleinitial' type='text'  minlength="1" maxlength="40" value="<%= bodyFill.middleinitial ? bodyFill.middleinitial : name ? name.middle : '' %>">
+                <label for='lastname'>Last Names</label>
+                <input id='lastname' name='lastname' type='text' placeholder="del Pueblo Santa" <%= bodyFill.lastname ? `value=${bodyFill.lastname}` : name ? `value=${name.last}` : '' %>>
+            <% } %>
+            
         </section>
         <section class='postalAddress'>
             <h2>2. Postal Address</h2>

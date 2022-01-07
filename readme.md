@@ -78,6 +78,7 @@ Learn how to create a low-fidelity wireframe in Lucidchart to include within you
 [complete] fill names database
 
 [ ] click through handler
+[ ] format phones numbers to a standard representation
 [completed] user view / form 
 [completed] form error handling
 [completed] receipt/submit view

@@ -58,6 +58,10 @@ input, select{
     font-size: .95rem;
 }
 
+header{
+    padding: 1em;
+}
+
 
 /******************************************
 /* FORM STYLES
@@ -114,9 +118,7 @@ section{
     text-decoration: underline;
 }
 
-header{
-    padding: 1em;
-}
+
 /* section{
     padding: 10px;
 } */
@@ -132,22 +134,7 @@ input, select{
     height: 2em;
     width: 48%;
 }
-input[type='submit']{
-    margin-top: 1em;
-    border: 1px solid rgb(182, 97, 97);
-    background-color: transparent;
-    height: 3em;
-    width: 30%;
-    font-variant: small-caps;
-    font-weight: 900;
-    font-size: large;
-    color: lightcoral;
-}
-input[type='submit']:hover{
-    border: 1px solid rgb(182, 97, 97);
-    background-color: lightcoral;
-    color: white;
-}
+
 
 #appointmentDates label{
     display: inline-block;
@@ -197,12 +184,13 @@ select{
     margin: .4em;
 }
 
-
+*/
 
 table{
     border-collapse: collapse;
     width: 100%;
 }
+
 td, th{
     border: 1px solid black;
     padding: .5em .2em;
@@ -210,7 +198,14 @@ td, th{
 th{
     text-transform: uppercase;
     text-align: left;
-} */ 
+} 
+p.table{
+    margin: 0;
+}
+
+.contactTable{
+    width: 100%;
+}
 
 /******************************************
 /* Signin Page
@@ -288,11 +283,37 @@ main{
     color: rgb(202, 227, 255);
 }
 
+
+
+ */
+
+input[type='submit']{
+    margin-top: 1em;
+    border: 1px solid rgb(182, 97, 97);
+    background-color: transparent;
+    height: 3em;
+    width: 30%;
+    font-variant: small-caps;
+    font-weight: 900;
+    font-size: large;
+    color: lightcoral;
+}
+
+input[type='submit']:hover{
+    border: 1px solid rgb(182, 97, 97);
+    background-color: lightcoral;
+    color: white;
+}
+
 .disabled{
     background-color: lightgray;
     color: grey;
 }
 
-p.table{
-    margin: 0;
-} */
+.submitData{
+    float: right;
+}
+
+.strike{
+    text-decoration: line-through;
+}

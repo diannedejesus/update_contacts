@@ -73,9 +73,12 @@ Feel free to contact our office with questions or concerns by emailing or callin
             if(req.body){
                 req.session.body = req.body //pass filled info
                 //Name field
-                if(validator.isEmpty(req.body.firstname.trim()) || validator.isEmpty(req.body.lastname.trim())){
-                    req.session.error.push('Error: Name and last name can not be empty')
-                    req.session.body.submit = ''
+
+                if(!req.body.firstname || validator.isEmpty(req.body.firstname.trim()) || validator.isEmpty(req.body.lastname.trim())){
+                    if(!req.body.names || validator.isEmpty(req.body.names[0].trim())){
+                        req.session.error.push('Error: Name and last name can not be empty')
+                        req.session.body.submit = ''
+                    }
                 }
 
                 //address field
@@ -175,20 +178,21 @@ Feel free to contact our office with questions or concerns by emailing or callin
                 phoneNumbers.push({number: req.body.number, numberType: req.body.type})
                 compiledInfo.phoneNumbers = req.body.type + ' ' + req.body.number 
             }
+
             //console.log(phoneNumbers)
-            compiledInfo.name = `${req.body.firstname} ${req.body.middleinitial} ${req.body.lastname}`
+            compiledInfo.name = req.body.firstname ? `${req.body.firstname} ${req.body.middleinitial} ${req.body.lastname}` : `${req.body.names[0]} / ${req.body.names[1]}`
             if(!compiledInfo.phoneNumbers) { compiledInfo.phoneNumbers = 'No phone numbers provided' }
             compiledInfo.email = req.body.email ? `${req.body.email}` : 'no email provided'
-            compiledInfo.emailUse = req.body.selector === 'no' ? 'Oficial use only' : 'Oficial use and contacting'
+            compiledInfo.emailUse = req.body.selector ? req.body.selector === 'no' ? 'Oficial use only' : 'Oficial use and contacting' : 'nothing selected'
             compiledInfo.address = req.body.streetaddr ? `<br>${req.body.urbName} <br>${req.body.streetaddr} <br>${req.body.city}, ${req.body.state} ${req.body.zip}` : 'No postal address provided'
 
-            if(false){
+            if(dataSubmit){
                 await SubmittedInformationDB.create({
                     name: {
-                        firstName: req.body.firstname,
-                        middleInitial: req.body.middleinitial,
-                        lastName: req.body.lastname,
-                    }, 
+                        firstName: req.body.firstname ? req.body.firstname : req.body.names[0],
+                        middleInitial: req.body.middleinitial ? req.body.middleinitial : '/',
+                        lastName: req.body.lastname ? req.body.lastname :  req.body.names[1],
+                    },
                     phones:phoneNumbers,
                     email: req.body.email, 
                     emailUse: req.body.selector === 'no' ? false : true, 
@@ -204,7 +208,9 @@ Feel free to contact our office with questions or concerns by emailing or callin
                 })
 
                 res.render('receipt.ejs', {bodyFill: req.body})
+                module.exports.sendEmail(req.user, compiledInfo)
             }else if(dataSubmit === true) {
+                //for testing without submitting to database
                 res.render('receipt.ejs', {bodyFill: req.body})
                 module.exports.sendEmail(req.user, compiledInfo)
             }

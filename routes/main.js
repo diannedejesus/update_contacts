@@ -1,13 +1,14 @@
 const express = require('express')
 const router = express.Router()
-const bookingController = require('../controllers/main')
+const contactController = require('../controllers/main')
 const {ensureAuth, ensureGuest} = require('../middleware/auth');
 
 
-router.get('/', ensureAuth, bookingController.index)
-router.get('/import', ensureAuth, bookingController.import)
-router.get('/fill', ensureAuth, bookingController.fillReference)
-
+router.get('/', ensureAuth, contactController.index)
+router.get('/import', ensureAuth, contactController.import)
+router.get('/fill', ensureAuth, contactController.fillReference)
+router.get('/compare', ensureAuth, contactController.compareData)
+router.get('/compare/:id', ensureAuth, contactController.compareData)
 
 
 module.exports = router

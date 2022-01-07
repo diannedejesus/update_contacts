@@ -9,7 +9,36 @@ module.exports = {
     index: async (req,res)=>{
         try{
             const reservationsMade = await HistoricImportDB.find()
-            res.render('contactList.ejs', { reservations: reservationsMade })
+            const emailCount = await HistoricImportDB.find({email: {$exists: true}}).count()
+            const submitCount = await SubmittedInformationDB.find().count()
+            const uniqueSubmitCount = (await SubmittedInformationDB.distinct('accessLink')).length
+
+            res.render('contactList.ejs', { reservations: reservationsMade, emailCount,submitCount, uniqueSubmitCount })
+        }catch(err){
+            console.log(err)
+        }
+    },
+
+    compareData: async (req,res)=>{
+        try{
+            const originalData = await HistoricImportDB.find({accessLink: req.params.id})
+            const submitData = await SubmittedInformationDB.find({accessLink: req.params.id})
+
+
+            //convert phones numbers to standard format
+            let submittedNumbers = []
+
+            for(let i=0; i<originalData[0].phones.length; i++){
+                originalData[0].phones[i].number = originalData[0].phones[i].number.split('').filter(el => Number(el)).join('')
+            }
+
+            for(data of submitData){
+                for(let i=0; i<data.phones.length; i++){
+                    submittedNumbers.push(data.phones[i].number.split('').filter(el => Number(el)).join(''))  
+                }
+            }
+
+            res.render('compareSubmit.ejs', { originalData: originalData, submitData: submitData, submitPhones: submittedNumbers})
         }catch(err){
             console.log(err)
         }

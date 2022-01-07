@@ -13,30 +13,30 @@
  
    
     <h2>1. Contact Name</h2>
-    <h3><%= bodyFill.firstname ? bodyFill.firstname : '' %> 
-        <%= bodyFill.middleinitial ? bodyFill.middleinitial : '' %>
-        <%= bodyFill.lastname ? bodyFill.lastname : '' %>
+    <h3><%= bodyFill.firstname ? bodyFill.firstname : bodyFill.names[0] %> 
+        <%= bodyFill.middleinitial ? bodyFill.middleinitial : ' / ' %>
+        <%= bodyFill.lastname ? bodyFill.lastname : bodyFill.names[1] %>
     </h3>
 
     <h2>2. Postal Address</h2>
-    <p><%= bodyFill.urbName ? bodyFill.urbName : '' %><br>
-    <%= bodyFill.streetaddr ? bodyFill.streetaddr : '' %><br>
-    <%= bodyFill.city ? `${bodyFill.city},` : '' %> <%= bodyFill.state ? bodyFill.state : '' %> <%= bodyFill.zip ? bodyFill.zip : '' %></p>
+    <p><%= bodyFill.urbName ? bodyFill.urbName : 'n/a' %><br>
+    <%= bodyFill.streetaddr ? bodyFill.streetaddr : 'n/a' %><br>
+    <%= bodyFill.city ? `${bodyFill.city},` : 'n/a' %> <%= bodyFill.state ? bodyFill.state : 'n/a' %> <%= bodyFill.zip ? bodyFill.zip : 'n/a' %></p>
 
     <h2>3. Phone Numbers</h2>
 
         <% if( typeof bodyFill.number === 'object'){ %>     
             <% for(let i=0; i<bodyFill.number.length; i++) { %>
-                <p><%= bodyFill.type[i] ? `${bodyFill.type[i]}:` : '' %> <%= bodyFill.number[i] %></p>
+                <p><%= bodyFill.type[i] ? `${bodyFill.type[i]}:` : 'n/a' %> <%= bodyFill.number[i] %></p>
             <% } %>
         <% } else { %>
-            <p><%= bodyFill.type ? `${bodyFill.type}:` : '' %> <%= bodyFill.number %></p>
+            <p><%= bodyFill.type ? `${bodyFill.type}:` : 'n/a' %> <%= bodyFill.number ? bodyFill.number : 'n/a' %></p>
         <% } %>
 
 
     <h2>4. Email Address</h2>
-    <p><%= bodyFill.email ? bodyFill.email : '' %></p>
-    <p>Can we use this email to comunicate with you for official purposes? <%= bodyFill.selector ?  bodyFill.selector : '' %></p>
+    <p><%= bodyFill.email ? bodyFill.email : 'n/a' %></p>
+    <p>Can we use this email to comunicate with you for official purposes? <%= bodyFill.selector ?  bodyFill.selector : 'n/a' %></p>
 
 
 
