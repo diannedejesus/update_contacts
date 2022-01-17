@@ -5,20 +5,20 @@
 Create a unique link for a client list which will permit them to update their contact information.
 
 ## Functional Description
-The application will connect to an outlook exchange account and import the contact list, timestamping the import. The list will be filtered by job title. Then a unique access link will be generated for each contact. This link will be used as an identifer for the contact. Then a separate database will be filled for the user application. It will contain only name and link/identifier for security purposes.
-- the import will be timestamped the day of import or have the last modified date (doesn't seem that the last modified date is available on exchange)
-- filtering by job title since that is the field we use to identify type of contact.
+The application connects to an outlook exchange account and imports the contact list, timestamping the import with the current date. The list is filtered by job title. Then a unique access link is generated for each contact. This link is used as an identifer for the contact across the different databases. Then a separate database will be filled for the user application. It contains only name and link/identifier from the original import for security purposes; it also will be the location for tracking data asociated with the contact.
+- the import will be timestamped the day of import [ would like to have the last modified date but it doesn't seem that the last modified date is available on exchange]
+- filtering by job title since that is the field we use to identify the type of contact.
 - connection by outlook exchange since that is what the company uses, through the soap protocal and EWS
 - the number of contacts will be less then 200 so the access link can be unique but managable as a manual entry
 - the data will be used to fill a separate database, the user data entry has no need to access all the contact information so that will be kept seperate with other none sensitive information.
 
-The user application will consist of a form where the user will be able to enter and submit their contact information. If they use a unique link then their name will be auto filled. Clear instruction will be placed onscreen and warnings will show up to explain the importance of updating their data.
+The user application will consist of a form where they will be able to enter and submit their contact information. If they use a unique link then their name will be auto filled. Clear instruction will be placed onscreen and warnings will show up to explain the importance of updating their data.
 - The instruction will state that in order to erase information and not replace it, they will need to call or email us.
-- if the unique link is not used then the linkid will be left empty and a match will be found during the verification process. 
+- if the unique link is not used then the linkid will be left empty and a match will be found during the submission process. 
 
 
-When the form is submitted it will be added to a submit database with a timestamp where it can be reviewed before updating the outlook database. The user will recieve a visual confirmation of the submitted data and if an email was provided then we will send a confirmation by email.
-- form can be submitted partially filled but needs at least name
+When the form is submitted it is be added to a submit database with a timestamp where it can be reviewed before updating the outlook database. The user will recieve a visual confirmation of the submitted data and if an email was provided then we will send a confirmation by email. If no email was provide the application will verify it an email is present for the user (only if link was used to enter data), if none is found a message will be presented to the user.
+- form can be submitted partially filled but needs at least the full name
 - the person will be informed of importance of updating all information, especially email if partially full.
 - repeated data will just be stored in database, this is not an issue due to the small scale use of the application.
 - The visual confirmation is a thanks page with the information displayed with time and date for printing and we will indicate that an email was sent (if no error occurred and if an email is on file).
@@ -28,6 +28,9 @@ The application will also track the click through information of the links. How 
 - This will be stored in the names database since it has a simple reference to each contact and ideally not have any repeated info like the submitted databse.
 - as soon as the link is accessed the access count is incremented. If possible a measure can be implemented to avoid multiple counts for same session but should not be an issue if this is not possible.
 - maybe count failed submits and why they failed
+
+In the comparison and verification process the historical data will be displayed along side the submitted data. It will visualize what has changed from the historical data. The user will be able to select which fields they wish to include in the update. When submited it will add the information to the verified database and the date of the verification of the data will be added to the submit database. When accessing the compare page again this data will be disabled since it was already modified and the verified data will be displayed.
+
 
 ### Databases
 * historic data/initial import
@@ -43,7 +46,16 @@ The application will also track the click through information of the links. How 
     - link
     - access count
     - submitted count
-* submitted information
+* submitted information (may have repeats)
+    - name
+    - phones
+    - postal address
+    - email
+    - email use
+    - link
+    - timestamp
+    - verified
+* verified information
     - name
     - phones
     - postal address
@@ -58,6 +70,15 @@ The application will also track the click through information of the links. How 
 <!-- With this section, you’re trying to answer a simple question: What does the software do? Of course, to answer this question thoroughly, you’ll need to dig a little deeper. In your functional description, you should cover error handling, one-time startup procedures, user limitations, and other similar details.  -->
 
 ## User/Client Interface
+![login page](login-signup.png "Login Page")
+![signup page](signup-login.png "Signup Page")
+![dashboard](dashboard.png "Dashboard")
+![configure page](configure.png "Configure Page")
+![submit page](submit-verification.png "Submit Page")
+![compare page](compare.png "Compare Page")
+![compare page with verified data](compare2.png "Compare Page [verified data]")
+
+
 <!-- There’s a good chance your coding project is going to be an application, which means it will have a user interface. (If your project is a library or something similar, there won’t be an interface.) As clients, UX designers, and programmers discuss and plan the user interface, it’s easy for the lines to get crossed. If the client doesn’t adequately communicate their vision, your teams might build out the user interface only to have the design shot down.  
 
 Here’s the good news: These mishaps are, for the most part, entirely avoidable. You just need to discuss a few questions with the client before you start developing. Do certain elements of the interface change (animations)? Which elements are buttons? How many unique screens can the user navigate to? And, of course, what does all of this actually look like?
@@ -78,12 +99,13 @@ Learn how to create a low-fidelity wireframe in Lucidchart to include within you
 [complete] fill names database
 
 [partial] click through handler
+    [ ] implement display of data
 [ ] format phones numbers to a standard representation
 [completed] user view / form 
 [completed] form error handling
 [completed] receipt/submit view
 [ ] find / link contacts with submits with no reference id
-[ ] admin view
+[ ] create an admin view / dashboard
 [completed] review changes view
 [completed] database implementation
 [ ][additional Feature] collect submit fails with reason for fail
@@ -100,7 +122,7 @@ Learn how to create a low-fidelity wireframe in Lucidchart to include within you
 
 <!-- NOTES
 ### Initial loading of information
-The idea behind this part of the app is that the user can load information from another resourse for contacts like ms exchange. They will enter their credentials which will be verified. When the user selects to import the information they can choose a field by which to limit the import. And can select which fields to use.
+The idea behind this part of the app is that the user can load information from another resourse (for contacts) like ms exchange. They will enter their credentials which will be verified. When the user selects to import the information they can choose a field by which to limit the import. And can select which fields to use.
 
 When the information is loaded it will be placed in two databases, one will contain the full information selected. A unique link will be generated for each entry. Then the name and associated unique link will be used to fill a seperate database. The app will count how many items were load into the two db and confirm to the user that the data was load. It will reload to a page that displays the data.
 
@@ -111,7 +133,7 @@ When the information is loaded it will be placed in two databases, one will cont
     - will also be used to define the information to select from the data.
 - count the amount of data that was loaded into the database for display.
 - add a reference for empty link counting
-- Generate unique link
+* Generate unique link
 
 ### Historic data display vs current data
 The historic database will only have two options posibly three. You will be able to update the timestamp to make how recent the data was changed, you can mark fields as disabled for data that is not relevent to the update process. Might posibly allow the addition of new entries for data that was not in the initial import.
@@ -125,13 +147,13 @@ Current data might be a manipulation of the submitted database and the historic 
 - Import only works if no data is present, this to avoid duplicates
         - [additional] add duplicate detector
 - Allow user to add a new entry to historic list (data can be added or disabled/enabled)
-- [completed] Option for editing list. User can enable and disable contacts as a visual way of indicating these contacts do not need to be updated.
+* [completed] Option for editing list. User can enable and disable contacts as a visual way of indicating these contacts do not need to be updated.
     - [additional] allow for adding a reason for disabling
 
 ### Update Page
-- Seperate the field for last names, for visual representation since outlook only permits one field so it will still be stored as one value.
+* [unneeded] Seperate the field for last names, for visual representation since outlook only permits one field so it will still be stored as one value.
 - integrate USPS address validity verification
-- permit user to post a name to associate number too
+- ?? permit user to post a name to associate number too
 - [additional] Limit the type of phone numbers to match outlooks limits
 - unify number and type array to avoid errors match number and type
 - modify form verification code, either integrate a pgk or move it to make it more cleaner and change the way it process information to make it more intuitive for the user. Posible not use sessions for this data.
@@ -184,7 +206,13 @@ Once you’ve written your software design document and gotten approval from sta
 [] add the count of items to the submitlist page view and if the info has been verified already. Perhaps order it by verification status
 [] modify the submitlist view to not include data since we will only be display unique values and won't represent all changes made. This includes timestamp.
 [] make sure the disabled entry is stays disabled through out application.
-[]
-[]
-
+[] make email dynamic and have application look for an email if one is not provide in the submitted data. if none found advice the user of importance, inability to provide email confirmation.
+[] add forget password option
+[] obcure password entry
+[] fix the display of comma when no address is present
+[] update the dashboard view to have needed data, historical data list view might not be the most pertinent
+[] list view for the verified data
+[] ensure the verified data db doesnt have duplicates
+[] review ux to ensure it is understandable by user
+[] possibly change the comparison to the verified data when present
 -->

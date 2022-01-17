@@ -57,7 +57,7 @@ module.exports = {
                     submittedNumbers.push(data.phones[i].number.split('').filter(el => Number(el)).join(''))  
                 }
             }
-console.log(verifiedData)
+//console.log(verifiedData)
             res.render('compareSubmit.ejs', { originalData: originalData, submitData: submitData, submitPhones: submittedNumbers, verifiedData: verifiedData})
         }catch(err){
             console.log(err)
