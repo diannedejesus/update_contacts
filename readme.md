@@ -103,34 +103,31 @@ illustration of people working together
 Learn how to create a low-fidelity wireframe in Lucidchart to include within your software design document. -->
 
 ## Goals and milestones
-[completed] connect to outlook
-[partial] filter data (selection from outlook not working)
-[completed] import contacts with timestamps
-[completed] send email
-[completed] generate unique link
-[complete] fill names database
+- [completed] connect to outlook
+- [partial] filter data (selection from outlook not working)
+- [completed] import contacts with timestamps
+- [completed] send email
+- [completed] generate unique link
+- [complete] fill names database
 
-[partial] click through handler
-    [ ] implement display of data
-[ ] format phones numbers to a standard representation
-[completed] user view / form 
-[completed] form error handling
-[completed] receipt/submit view
-[ ] find / link contacts with submits with no reference id
-[ ] create an admin view / dashboard
-[completed] review changes view
-[completed] database implementation
-[ ][additional Feature] collect submit fails with reason for fail
-[ ][additional Feature] click through handler, session detection
-[ ][additional Feature] compare and submit contact changes
-[ ][Wishlist] dashboard with visualizations
+- [partial] click through handler
+-    [ ] implement display of data
+- [ ] format phones numbers to a standard representation
+- [completed] user view / form 
+- [completed] form error handling
+- [completed] receipt/submit view
+- [ ] find / link contacts with submits with no reference id
+- [ ] create an admin view / dashboard
+- [completed] review changes view
+- [completed] database implementation
+- [ ][additional Feature] collect submit fails with reason for fail
+- [ ][additional Feature] click through handler, session detection
+- [ ][additional Feature] compare and submit contact changes
+- [ ][Wishlist] dashboard with visualizations
 
 ## Bugs and Issues
 - EWS Restriction filter not working
 - EWS Selecting only needed properties not clear when mutiple are needed
-- check for additional text when fields are blank
-    - displaying address
-    - adding address to db
 
 <!-- NOTES
 ### Initial loading of information
