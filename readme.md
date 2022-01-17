@@ -70,13 +70,13 @@ In the comparison and verification process the historical data will be displayed
 <!-- With this section, you’re trying to answer a simple question: What does the software do? Of course, to answer this question thoroughly, you’ll need to dig a little deeper. In your functional description, you should cover error handling, one-time startup procedures, user limitations, and other similar details.  -->
 
 ## User/Client Interface
-![login page](login-signup.png "Login Page")
-![signup page](signup-login.png "Signup Page")
-![dashboard](dashboard.png "Dashboard")
-![configure page](configure.png "Configure Page")
-![submit page](submit-verification.png "Submit Page")
-![compare page](compare.png "Compare Page")
-![compare page with verified data](compare2.png "Compare Page [verified data]")
+![login page](https://github.com/diannedejesus/update_contacts/blob/main/login-signup.png "Login Page")
+![signup page](https://github.com/diannedejesus/update_contacts/blob/main/signup-login.png "Signup Page")
+![dashboard](https://github.com/diannedejesus/update_contacts/blob/main/dashboard.png "Dashboard")
+![configure page](https://github.com/diannedejesus/update_contacts/blob/main/configure.png "Configure Page")
+![submit page](https://github.com/diannedejesus/update_contacts/blob/main/submit-verification.png "Submit Page")
+![compare page](https://github.com/diannedejesus/update_contacts/blob/main/compare.png "Compare Page")
+![compare page with verified data](https://github.com/diannedejesus/update_contacts/blob/main/compare2.png "Compare Page [verified data]")
 
 
 <!-- There’s a good chance your coding project is going to be an application, which means it will have a user interface. (If your project is a library or something similar, there won’t be an interface.) As clients, UX designers, and programmers discuss and plan the user interface, it’s easy for the lines to get crossed. If the client doesn’t adequately communicate their vision, your teams might build out the user interface only to have the design shot down.  
