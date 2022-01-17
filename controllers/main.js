@@ -1,6 +1,7 @@
 const NameReferenceDB = require('../models/NameReference')
 const HistoricImportDB = require('../models/HistoricImport')
 const SubmittedInformationDB = require('../models/SubmittedInformation')
+const VerifiedDataDB = require('../models/VerifiedData')
 const ewsOptions = require('../ewsConnections')
 const validator = require('validator');
 const { nanoid } = require('nanoid')
@@ -13,7 +14,25 @@ module.exports = {
             const submitCount = await SubmittedInformationDB.find().count()
             const uniqueSubmitCount = (await SubmittedInformationDB.distinct('accessLink')).length
 
-            res.render('contactList.ejs', { reservations: reservationsMade, emailCount,submitCount, uniqueSubmitCount })
+            res.render('contactList.ejs', { reservations: reservationsMade, emailCount, submitCount, uniqueSubmitCount })
+        }catch(err){
+            console.log(err)
+        }
+    },
+
+    submitList: async (req,res)=>{
+        try{
+            const submitData = await SubmittedInformationDB.aggregate([
+                { "$group": { 
+                  "_id": "$accessLink", 
+                  "doc": { "$first": "$$ROOT" }
+                }},
+                { "$replaceRoot": {
+                  "newRoot": "$doc"
+                }}
+              ])
+
+            res.render('submitList.ejs', {submitData: submitData })
         }catch(err){
             console.log(err)
         }
@@ -23,6 +42,7 @@ module.exports = {
         try{
             const originalData = await HistoricImportDB.find({accessLink: req.params.id})
             const submitData = await SubmittedInformationDB.find({accessLink: req.params.id})
+            const verifiedData = await VerifiedDataDB.find({accessLink: req.params.id})
 
 
             //convert phones numbers to standard format
@@ -37,8 +57,8 @@ module.exports = {
                     submittedNumbers.push(data.phones[i].number.split('').filter(el => Number(el)).join(''))  
                 }
             }
-
-            res.render('compareSubmit.ejs', { originalData: originalData, submitData: submitData, submitPhones: submittedNumbers})
+console.log(verifiedData)
+            res.render('compareSubmit.ejs', { originalData: originalData, submitData: submitData, submitPhones: submittedNumbers, verifiedData: verifiedData})
         }catch(err){
             console.log(err)
         }
@@ -129,28 +149,82 @@ module.exports = {
     },
 
     
-    resendEmail: async (req, res)=>{
-        try{
-            const reservationData = await ReservedSlotDB.findOne({linkId: req.body.idFromJSFile})
-            //let durationTime = reservationData.duration
+    // resendEmail: async (req, res)=>{
+    //     try{
+    //         const reservationData = await ReservedSlotDB.findOne({linkId: req.body.idFromJSFile})
+    //         //let durationTime = reservationData.duration
 
-            const optionsEmailClient = {
-                'Name': reservationData.name,
-                'Body': `Hello ${reservationData.name},\n\nOur office needs to meet with you to complete some documentation or discuss a topic pertinate to your case. Please use the following link to schedule your appointment. \n\nIf none of these times/dates work with your schedule then please email or call us so we can find a time that works. \n\nWe will be discussing: ${reservationData.subject} and we estimate the meeting will be ${reservationData.duration}\n\n http://localhost:3000/setDates/selectTimeSlot/${reservationData.linkId}\n\n`, //Body: name email
-                'Email': reservationData.email,
-                'Subject': 'We need you to schedule an appointment',
+    //         const optionsEmailClient = {
+    //             'Name': reservationData.name,
+    //             'Body': `Hello ${reservationData.name},\n\nOur office needs to meet with you to complete some documentation or discuss a topic pertinate to your case. Please use the following link to schedule your appointment. \n\nIf none of these times/dates work with your schedule then please email or call us so we can find a time that works. \n\nWe will be discussing: ${reservationData.subject} and we estimate the meeting will be ${reservationData.duration}\n\n http://localhost:3000/setDates/selectTimeSlot/${reservationData.linkId}\n\n`, //Body: name email
+    //             'Email': reservationData.email,
+    //             'Subject': 'We need you to schedule an appointment',
+    //         }
+
+    //         ewsOptions.sendEmail(req.user.calendarPassword, req.user.calendarEmail, optionsEmailClient)
+
+    //         console.log('Email Sent')
+    //         res.json('Email Sent')
+    //     }catch(err){
+    //         console.log(err)
+    //     }
+    // },
+
+    consolidateData: async (req, res)=>{
+        try{
+            console.log('body', req.body)
+            //const await HistoricImportDB.find({}, 'name accessLink');
+            //const submitID = req.body.id ? req.body.id : ''
+
+            const address = req.body.address ? req.body.address.split('$') : ''
+            const names = req.body.fullName ? req.body.fullName.split('$') : ''
+            const email = req.body.email ? req.body.email.split('$') : ''
+            
+            const verifiedData = {
+                name: {
+                    firstName: names[0],
+                    middleInitial: names[1],
+                    lastName: names[2],
+                },
+            
+                phones: [],
+            
+                email: req.body.email[0],
+                emailUse: req.body.emailuse[1],
+            
+                address: {
+                    street: address[0],
+                    city: address[1],
+                    state: address[2],
+                    zipcode: address[3],
+                },
+            
+                accessLink: req.body.accessLink,
+            
+                timestamp: new Date(),
             }
 
-            ewsOptions.sendEmail(req.user.calendarPassword, req.user.calendarEmail, optionsEmailClient)
+            for(let i=0; i<req.body.phoneNumber.length; i++){
+                let numberInfo = req.body.phoneNumber[i].split('$')
+                //console.log(numberInfo)
+                verifiedData.phones.push({ number: numberInfo[0], numberType: numberInfo[1]})
+            }
 
-            console.log('Email Sent')
-            res.json('Email Sent')
+            VerifiedDataDB.create(verifiedData)
+
+            for(let i=0; i<req.body.id.length; i++){
+                //this is for changing the status or verified of submitted data
+                await SubmittedInformationDB.findOneAndUpdate({_id: req.body.id[i]}, {verifiedDate: new Date()})
+            }
+
+            //console.log('verified', req.body.id)
+
+            console.log('Data Verified')
+            res.json('Data Verfied')
         }catch(err){
             console.log(err)
         }
     },
-
-    
 
     // assignTimeSlot: async (req, res)=>{
     //     try{

@@ -68,9 +68,12 @@ header{
 /*******************************************/
 
 section{
-    width: 48%;
-    height: 15em;
     padding: .5em;
+}
+
+.container{
+    width: 49%;
+    height: 100%;
     float: left;
 }
 
@@ -309,11 +312,19 @@ input[type='submit']:hover{
     background-color: lightgray;
     color: grey;
 }
+.disabled h2{
+    background-color: grey;
+}
 
 .submitData{
     float: right;
+    width: 100%;
 }
 
 .strike{
     text-decoration: line-through;
+}
+
+.verified{
+    background-color: indianred;
 }

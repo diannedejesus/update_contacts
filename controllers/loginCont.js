@@ -30,7 +30,7 @@ module.exports = {
       }
       req.logIn(user, (err) => {
         if(err) return next(err);
-        res.redirect(req.session.returnTo || '/setDates')
+        res.redirect(req.session.returnTo || '/dashboard')
       })
     })(req, res, next)
   },

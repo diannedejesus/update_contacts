@@ -77,15 +77,15 @@ Learn how to create a low-fidelity wireframe in Lucidchart to include within you
 [completed] generate unique link
 [complete] fill names database
 
-[ ] click through handler
+[partial] click through handler
 [ ] format phones numbers to a standard representation
 [completed] user view / form 
 [completed] form error handling
 [completed] receipt/submit view
 [ ] find / link contacts with submits with no reference id
 [ ] admin view
-[ ] review changes view
-[ ] database implementation
+[completed] review changes view
+[completed] database implementation
 [ ][additional Feature] collect submit fails with reason for fail
 [ ][additional Feature] click through handler, session detection
 [ ][additional Feature] compare and submit contact changes
@@ -175,3 +175,16 @@ Your first draft of an SDD doesn’t necessarily need to be your last—it shoul
 
 <!-- Update your SDD
 Once you’ve written your software design document and gotten approval from stakeholders, don’t lock it away in some dusty drawer (or whatever the digital equivalent is). As your project progresses, team members should be referencing the SDD constantly. If there’s a delay, update your timeline. By treating an SDD as a living document, it will become an invaluable single source of truth. -->
+
+<!-- 
+------------- Look in to ------------------
+
+[] What happens when an items is verified? Should user be able to keep submitting data or should the case be disabled.
+[] Setup a verification for cases submitted without a link to associate it to an entry
+[] add the count of items to the submitlist page view and if the info has been verified already. Perhaps order it by verification status
+[] modify the submitlist view to not include data since we will only be display unique values and won't represent all changes made. This includes timestamp.
+[] make sure the disabled entry is stays disabled through out application.
+[]
+[]
+
+-->

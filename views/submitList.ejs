@@ -4,20 +4,18 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Contacts</title>
+    <title>Submitted Contacts</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
     <header>
+        <a href='/'>dashboard</a> | 
         <a href='/login/configure'>configure</a> | 
         <a href='/signup/logout' class='signout'>signout</a>
     </header>
    
     <main>
-        <div>Contacts with emails: <%= emailCount %></div>
-        <div><a href="/dashboard/submitList">Submitted: <%= submitCount %></a></div>
-        <div>Unique Submits: <%= uniqueSubmitCount %></div>
-        <h1>Contact List</h1>
+        <h1>Submitted List</h1>
         <section class='contactTable'>
             <table>
                 <tr>
@@ -25,10 +23,10 @@
                     <th>Email</th>
                     <th>Phone Numbers</th>
                     <th>Mailing Address</th>
-                    <th>linkId</th>
+                    <th>linkId / compare</th>
                     <th>timestamp</th>
                 </tr>
-                <% reservations.forEach( (el) => { %>
+                <% submitData.forEach( (el) => { %>
                 <tr class="<%= el.disabled ? 'disabled' : 'enabled' %>">
                     <td><%= el.name.firstName %> <%= el.name.middleInitial %> <%= el.name.lastName %> <%= el.name.secondLastName %></td>
                     <td><%= el.email %></td>
@@ -44,11 +42,12 @@
                         <% } %>
                     </td>
                     <td>
-                        <% if (el.disabled === false) { %>
-                            <%= el.accessLink %>
-                        <% } else { %>
-                            Disabled
-                        <% } %>
+                        <a href="/dashboard/compare/<%= el.accessLink %>"><%= el.accessLink %></a>
+                        <!-- <% if (el.disabled === false) { %> -->
+                            <!-- <%= el.accessLink %> -->
+                        <!-- <% } else { %> -->
+                            <!-- Disabled -->
+                        <!-- <% } %> -->
                     </td>
                     <td><%= el.timestamp.toDateString() %> - <%= el.timestamp.toLocaleTimeString() %></td>
                 </tr>

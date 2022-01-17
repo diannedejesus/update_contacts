@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 
 
 
-const SubmittedInformationSchema = new mongoose.Schema({
+const VerifiedDataSchema = new mongoose.Schema({
   name: {
     firstName: {
       type: String,
@@ -37,6 +37,7 @@ const SubmittedInformationSchema = new mongoose.Schema({
     state: String,
     zipcode: String,
   },
+
   accessLink: {
     type: String,
   },
@@ -45,9 +46,10 @@ const SubmittedInformationSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  verifiedDate: {
+  
+  syncedDate: {
     type: Date,
   },
 })
 
-module.exports = mongoose.model('SubmittedInformation', SubmittedInformationSchema)
+module.exports = mongoose.model('VerifiedData', VerifiedDataSchema)
