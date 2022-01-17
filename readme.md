@@ -70,19 +70,19 @@ In the comparison and verification process the historical data will be displayed
 <!-- With this section, you’re trying to answer a simple question: What does the software do? Of course, to answer this question thoroughly, you’ll need to dig a little deeper. In your functional description, you should cover error handling, one-time startup procedures, user limitations, and other similar details.  -->
 
 ## User/Client Interface
-###Login Page
-![login page](/blob/main/login-signup.PNG?raw=true "Login Page")
-###Signup Page
+### Login Page
+![login page](https://github.com/diannedejesus/update_contacts/blob/main/login-signup.PNG?raw=true "Login Page")
+### Signup Page
 ![signup page](https://github.com/diannedejesus/update_contacts/blob/main/signup-login.PNG?raw=true "Signup Page")
-###Dashboard
+### Dashboard
 ![dashboard](https://github.com/diannedejesus/update_contacts/blob/main/dashboard.PNG?raw=true "Dashboard")
-###Configure Page
+### Configure Page
 ![configure page](https://github.com/diannedejesus/update_contacts/blob/main/configure.PNG?raw=true "Configure Page")
-##Submit Page
+### Submit Page
 ![submit page](https://github.com/diannedejesus/update_contacts/blob/main/submit-verification.PNG?raw=true "Submit Page")
-###Compare Page
+### Compare Page
 ![compare page](https://github.com/diannedejesus/update_contacts/blob/main/compare.PNG?raw=true "Compare Page")
-###Compare Page [verified data]
+### Compare Page [verified data]
 ![compare page with verified data](https://github.com/diannedejesus/update_contacts/blob/main/compare2.PNG?raw=true "Compare Page [verified data]")
 
 <!-- There’s a good chance your coding project is going to be an application, which means it will have a user interface. (If your project is a library or something similar, there won’t be an interface.) As clients, UX designers, and programmers discuss and plan the user interface, it’s easy for the lines to get crossed. If the client doesn’t adequately communicate their vision, your teams might build out the user interface only to have the design shot down.  
