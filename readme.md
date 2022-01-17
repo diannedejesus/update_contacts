@@ -72,16 +72,22 @@ In the comparison and verification process the historical data will be displayed
 ## User/Client Interface
 ### Login Page
 ![login page](https://github.com/diannedejesus/update_contacts/blob/main/login-signup.PNG?raw=true "Login Page")
+***
 ### Signup Page
 ![signup page](https://github.com/diannedejesus/update_contacts/blob/main/signup-login.PNG?raw=true "Signup Page")
+***
 ### Dashboard
 ![dashboard](https://github.com/diannedejesus/update_contacts/blob/main/dashboard.PNG?raw=true "Dashboard")
+***
 ### Configure Page
 ![configure page](https://github.com/diannedejesus/update_contacts/blob/main/configure.PNG?raw=true "Configure Page")
+***
 ### Submit Page
 ![submit page](https://github.com/diannedejesus/update_contacts/blob/main/submit-verification.PNG?raw=true "Submit Page")
+***
 ### Compare Page
 ![compare page](https://github.com/diannedejesus/update_contacts/blob/main/compare.PNG?raw=true "Compare Page")
+***
 ### Compare Page [verified data]
 ![compare page with verified data](https://github.com/diannedejesus/update_contacts/blob/main/compare2.PNG?raw=true "Compare Page [verified data]")
 
