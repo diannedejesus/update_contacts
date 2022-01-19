@@ -111,13 +111,13 @@ Learn how to create a low-fidelity wireframe in Lucidchart to include within you
 - [complete] fill names database
 
 - [partial] click through handler
--    [ ] implement display of data
-- [ ] format phones numbers to a standard representation
+-    [ ]implement display of data
+- [ ]format phones numbers to a standard representation
 - [completed] user view / form 
 - [completed] form error handling
 - [completed] receipt/submit view
-- [ ] find / link contacts with submits with no reference id
-- [ ] create an admin view / dashboard
+- [ ]find / link contacts with submits with no reference id
+- [ ]create an admin view / dashboard
 - [completed] review changes view
 - [completed] database implementation
 - [ ][additional Feature] collect submit fails with reason for fail
