@@ -42,7 +42,23 @@
                         <% } %>
                     </td>
                     <td>
-                        <a href="/dashboard/compare/<%= el.accessLink %>"><%= el.accessLink %></a>
+                        <% if(el.accessLink.includes(' ')){ %>
+                        <ul>
+                            <% el.accessLink.trim().split(' ').forEach(accessCode => { %>
+                                <li><a href="/dashboard/compare/<%= accessCode.split('$')[0] %>"><%= accessCode.split('$')[0] %></a> <%= accessCode.split('$')[1] %> <%= accessCode.split('$')[2] %> <%= accessCode.split('$')[3] ? accessCode.split('$')[3] : '' %>
+                                    
+                                    <form action="/dashboard/editAccessLinks/" method="POST">
+                                        <input type="hidden" name="selectedAccessLink" value='<%= accessCode.split('$')[0] %>'>
+                                        <input type="hidden" name="originalAccessLink" value='<%= el.accessLink %>'>
+                                        <input type="submit" value="Keep">
+                                    </form>
+                                </li>
+                            <% }) %>
+                        </ul>
+                        <% } else{ %>
+                            <a href="/dashboard/compare/<%= el.accessLink %>"><%= el.accessLink %></a>
+                        <% } %>
+                       
                         <!-- <% if (el.disabled === false) { %> -->
                             <!-- <%= el.accessLink %> -->
                         <!-- <% } else { %> -->

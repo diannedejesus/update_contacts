@@ -17,14 +17,53 @@ module.exports = {
 
             if(formInformation.length === 0 && req.params.id){
                 await NameReferenceDB.findOneAndUpdate({accessLink: req.params.id}, {$inc: {accessCount: 1}})
-                data = await NameReferenceDB.find({accessLink: req.params.id}, 'name');
+                data = await NameReferenceDB.find({accessLink: req.params.id});
                 contactName = {first: data[0].name.firstName, middle: data[0].name.middleInitial, last:data[0].name.lastName}
-            }else if(formInformation.legnth === 0){
+            }else if(formInformation.length === 0){
                 await NameReferenceDB.findOneAndUpdate({accessLink: ''}, {$inc: {accessCount: 1}})
             }
-
+            //if(!data){data.disabple}
             console.log('update information')
-            res.render('updateInformation.ejs', {name: contactName, errors: currentErrors, bodyFill: formInformation, id: req.params.id})
+            res.render('updateInformation.ejs', {name: contactName, errors: currentErrors, bodyFill: formInformation, id: req.params.id, disabled: data ? data[0].disabled : false })
+        }catch(err){
+            console.log(err)
+        }
+    },
+
+    sendReceipt: async (req,res)=>{
+        try{
+            let compiledInfo = {}
+            //let phoneNumbers = []
+            if(req.body.associate.toLowerCase() === 'yes'){
+                console.log('update')
+                await SubmittedInformationDB.findOneAndUpdate({_id: req.body.id}, {email: req.body.email, emailUse: req.body.selector})
+            } //if yes add email to submitted data
+
+
+            if(req.body.number.length > 0 && req.body.number.length === req.body.type.length){
+                for(let i=0; i<req.body.number.length; i++){
+                    //phoneNumbers.push({number: req.body.number[i], numberType: req.body.type[i]}) 
+                    compiledInfo.phoneNumbers = compiledInfo.phoneNumbers ? compiledInfo.phoneNumbers + '<br>' + req.body.type[i] + ' ' + req.body.number[i] + ' ' : req.body.type[i] + ' ' + req.body.number[i] + ' '
+                }
+            }else if(req.body.number){
+                //phoneNumbers.push({number: req.body.number, numberType: req.body.type})
+                compiledInfo.phoneNumbers = req.body.type + ' ' + req.body.number
+            }
+            
+            
+                compiledInfo.name = req.body.firstname ? `${req.body.firstname} ${req.body.middleinitial} ${req.body.lastname}` : `${req.body.names[0]} / ${req.body.names[1]}`
+                if(!compiledInfo.phoneNumbers) { compiledInfo.phoneNumbers = 'No phone numbers provided' }
+                compiledInfo.email = req.body.email ? `${req.body.email}` : 'no email provided'
+                compiledInfo.emailUse = req.body.selector ? req.body.selector === 'no' ? 'Oficial use only' : 'Oficial use and contacting' : 'nothing selected'
+                compiledInfo.address = req.body.streetaddr ? `<br>${req.body.urbName} <br>${req.body.streetaddr} <br>${req.body.city}, ${req.body.state} ${req.body.zip}` : 'No postal address provided'
+
+                res.render('receipt.ejs', {bodyFill: req.body})
+                if(req.body.email){ module.exports.sendEmail(req.user, compiledInfo) }
+            
+
+            console.log('receipt sent')
+
+            //res.render('updateInformation.ejs', {name: contactName, errors: currentErrors, bodyFill: formInformation, id: req.params.id, disabled: data[0].disabled})
         }catch(err){
             console.log(err)
         }
@@ -32,9 +71,6 @@ module.exports = {
 
     sendEmail: async (user, formInformation)=>{
         try{
-            //const reservationData = await ReservedSlotDB.findOne({linkId: req.body.idFromJSFile})
-            //let durationTime = reservationData.duration
-
             const optionsEmailClient = {
                 'Name': formInformation.name,
                 'Body': `Hello ${formInformation.name},<br><br>
@@ -51,8 +87,11 @@ We appreciate that you took the time to update your contact information. This in
 <br>
 Feel free to contact our office with questions or concerns by emailing or calling our office.<br><br>`, //Body: name email
                 'Email': 'djs.dianne@gmail.com',
+                //'Email': formInformation.email,
                 'Subject': 'Thankyou for updating your information',
             }
+
+            console.log('email sent to:', formInformation.email)
 
             ewsOptions.sendEmail(user.calendarPassword, user.calendarEmail, optionsEmailClient)
 
@@ -176,7 +215,7 @@ Feel free to contact our office with questions or concerns by emailing or callin
                 }
             }else if(req.body.number){
                 phoneNumbers.push({number: req.body.number, numberType: req.body.type})
-                compiledInfo.phoneNumbers = req.body.type + ' ' + req.body.number 
+                compiledInfo.phoneNumbers = req.body.type + ' ' + req.body.number
             }
 
             //console.log(phoneNumbers)
@@ -186,8 +225,20 @@ Feel free to contact our office with questions or concerns by emailing or callin
             compiledInfo.emailUse = req.body.selector ? req.body.selector === 'no' ? 'Oficial use only' : 'Oficial use and contacting' : 'nothing selected'
             compiledInfo.address = req.body.streetaddr ? `<br>${req.body.urbName} <br>${req.body.streetaddr} <br>${req.body.city}, ${req.body.state} ${req.body.zip}` : 'No postal address provided'
 
+            //no access link was used or provided
+            console.log(req.body.firstname ? req.body.firstname : req.body.names[0])
+            if(!req.body.accessLink){
+                const nameFind = await NameReferenceDB.find({'name.firstName': req.body.firstname ? req.body.firstname : req.body.names[0]}).collation( { locale: 'en', strength: 2 } )
+                req.body.accessLink = ''
+                for(items of nameFind){
+                    req.body.accessLink += items.accessLink + '$' + `${items.name.firstName}$${items.name.middleInitial}$${items.name.lastName}` + ' '
+                }
+                console.log('names', req.body.accessLink)
+
+            }
+
             if(dataSubmit){
-                await SubmittedInformationDB.create({
+                let submission = await SubmittedInformationDB.create({
                     name: {
                         firstName: req.body.firstname ? req.body.firstname : req.body.names[0],
                         middleInitial: req.body.middleinitial ? req.body.middleinitial : '/',
@@ -207,8 +258,8 @@ Feel free to contact our office with questions or concerns by emailing or callin
                     accessLink: req.body.accessLink,
                 })
 
-                res.render('receipt.ejs', {bodyFill: req.body})
-                module.exports.sendEmail(req.user, compiledInfo)
+                res.render('receipt.ejs', {bodyFill: req.body, id: submission._id})
+                if(req.body.email){ module.exports.sendEmail(req.user, compiledInfo) }
             }else if(dataSubmit === true) {
                 //for testing without submitting to database
                 res.render('receipt.ejs', {bodyFill: req.body})

@@ -13,8 +13,28 @@ module.exports = {
             const emailCount = await HistoricImportDB.find({email: {$exists: true}}).count()
             const submitCount = await SubmittedInformationDB.find().count()
             const uniqueSubmitCount = (await SubmittedInformationDB.distinct('accessLink')).length
+            const accessCount = await NameReferenceDB.find({accessCount: {$exists: true}})
 
-            res.render('contactList.ejs', { reservations: reservationsMade, emailCount, submitCount, uniqueSubmitCount })
+            let linkedAccessed = 0
+            let noLinkAccessed = 0
+
+            for(items of accessCount){
+                if(items.name.firstName !== 'Empty'){
+                    linkedAccessed += items.accessCount
+                }else{
+                    noLinkAccessed = items.accessCount
+                }
+            }
+
+            res.render('contactList.ejs', { 
+                reservations: reservationsMade, 
+                emailCount, 
+                submitCount, 
+                uniqueSubmitCount, 
+                linkedAccessed, 
+                noLinkAccessed 
+            })
+
         }catch(err){
             console.log(err)
         }
@@ -38,6 +58,25 @@ module.exports = {
         }
     },
 
+    keepAccessLinks: async (req,res)=>{
+        try{
+            const contactID = await SubmittedInformationDB.find({'accessLink': req.body.originalAccessLink})
+            const modifyData = await SubmittedInformationDB.findOneAndUpdate({'_id': contactID[0]._id}, {'accessLink': ''}, { new: true
+              })
+              const modifyData2 = await SubmittedInformationDB.findOneAndUpdate({'_id': contactID[0]._id}, {'accessLink': req.body.selectedAccessLink}, { new: true
+              })
+            console.log(modifyData2, contactID[0]._id)
+
+            
+            console.log('access link updated via keepAccessLinks')
+            res.redirect('/dashboard/submitList')
+        }catch(err){
+            console.log(err)
+        }
+    },
+
+
+
     compareData: async (req,res)=>{
         try{
             const originalData = await HistoricImportDB.find({accessLink: req.params.id})
@@ -51,6 +90,7 @@ module.exports = {
             for(let i=0; i<originalData[0].phones.length; i++){
                 originalData[0].phones[i].number = originalData[0].phones[i].number.split('').filter(el => Number(el)).join('')
             }
+        
 
             for(data of submitData){
                 for(let i=0; i<data.phones.length; i++){
@@ -117,7 +157,7 @@ module.exports = {
 
                 console.log('imported')
                 //res.json('imported')
-                res.redirect('/setdates')
+                res.redirect('/dashboard')
             }else{
                 //error do you wish to replace database
             }

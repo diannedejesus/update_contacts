@@ -37,6 +37,51 @@
     <h2>4. Email Address</h2>
     <p><%= bodyFill.email ? bodyFill.email : 'n/a' %></p>
     <p>Can we use this email to comunicate with you for official purposes? <%= bodyFill.selector ?  bodyFill.selector : 'n/a' %></p>
+    
+    <% if(!bodyFill.email) { %>
+        <p>We could not send a confirmation email because you did not provide an email with your data. If you wish to recieve a confirmation email you can use the following form to do so now.</p>
+        <form action="/updateInfo/sendReceipt" method="post">
+            <input type='hidden' name='firstname' value='<%= bodyFill.firstname ? bodyFill.firstname : bodyFill.names[0] %>'>
+            <input type='hidden' name='middleinitial' value='<%= bodyFill.middleinitial ? bodyFill.middleinitial : ' / ' %>'>
+            <input type='hidden' name='lastname' value='<%= bodyFill.lastname ? bodyFill.lastname : bodyFill.names[1] %>'>
+            <input type='hidden' name='urbName' value='<%= bodyFill.urbName ? bodyFill.urbName : 'n/a' %>'>
+            <input type='hidden' name='streetaddr' value='<%= bodyFill.streetaddr ? bodyFill.streetaddr : 'n/a' %>'>
+            <input type='hidden' name='city' value='<%= bodyFill.city ? `${bodyFill.city},` : 'n/a' %>'>
+            <input type='hidden' name='state' value='<%= bodyFill.state ? bodyFill.state : 'n/a' %>'>
+            <input type='hidden' name='zip' value='<%= bodyFill.zip ? bodyFill.zip : 'n/a' %>'>
+
+            <% if( typeof bodyFill.number === 'object'){ %>     
+                <% for(let i=0; i<bodyFill.number.length; i++) { %>
+                    <input type='hidden' name='type' value='<%= bodyFill.type[i] ? `${bodyFill.type[i]}:` : 'n/a' %>'>
+                    <input type='hidden' name='number' value='<%= bodyFill.number[i] %>'>
+                <% } %>
+            <% } else { %>
+                <input type='hidden' name='type' value='<%= bodyFill.type ? `${bodyFill.type}:` : 'n/a' %>'>
+                <input type='hidden' name='number' value='<%= bodyFill.number ? bodyFill.number : 'n/a' %>'>
+            <% } %>
+
+            <input type='hidden' name='accessLink' value='<%= bodyFill.accessLink %>'>
+            <input type='hidden' name='id' value='<%= id %>'>
+            
+
+            <input id='email' name='email' type='text' placeholder="email@email.com">
+            <p>Can we use associate this email to your contact information (if it is not already included)?</p>
+            <label for="huey">Yes</label>
+            <input type="radio" id="huey" name="associate" value="yes">
+        
+            <label for="dewey">No</label>
+            <input type="radio" id="dewey" name="associate" value="no">
+
+            <p>Can we use this email to comunicate with you for official purposes?</p>
+            <label for="huey">Yes</label>
+            <input type="radio" id="huey" name="selector" value="yes">
+        
+            <label for="dewey">No</label>
+            <input type="radio" id="dewey" name="selector" value="no">
+
+            <input type="submit" name='submit' value='Submit'>
+        </form>
+    <% } %>
 
 
 

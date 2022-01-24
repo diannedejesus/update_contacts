@@ -21,12 +21,19 @@ const NameReferenceSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+
   accessCount: {
     type: Number,
   },
+
   submittedCount: {
     type: Number,
-  }
+  },
+
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 module.exports = mongoose.model('NameReference', NameReferenceSchema)

@@ -3,6 +3,7 @@ const passport = require('passport');
 const crypto = require ("crypto");
 const User = require('../models/UserInfo');
 const HistoricImportDB = require('../models/HistoricImport')
+const NameReferenceDB = require('../models/NameReference')
 
 module.exports = {
   getPage: async (req, res) => {
@@ -56,6 +57,7 @@ module.exports = {
       const contactState = await HistoricImportDB.find({accessLink: req.query.accessLink}, 'disabled')
 
       await HistoricImportDB.findOneAndUpdate({accessLink: req.query.accessLink}, {disabled: !contactState[0].disabled})
+      await NameReferenceDB.findOneAndUpdate({accessLink: req.query.accessLink}, {disabled: !contactState[0].disabled})
 
       res.redirect(req.get('referer'));
   },

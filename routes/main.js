@@ -13,5 +13,6 @@ router.get('/compare/:id', ensureAuth, contactController.compareData)
 
 router.post('/confirm', ensureAuth, contactController.consolidateData)
 
+router.post('/editAccessLinks', ensureAuth, contactController.keepAccessLinks)
 
 module.exports = router

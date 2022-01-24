@@ -7,6 +7,7 @@ const {ensureAuth, ensureGuest} = require('../middleware/auth');
 router.get('/', ensureAuth, updateInformationController.index)
 router.get('/:id', ensureAuth, updateInformationController.index)
 router.post('/', ensureAuth, updateInformationController.submitInfo)
+router.post('/sendReceipt', ensureAuth, updateInformationController.sendReceipt)
 
 // //router.get('/receiptPage', ensureAuth, bookingController.receiptPage)
 

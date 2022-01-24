@@ -17,7 +17,10 @@
     </header>
    
     <h1>Compare Data</h1>  
-    <h3>Identifier: <%= originalData[0].accessLink %></h3> 
+    <h3>Identifier: <%= originalData[0].accessLink %></h3>
+    <% if(originalData[0].disabled){ %> 
+        <h3 class="disabled">This contact has been disabled. You can enable it in the configure menu under the edit list option.</h3> 
+    <% } %>
     <section class="container">
         <section>
             <h2>Original Data</h2>
@@ -69,11 +72,13 @@
                     <%= el.address.zipcode === originalData[0].address.zipcode ? '' : 'class=strike' %> 
                 <% }) %> ><%= originalData[0].address.zipcode %> </span>
             </p>
-            <p>phone number: <% originalData[0].phones.forEach(numbers => { %>
-                <span 
-                    <%= submitPhones.includes(numbers.number) ? '' : 'class=strike' %> 
-                > <%= numbers.number %> <%= numbers.numberType %> </span>
-            <% }) %></p>
+            <p>
+                phone number: <% originalData[0].phones.forEach(numbers => { %>
+                    <span <%= submitPhones.includes(numbers.number) ? '' : 'class=strike' %> > 
+                        <%= numbers.number %> <%= numbers.numberType %> 
+                    </span>
+                <% }) %>
+            </p>
         </section>
         <section>
             <h2 class="verified">Verified Data</h2>
@@ -108,23 +113,23 @@
     <section class="container">
         <form action='/dashboard/confirm' method="POST">
             <% submitData.forEach((el, current) => { %>
-                <section class="submitData <%= el.verifiedDate ? 'disabled' : '' %>">
+                <section class="submitData <%= el.verifiedDate || originalData[0].disabled ? 'disabled' : '' %>">
                     <h2>Submitted Data</h2>
                     <p>
-                        <input type="radio" name="fullName" <%= el.verifiedDate ? 'disabled' : '' %> value="<%= el.name.firstName %>$<%= el.name.middleInitial %>$<%= el.name.lastName %>"> Full Name: <%= el.name.firstName %> <%= el.name.middleInitial %> <%= el.name.lastName %>
+                        <input type="radio" name="fullName" <%= el.verifiedDate || originalData[0].disabled ? 'disabled' : '' %> value="<%= el.name.firstName %>$<%= el.name.middleInitial %>$<%= el.name.lastName %>"> Full Name: <%= el.name.firstName %> <%= el.name.middleInitial %> <%= el.name.lastName %>
                     </p>
 
                     <p>
-                        <input class="email" type="radio" name="email" <%= el.verifiedDate ? 'disabled' : '' %> value="<%= el.email %>$<%= el.emailUse %>"> email: <%= el.email %>
+                        <input class="email" type="radio" name="email" <%= el.verifiedDate || originalData[0].disabled ? 'disabled' : '' %> value="<%= el.email %>$<%= el.emailUse %>"> email: <%= el.email %>
                         email use: <%= el.emailUse %>
                     </p>
 
                     <p>
-                        <input type="radio" name="address" <%= el.verifiedDate ? 'disabled' : '' %> value="<%= el.address.street %>$<%= el.address.city %>$<%= el.address.state %>$<%= el.address.zipcode %>"> address: <%= el.address.street %> <%= el.address.city %> <%= el.address.state %> <%= el.address.zipcode %>
+                        <input type="radio" name="address" <%= el.verifiedDate || originalData[0].disabled ? 'disabled' : '' %> value="<%= el.address.street %>$<%= el.address.city %>$<%= el.address.state %>$<%= el.address.zipcode %>"> address: <%= el.address.street %> <%= el.address.city %> <%= el.address.state %> <%= el.address.zipcode %>
                     </p>
 
                     <p>phone number: <% el.phones.forEach((numbers, i) => { %>
-                        <input type="checkbox" name="phoneNumber" <%= el.verifiedDate ? 'disabled' : '' %> 
+                        <input type="checkbox" name="phoneNumber" <%= el.verifiedDate || originalData[0].disabled ? 'disabled' : '' %> 
                         value="<%= numbers.number %>$<%= numbers.numberType %>"> <%= numbers.number %> <%= numbers.numberType %>
                     <% }) %></p>
                     
@@ -133,8 +138,11 @@
                     <input type="hidden" name="id" value="<%= el._id %>">
                 </section>
             <% }) %>
+
+            <% let alreadyVerified = submitData.every((el) => el.verifiedDate  )%>
+
             <input type="hidden" name="accessLink" value="<%= originalData[0].accessLink %>">
-            <input type="submit">
+            <input type="submit" <%= originalData[0].disabled || alreadyVerified ? 'disabled' : '' %>>
         </form>
     </section>
 
