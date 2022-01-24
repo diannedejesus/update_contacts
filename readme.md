@@ -109,31 +109,26 @@ illustration of people working together
 Learn how to create a low-fidelity wireframe in Lucidchart to include within your software design document. -->
 
 ## Goals and milestones
-- [partial] Click through handler
-    - [completed] Implement display of data
+- [] Credentials: add or remove access to your contacts credentials.
+    - [] Might elimanate the storage of this data and just ask user to verify everytime they want to access
+- [] Delete and/or replace the local list of contacts (will erase all data)
+- [] add a reference for empty link counting when database is first created
+- [] Allow user to add a new entry to historic list (data can be added or disabled/enabled)
+    - [additional feature] allow for adding a reason for disabling
+- [] view for the verified data (most likey a list)
+
+
+
+### Secondary Goals
+- [] Format phones numbers to a standard representation
+
+- [ ]Modify the admin view / dashboard
+- [ ]Add input verification to receipt page for after the fact email entry
+- [ ]Possibly track who enter an email after the fact for a receipt but does not want it associated to its account.
 - [completed] Setup a verification for cases submitted without a link to associate it to an entry
     - [partial]make an option to permit the user to eliminate the non-relevant link
         -[]figure out how to make mongoose update / replace a field with similar data
     - [completed]include more information with the link to make it easier to identify the correct one from the incorrect one
-- [completed] fixed error with dashboard not counting the without link access amount
-- [completed]Make sure the disabled entry stays disabled through out application.
-    -[complete]Made sure the submit button was disabled if all data was already verified
-- [completed]Make email dynamic ~~and have application look for an email if one is not provide in the submitted data.~~ [would override the data precations already implemented] if none found advice the user of importance, inability to provide email confirmation.
-    - [completed]Add an option after the fact to include an email to send the confirmation.
-
-### Secondary Goals
-- [] add a reference for empty link counting when database is first created
-- [] Format phones numbers to a standard representation
-- [] view for the verified data (most likey a list)
-- [] Credentials: add or remove access to your contacts credentials.
-    - [] Might elimanate the storage of this data and just ask user to verify everytime they want to access
-- [] Delete and/or replace the local list of contacts (will erase all data)
-- [] Allow user to add a new entry to historic list (data can be added or disabled/enabled)
-    - [additional feature] allow for adding a reason for disabling
-- [ ]Modify the admin view / dashboard
-- [ ]Add input verification to receipt page for after the fact email entry
-- [ ]Possibly track who enter an email after the fact for a receipt but does not want it associated to its account.
-
 
 ### Wishlist Feature
 - [ ][additional Feature] Collect submit fails with reason for fail
@@ -156,6 +151,13 @@ Learn how to create a low-fidelity wireframe in Lucidchart to include within you
 - [completed] Send email
 - [completed] Generate unique link
 - [completed] Fill names database
+- [completed] fixed error with dashboard not counting the without link access amount
+- [completed]Make sure the disabled entry stays disabled through out application.
+    -[complete]Made sure the submit button was disabled if all data was already verified
+- [completed]Make email dynamic ~~and have application look for an email if one is not provide in the submitted data.~~ [would override the data precations already implemented] if none found advice the user of importance, inability to provide email confirmation.
+    - [completed]Add an option after the fact to include an email to send the confirmation.
+- [partial] Click through handler
+    - [completed] Implement display of data
 
 ## Bugs and Issues
 - EWS Restriction filter not working
