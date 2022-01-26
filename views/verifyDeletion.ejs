@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm</title>
+    <link rel="stylesheet" href="../css/normalize.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header>
+        <a href='/'>dashboard</a> | 
+        <a href='/dashboard/submitList'>submit list</a> |
+        <a href='/login/configure'>configure</a> | 
+        <a href='/signup/logout' class='signout'>signout</a>
+    </header>
+   
+    <h1>Confirm Deletion</h1>  
+
+    <% if(deleted === false){ %> 
+    <p>Deleting your data includes deleting your historic database information and all related information, in all other databases.</p> <p>This includes submitted information, verified information and name reference.</p> <p>I you are sure you want to permenantly delete this data then please confirm by clicking yes. Remeber we will not be able to retrieve any data after it has been deleted.</p>
+    <form class="login-form" action="/login/deleteData" method="GET">
+        <input type="submit" value='YES'>
+    </form>
+    <% } else { %> 
+        <p>All you data has been successfully deleted.</p>
+    <% } %>
+</body>
+</html>

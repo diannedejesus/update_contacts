@@ -19,7 +19,7 @@ module.exports = {
             let noLinkAccessed = 0
 
             for(items of accessCount){
-                if(items.name.firstName !== 'Empty'){
+                if(items.name.firstName.toLowerCase() !== 'empty'){
                     linkedAccessed += items.accessCount
                 }else{
                     noLinkAccessed = items.accessCount
@@ -107,7 +107,7 @@ module.exports = {
     import: async (req, res)=>{
         try{
             const dbFilled = await HistoricImportDB.count()
-            console.log(dbFilled)
+            //console.log(dbFilled)
             if(dbFilled <= 0){
                 const contact = await ewsOptions.getContacts(req.user.calendarPassword, req.user.calendarEmail)
                 let collection = []
@@ -145,7 +145,7 @@ module.exports = {
                 }
 
 
-                HistoricImportDB.insertMany(collection)
+                await HistoricImportDB.insertMany(collection)
                 .then(function (docs) {
                     //res.json(docs);
                     console.log(docs)
@@ -154,6 +154,8 @@ module.exports = {
                     //res.status(500).send(err);
                     console.log(err)
                 });
+
+                await module.exports.fillReference()
 
                 console.log('imported')
                 //res.json('imported')
@@ -169,8 +171,17 @@ module.exports = {
     fillReference: async (req,res)=>{
         try{
             const data = await HistoricImportDB.find({}, 'name accessLink');
+            const emptyReference = {
+                name: {
+                    firstName: 'empty',
+                    middleInitial: '',
+                    lastName: '',
+                },
+                accessLink: ' ',
+            }
+            
             console.log(data)
-
+            
             NameReferenceDB.insertMany(data)
                 .then(function (docs) {
                     //res.json(docs);
@@ -181,8 +192,10 @@ module.exports = {
                     console.log(err)
                 });
             
+                NameReferenceDB.create(emptyReference)
+
             console.log('filled')
-            res.json('filled')
+            //res.json('filled')
         }catch(err){
             console.log(err)
         }

@@ -4,6 +4,9 @@ const crypto = require ("crypto");
 const User = require('../models/UserInfo');
 const HistoricImportDB = require('../models/HistoricImport')
 const NameReferenceDB = require('../models/NameReference')
+const SubmittedInformationDB = require('../models/SubmittedInformation')
+const VerifiedDataDB = require('../models/VerifiedData')
+const { nanoid } = require('nanoid')
 
 module.exports = {
   getPage: async (req, res) => {
@@ -37,19 +40,68 @@ module.exports = {
   },
 
   getConfigure: async (req, res) => {
-    //allow for removal of credentials
     //implement flash for errors
-
+    let currentMessages = ''
     const dataCount = await HistoricImportDB.count()
+    res.render('configure', { dataCount, accountName: req.user.calendarEmail, messages: currentMessages });
+  },
 
-    res.render('configure', { dataCount, accountName: req.user.calendarEmail });
+  addContact: async (req, res) => {
+    try {
+      let currentMessages = ''
+      const dataCount = await HistoricImportDB.count()
+      let currentEntry = {
+        name: {
+            firstName: req.body.firstname,
+            middleInitial: req.body.middleinitial,
+            lastName: req.body.lastname,
+        },
+            email: req.body.email,
+            phones: [],
+            
+            address: {
+                street: req.body.urbName,
+                city: req.body.city,
+                state: req.body.state,
+                zipcode: req.body.zip,
+            },
+            timestamp: new Date(),
+            accessLink: nanoid(10),
+        }
+        if(req.body.number){
+            for(let i=0; i<req.body.number.length; i++){
+                currentEntry.phones.push({
+                    number: req.body.number[i], 
+                    numberType: req.body.type[i]
+                })
+            }
+        }
+
+      await HistoricImportDB.create(currentEntry)
+      await SubmittedInformationDB.create(currentEntry)
+      await NameReferenceDB.create({
+        name: {
+          firstName: currentEntry.name.firstName,
+          middleInitial: currentEntry.name.middleInitial,
+          lastName: currentEntry.name.lastName,
+        },
+        accessLink: currentEntry.accessLink,
+      })
+
+      currentMessages = 'Entry Added'
+
+      console.log('Entry Created')
+      res.render('configure', { dataCount, accountName: req.user.calendarEmail, messages: currentMessages });
+    } catch (err) {
+      console.log(err)
+    }  
   },
 
   editList: async (req, res) => {
-    //allow for removal of credentials
-    //implement flash for errors
 
     const allContacts = await HistoricImportDB.find()
+
+    console.log('editList')
     res.render('import_database', { allContacts });
   },
 
@@ -92,5 +144,54 @@ module.exports = {
 
     console.log('Calendar access added')
     res.json('Calendar access added')
-  }
+  },
+
+  verifyDeleteData: async (req,res)=>{
+    try {
+        
+        console.log('verify delete data')
+        res.render('verifyDeletion', {deleted: false})
+    } catch (err) {
+        console.log(err)
+    }
+},
+
+deleteData: async (req,res)=>{
+    try {
+        await HistoricImportDB.deleteMany({}, function(err) { 
+          console.log('HistoricImport removed') 
+       }).clone();
+        await NameReferenceDB.deleteMany({}, function(err) { 
+          console.log('NameReference removed') 
+       }).clone();
+        await SubmittedInformationDB.deleteMany({}, function(err) { 
+          console.log('SubmittedInformationDB removed') 
+       }).clone();
+        await VerifiedDataDB.deleteMany({}, function(err) { 
+          console.log('VerifiedDataDB removed') 
+       }).clone();
+
+        console.log('delete data')
+        res.render('verifyDeletion', {deleted: true})
+    } catch (err) {
+        console.log(err)
+    }
+},
+
+deleteCredentials: async (req,res)=>{
+    try {
+      const dataCount = await HistoricImportDB.count()
+      let currentMessages = ''
+
+      await User.findOneAndUpdate({email: req.user.email}, {calendarEmail: '', calendarPassword: ''})
+
+      currentMessages = 'Your credentials were deleted.'
+
+      console.log('delete credentials')
+      res.render('configure', { dataCount, accountName: req.user.calendarEmail, messages: currentMessages})
+    } catch (err) {
+        console.log(err)
+
+    }
+},
 }

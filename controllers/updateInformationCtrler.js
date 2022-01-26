@@ -20,7 +20,7 @@ module.exports = {
                 data = await NameReferenceDB.find({accessLink: req.params.id});
                 contactName = {first: data[0].name.firstName, middle: data[0].name.middleInitial, last:data[0].name.lastName}
             }else if(formInformation.length === 0){
-                await NameReferenceDB.findOneAndUpdate({accessLink: ''}, {$inc: {accessCount: 1}})
+                await NameReferenceDB.findOneAndUpdate({accessLink: ' '}, {$inc: {accessCount: 1}})
             }
             //if(!data){data.disabple}
             console.log('update information')

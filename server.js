@@ -26,7 +26,7 @@ app.use(express.json())
 
 app.use(
     session({
-      secret: 'keyboard cat', //this can be anything you want
+      secret: process.env.YourSECRECT, //this can be anything you want
       resave: false,
       saveUninitialized: false,
       store: MongoStore.create({ mongoUrl: process.env.DB_STRING})

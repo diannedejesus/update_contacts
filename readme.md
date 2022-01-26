@@ -109,26 +109,35 @@ illustration of people working together
 Learn how to create a low-fidelity wireframe in Lucidchart to include within your software design document. -->
 
 ## Goals and milestones
-- [] Credentials: add or remove access to your contacts credentials.
+- [completed] Credentials: add or remove access to your contacts credentials.
     - [] Might elimanate the storage of this data and just ask user to verify everytime they want to access
-- [] Delete and/or replace the local list of contacts (will erase all data)
-- [] add a reference for empty link counting when database is first created
-- [] Allow user to add a new entry to historic list (data can be added or disabled/enabled)
-    - [additional feature] allow for adding a reason for disabling
+- [completed] Delete and/or replace the local list of contacts (will erase all data)
+- [completed] add a reference for empty link counting when database is first created
+- [completed] Allow user to add a new entry to historic list (data can be added or disabled/enabled)
+    - [][additional feature] allow for adding a reason for disabling
+- [completed] Format the p tag that confirms the of deletion of credentials to the user on the configure page
+- [] Add confirmation or page for when calendar access is added
+- [] Fix form for submitting email on receipt page (move submit button)
 - [] view for the verified data (most likey a list)
 
 
 
 ### Secondary Goals
-- [] Format phones numbers to a standard representation
+- [ ]Format phones numbers to a standard representation
+- [ ]Add input verification to receipt page for after the fact email entry
 
 - [ ]Modify the admin view / dashboard
-- [ ]Add input verification to receipt page for after the fact email entry
+
 - [ ]Possibly track who enter an email after the fact for a receipt but does not want it associated to its account.
+- [ ]Have a button to add credentials that leads to a form page; if this part remains in the app.
+    - [ ]Pretty sure the app will only use one set of credentials so we wont need the form unless the user want to replace their credetials or modify.
+
 - [completed] Setup a verification for cases submitted without a link to associate it to an entry
     - [partial]make an option to permit the user to eliminate the non-relevant link
-        -[]figure out how to make mongoose update / replace a field with similar data
+        -[ ]figure out how to make mongoose update / replace a field with similar data
     - [completed]include more information with the link to make it easier to identify the correct one from the incorrect one
+
+-[ ]Rename pages and routes
 
 ### Wishlist Feature
 - [ ][additional Feature] Collect submit fails with reason for fail

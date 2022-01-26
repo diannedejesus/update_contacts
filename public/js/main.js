@@ -7,6 +7,9 @@ const addNumberBtn = document.querySelector('.addNumber')
 if(addNumberBtn){addNumberBtn.addEventListener('click', addNumber)}
 if(signoutBtn){signoutBtn.addEventListener('click', signout)}
 
+document.querySelector('.showSection').addEventListener('click', showSection)
+
+
 // Array.from(sendMail).forEach((el)=>{
 //     el.addEventListener('click', resendEmail)
 // })
@@ -32,6 +35,16 @@ if(signoutBtn){signoutBtn.addEventListener('click', signout)}
 //         console.log(err)
 //     }
 // }
+
+function showSection(event){
+    let contactForm = document.querySelector('.addContact').style.display
+console.log('contactForm', contactForm)
+    if(contactForm === 'none' || !contactForm){
+        document.querySelector('.addContact').style.display = 'block';
+    }else {
+        document.querySelector('.addContact').style.display = 'none';
+    }
+}
 
 async function signout(){
     try{

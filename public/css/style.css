@@ -328,3 +328,25 @@ input[type='submit']:hover{
 .verified{
     background-color: indianred;
 }
+.addContact{
+    display: none;
+}
+
+.addContact section{
+    width: 40%;
+    height: 16em;
+    float: left;
+}
+.addContact .lessSpace{
+    height: 12em;
+}
+.addContact section h2{
+    background-color:mediumpurple;
+}
+
+.message{
+    font-weight: 900;
+    font-size: xx-large;
+    border: 1px solid darkgray;
+    background-color: aquamarine;
+}

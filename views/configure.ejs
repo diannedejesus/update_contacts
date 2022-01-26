@@ -16,9 +16,11 @@
     </header>
    
     <h1>Configure</h1>  
-
+    <% if (messages){ %> 
+        <p class='message'><%= messages %></p>
+    <% } %>
     <p>MS Exchange Credentials</p>
-    <p>Currently stored credentials: <%= accountName %></p>
+    <p>Currently stored credentials: <%= accountName %>  <% if (accountName){ %> <a href="/login/deleteCredentials">remove</a><% } else { %> no saved credential found <% } %></p> 
     <form class="login-form" action="../login/configure" method="POST">
         <input type="text" name='email' placeholder="email">
         <input type="text" name='password' placeholder="password">
@@ -26,6 +28,77 @@
     </form>
     <h2>Import</h2>
     <p>You have imported <%= dataCount %> contacts. Do you wish to add new contacts to this list, edit the current contacts or replace the list?</p>
-    <a href='#' class='button'>Add Contacts</a> <a href='/login/editList' class='button'>Edit List</a> <a href='#' class='button'>Replace Data</a> <a href='/setDates/import' class='button'>Import Data</a>
+    <a href='#' class='button showSection'>Add Contacts</a> 
+    <a href='/login/editList' class='button'>Edit List</a> 
+    <a href='#' class='button'>Replace Data</a> 
+    <a href='/dashboard/import' class='button'>Import Data</a>
+    <a href='/login/confirmDelete' class='button'>Delete Data</a>
+    <section class='addContact'>
+        <form method='POST' action='/login/addContact'>
+            <section class='contactName'>
+                <h2>1. Contact Name</h2>
+                <label for='firstname'>Name</label>
+                <input id='firstname' name='firstname'type='text' placeholder="Juana">
+                <label for='middleinitial'>Initial</label>
+                <input id='middleinitial' name='middleinitial' type='text'  minlength="1" maxlength="40">
+                <label for='lastname'>Last Names</label>
+                <input id='lastname' name='lastname' type='text' placeholder="del Pueblo Santa">
+            </section>
+            <section class='postalAddress'>
+                <h2>2. Postal Address</h2>
+                <div class='addressMain'>
+                    <label for='urbName'>Urb Name</label>
+                    <input id='urbName' name='urbName' type='text' placeholder="Urb. Santa Juanita">
+                    <label for='streetaddr'>Street Address</label>
+                    <input id='streetaddr' name='streetaddr' type='text' placeholder="345 Calle Ricon Nuevo">
+                </div>
+                <div class='stateInfo'>
+                    <label for='city'>City</label>
+                    <input id='city' name='city' type='text' placeholder="Rincon">
+                </div>
+                <div class='stateInfo'>
+                    <label for='state'>State</label>
+                    <input id='state' name='state' type='text' placeholder="PR">
+                </div>
+                <div class='stateInfo'>
+                    <label for='zip'>Zip Code</label>
+                    <input id='zip' name='zip' type='text' placeholder="00999-45302">
+                </div>
+            </section>
+            <section class='phoneNumbers lessSpace'>
+            <h2>3. Phone Numbers</h2>
+                <div id='numberSlots'>
+                    <label for='number1'>Number</label>
+                    <input id='number1' name='number' type='text' placeholder="787-555-5555">
+                    <label for='type1'>Type</label>
+                    <select id='type1' name='type'>
+                        <option value='Home'>Home</option>
+                        <option value='Mobile'>Mobile</option>
+                        <option value='Business'>Business</option>
+                        <option value='Other'>Other</option>
+                    </select>
+                </div>
+                <button class='addNumber' type="button">Add Number</button>
+            </section>
+            <section class='emailAddress lessSpace'>
+                <h2>4. Email Address</h2>
+                <label for='email'>Email</label>
+                <input id='email' name='email' type='text' placeholder="email@email.com"> 
+                <p>Can we use this email to comunicate with you for official purposes?</p>
+
+                <label for="huey">Yes</label>
+                <input type="radio" id="huey" name="selector" value="yes">
+            
+                <label for="dewey">No</label>
+                <input type="radio" id="dewey" name="selector" value="no">
+            </section>
+            <section class='submitButton'>
+                <!-- <input type="hidden" name='accessLink' value=""> -->
+                <input type="submit">
+            </section>
+        </form>
+    </section>
+
+    <script src="../js/main.js"></script>
 </body>
 </html>
