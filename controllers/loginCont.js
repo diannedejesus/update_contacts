@@ -41,8 +41,10 @@ module.exports = {
 
   getConfigure: async (req, res) => {
     //implement flash for errors
-    let currentMessages = ''
+    let currentMessages = req.query.messages ? req.query.messages : ''
     const dataCount = await HistoricImportDB.count()
+
+    
     res.render('configure', { dataCount, accountName: req.user.calendarEmail, messages: currentMessages });
   },
 
@@ -91,7 +93,9 @@ module.exports = {
       currentMessages = 'Entry Added'
 
       console.log('Entry Created')
-      res.render('configure', { dataCount, accountName: req.user.calendarEmail, messages: currentMessages });
+      
+      
+      
     } catch (err) {
       console.log(err)
     }  
@@ -141,9 +145,10 @@ module.exports = {
     
     //add to user info
     await User.findOneAndUpdate({email: req.user.email}, {calendarEmail: req.body.email, calendarPassword: encryptedData})
-
-    console.log('Calendar access added')
-    res.json('Calendar access added')
+    const messages = encodeURIComponent('contact access was saved')
+    console.log('contact access added')
+    //res.json('Calendar access added')
+    res.redirect('/login/configure?messages=' + messages)
   },
 
   verifyDeleteData: async (req,res)=>{
@@ -180,15 +185,16 @@ deleteData: async (req,res)=>{
 
 deleteCredentials: async (req,res)=>{
     try {
-      const dataCount = await HistoricImportDB.count()
+      //const dataCount = await HistoricImportDB.count()
       let currentMessages = ''
 
       await User.findOneAndUpdate({email: req.user.email}, {calendarEmail: '', calendarPassword: ''})
 
-      currentMessages = 'Your credentials were deleted.'
+      currentMessages = encodeURIComponent('Your credentials were deleted.')
 
       console.log('delete credentials')
-      res.render('configure', { dataCount, accountName: req.user.calendarEmail, messages: currentMessages})
+      res.redirect('/login/configure?messages=' + currentMessages)
+      //res.render('configure', { dataCount, accountName: req.user.calendarEmail, messages: currentMessages})
     } catch (err) {
         console.log(err)
 

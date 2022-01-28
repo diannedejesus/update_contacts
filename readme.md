@@ -110,13 +110,14 @@ Learn how to create a low-fidelity wireframe in Lucidchart to include within you
 
 ## Goals and milestones
 - [completed] Credentials: add or remove access to your contacts credentials.
-    - [] Might elimanate the storage of this data and just ask user to verify everytime they want to access
+    - [] Might eliminate the storage of this data and just ask user to verify everytime they want to access
 - [completed] Delete and/or replace the local list of contacts (will erase all data)
 - [completed] add a reference for empty link counting when database is first created
 - [completed] Allow user to add a new entry to historic list (data can be added or disabled/enabled)
     - [][additional feature] allow for adding a reason for disabling
 - [completed] Format the p tag that confirms the of deletion of credentials to the user on the configure page
-- [] Add confirmation or page for when calendar access is added
+
+- [completed] Add confirmation or page for when calendar access is added
 - [] Fix form for submitting email on receipt page (move submit button)
 - [] view for the verified data (most likey a list)
 
