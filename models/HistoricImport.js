@@ -24,6 +24,10 @@ const HistoricImportSchema = new mongoose.Schema({
   email: {
     type: String,
   },
+  emailUse: {
+    type: Boolean,
+    default: true,
+  },
 
   address: {
     street: String,

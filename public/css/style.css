@@ -291,6 +291,7 @@ main{
  */
 
 input[type='submit']{
+    display: block;
     margin-top: 1em;
     border: 1px solid rgb(182, 97, 97);
     background-color: transparent;

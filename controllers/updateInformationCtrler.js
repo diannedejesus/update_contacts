@@ -17,14 +17,14 @@ module.exports = {
 
             if(formInformation.length === 0 && req.params.id){
                 await NameReferenceDB.findOneAndUpdate({accessLink: req.params.id}, {$inc: {accessCount: 1}})
-                data = await NameReferenceDB.find({accessLink: req.params.id});
-                contactName = {first: data[0].name.firstName, middle: data[0].name.middleInitial, last:data[0].name.lastName}
+                data = await NameReferenceDB.findOne({accessLink: req.params.id});
+                contactName = {first: data.name.firstName, middle: data.name.middleInitial, last:data.name.lastName}
             }else if(formInformation.length === 0){
                 await NameReferenceDB.findOneAndUpdate({accessLink: ' '}, {$inc: {accessCount: 1}})
             }
             //if(!data){data.disabple}
             console.log('update information')
-            res.render('updateInformation.ejs', {name: contactName, errors: currentErrors, bodyFill: formInformation, id: req.params.id, disabled: data ? data[0].disabled : false })
+            res.render('updateInformation.ejs', {name: contactName, errors: currentErrors, bodyFill: formInformation, id: req.params.id, disabled: data ? data.disabled : false })
         }catch(err){
             console.log(err)
         }
@@ -248,7 +248,7 @@ Feel free to contact our office with questions or concerns by emailing or callin
                     email: req.body.email, 
                     emailUse: req.body.selector === 'no' ? false : true, 
                     address: {
-                        street: req.body.urbName + '/n' + req.body.streetaddr, 
+                        street: req.body.urbName ? `${req.body.urbName} /n ${req.body.streetaddr}` : '',
                         city: req.body.city, 
                         state: req.body.state, 
                         zipcode: req.body.zip, 

@@ -50,6 +50,10 @@ const VerifiedDataSchema = new mongoose.Schema({
   syncedDate: {
     type: Date,
   },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 module.exports = mongoose.model('VerifiedData', VerifiedDataSchema)

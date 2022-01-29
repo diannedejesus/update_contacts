@@ -51,7 +51,7 @@ module.exports = {
   addContact: async (req, res) => {
     try {
       let currentMessages = ''
-      const dataCount = await HistoricImportDB.count()
+      //const dataCount = await HistoricImportDB.count()
       let currentEntry = {
         name: {
             firstName: req.body.firstname,
@@ -70,13 +70,18 @@ module.exports = {
             timestamp: new Date(),
             accessLink: nanoid(10),
         }
-        if(req.body.number){
-            for(let i=0; i<req.body.number.length; i++){
-                currentEntry.phones.push({
-                    number: req.body.number[i], 
-                    numberType: req.body.type[i]
-                })
-            }
+        if(req.body.number.length > 0 && req.body.number.length === req.body.type.length){
+          for(let i=0; i<req.body.number.length; i++){
+            currentEntry.phones.push({
+                number: req.body.number[i], 
+                numberType: req.body.type[i]
+            })
+          }
+        } else if(req.body.number){
+          currentEntry.phones.push({
+            number: req.body.number, 
+            numberType: req.body.type
+          })
         }
 
       await HistoricImportDB.create(currentEntry)
@@ -90,10 +95,10 @@ module.exports = {
         accessLink: currentEntry.accessLink,
       })
 
-      currentMessages = 'Entry Added'
+      currentMessages = encodeURIComponent('Entry Added')
 
       console.log('Entry Created')
-      
+      res.redirect('/login/configure?messages=' + currentMessages)
       
       
     } catch (err) {
@@ -110,10 +115,12 @@ module.exports = {
   },
 
   toggleContact: async (req, res) => {
-      const contactState = await HistoricImportDB.find({accessLink: req.query.accessLink}, 'disabled')
+      const contactState = await HistoricImportDB.findOne({accessLink: req.query.accessLink}, 'disabled')
 
-      await HistoricImportDB.findOneAndUpdate({accessLink: req.query.accessLink}, {disabled: !contactState[0].disabled})
-      await NameReferenceDB.findOneAndUpdate({accessLink: req.query.accessLink}, {disabled: !contactState[0].disabled})
+      await HistoricImportDB.findOneAndUpdate({accessLink: req.query.accessLink}, {disabled: !contactState.disabled})
+      await NameReferenceDB.findOneAndUpdate({accessLink: req.query.accessLink}, {disabled: !contactState.disabled})
+      await VerifiedDataDB.findOneAndUpdate({accessLink: req.query.accessLink}, {disabled: !contactState.disabled})
+      await SubmittedInformationDB.findOneAndUpdate({accessLink: req.query.accessLink}, {disabled: !contactState.disabled})
 
       res.redirect(req.get('referer'));
   },

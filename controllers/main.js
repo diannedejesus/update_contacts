@@ -5,15 +5,17 @@ const VerifiedDataDB = require('../models/VerifiedData')
 const ewsOptions = require('../ewsConnections')
 const validator = require('validator');
 const { nanoid } = require('nanoid')
+const { each } = require('mongodb/lib/operations/cursor_ops')
 
 module.exports = { 
     index: async (req,res)=>{
         try{
-            const reservationsMade = await HistoricImportDB.find()
+            const historicData = await HistoricImportDB.find()
             const emailCount = await HistoricImportDB.find({email: {$exists: true}}).count()
             const submitCount = await SubmittedInformationDB.find().count()
             const uniqueSubmitCount = (await SubmittedInformationDB.distinct('accessLink')).length
             const accessCount = await NameReferenceDB.find({accessCount: {$exists: true}})
+            const verifiedContacts = await VerifiedDataDB.find().count()
 
             let linkedAccessed = 0
             let noLinkAccessed = 0
@@ -26,14 +28,79 @@ module.exports = {
                 }
             }
 
+            //compile information for dashboard
+            for(items of historicData){
+                const contactVerified = await VerifiedDataDB.findOne({accessLink: items.accessLink})
+                const contactSubmits = await SubmittedInformationDB.find({accessLink: items.accessLink}).count()
+                const accessed = await NameReferenceDB.findOne({accessLink: items.accessLink, accessCount: {$exists: true}})
+
+                if(contactVerified){
+                    items = Object.assign(items, contactVerified)
+                    items.status = 'verified'
+                }else if(contactSubmits > 0){
+                    items.status = contactSubmits + ' submits'
+                } else {
+                    items.status = 'pending'
+                }
+
+                if(accessed){
+                    items.accessed = accessed.accessCount
+                }else{
+                    items.accessed = 0
+                }
+                
+            }
+
+
+
             res.render('contactList.ejs', { 
-                reservations: reservationsMade, 
+                reservations: historicData, 
                 emailCount, 
                 submitCount, 
                 uniqueSubmitCount, 
                 linkedAccessed, 
-                noLinkAccessed 
+                noLinkAccessed,
+                verifiedContacts
             })
+
+        }catch(err){
+            console.log(err)
+        }
+    },
+    
+    letterView: async (req,res)=>{
+        try{
+            const info = await HistoricImportDB.findOne({accessLink: req.params.idCode})
+            // const emailCount = await HistoricImportDB.find({email: {$exists: true}}).count()
+            // const submitCount = await SubmittedInformationDB.find().count()
+            // const uniqueSubmitCount = (await SubmittedInformationDB.distinct('accessLink')).length
+            // const accessCount = await NameReferenceDB.find({accessCount: {$exists: true}})
+            // const verifiedContacts = await VerifiedDataDB.find().count()
+
+            // let linkedAccessed = 0
+            // let noLinkAccessed = 0
+
+            // for(items of accessCount){
+            //     if(items.name.firstName.toLowerCase() !== 'empty'){
+            //         linkedAccessed += items.accessCount
+            //     }else{
+            //         noLinkAccessed = items.accessCount
+            //     }
+            // }
+
+            res.render('letter.ejs', { info })
+
+        }catch(err){
+            console.log(err)
+        }
+    },
+
+    verifiedList: async (req,res)=>{
+        try{
+            const reservationsMade = await VerifiedDataDB.find()
+
+            console.log('load verified list')
+            res.render('verifiedList.ejs', { reservations: reservationsMade })
 
         }catch(err){
             console.log(err)
@@ -42,6 +109,7 @@ module.exports = {
 
     submitList: async (req,res)=>{
         try{
+            let collectedData = []
             const submitData = await SubmittedInformationDB.aggregate([
                 { "$group": { 
                   "_id": "$accessLink", 
@@ -50,9 +118,20 @@ module.exports = {
                 { "$replaceRoot": {
                   "newRoot": "$doc"
                 }}
-              ])
+            ])
 
-            res.render('submitList.ejs', {submitData: submitData })
+            for(items of submitData){
+                const linkID = items.accessLink
+                const accessed = await NameReferenceDB.findOne({accessLink: linkID})
+                const verified = await VerifiedDataDB.findOne({accessLink: linkID})
+                const submits = await SubmittedInformationDB.find({accessLink: linkID}).count()
+                collectedData.push({linkID, accessed: accessed.accessCount ? accessed.accessCount : 0, verified: verified ? true : false, submits})
+                //console.log(' this' , accessed.accessCount)
+            }
+            console.log(collectedData)
+            // search data submits verified accessed count
+
+            res.render('submitList.ejs', {submitData: submitData, collectedData })
         }catch(err){
             console.log(err)
         }
@@ -60,13 +139,8 @@ module.exports = {
 
     keepAccessLinks: async (req,res)=>{
         try{
-            const contactID = await SubmittedInformationDB.find({'accessLink': req.body.originalAccessLink})
-            const modifyData = await SubmittedInformationDB.findOneAndUpdate({'_id': contactID[0]._id}, {'accessLink': ''}, { new: true
-              })
-              const modifyData2 = await SubmittedInformationDB.findOneAndUpdate({'_id': contactID[0]._id}, {'accessLink': req.body.selectedAccessLink}, { new: true
-              })
-            console.log(modifyData2, contactID[0]._id)
-
+            const contactID = await SubmittedInformationDB.findOne({'accessLink': req.body.originalAccessLink})
+            const modifyData = await SubmittedInformationDB.findOneAndUpdate({'_id': contactID._id}, {$set:{ 'accessLink': req.body.selectedAccessLink}}, { new: true })
             
             console.log('access link updated via keepAccessLinks')
             res.redirect('/dashboard/submitList')
@@ -75,20 +149,17 @@ module.exports = {
         }
     },
 
-
-
     compareData: async (req,res)=>{
         try{
-            const originalData = await HistoricImportDB.find({accessLink: req.params.id})
+            const originalData = await HistoricImportDB.findOne({accessLink: req.params.id})
             const submitData = await SubmittedInformationDB.find({accessLink: req.params.id})
             const verifiedData = await VerifiedDataDB.find({accessLink: req.params.id})
-
 
             //convert phones numbers to standard format
             let submittedNumbers = []
 
-            for(let i=0; i<originalData[0].phones.length; i++){
-                originalData[0].phones[i].number = originalData[0].phones[i].number.split('').filter(el => Number(el)).join('')
+            for(let i=0; i<originalData.phones.length; i++){
+                originalData.phones[i].number = originalData.phones[i].number.split('').filter(el => Number(el)).join('')
             }
         
 
@@ -97,7 +168,7 @@ module.exports = {
                     submittedNumbers.push(data.phones[i].number.split('').filter(el => Number(el)).join(''))  
                 }
             }
-//console.log(verifiedData)
+
             res.render('compareSubmit.ejs', { originalData: originalData, submitData: submitData, submitPhones: submittedNumbers, verifiedData: verifiedData})
         }catch(err){
             console.log(err)
@@ -107,13 +178,14 @@ module.exports = {
     import: async (req, res)=>{
         try{
             const dbFilled = await HistoricImportDB.count()
-            //console.log(dbFilled)
+
             if(dbFilled <= 0){
                 const contact = await ewsOptions.getContacts(req.user.calendarPassword, req.user.calendarEmail)
                 let collection = []
 
                 for(items of contact.ResponseMessages.FindItemResponseMessage.RootFolder.Items.Contact){
                     if(items.JobTitle === 'Landlord'){
+                        console.log(items.EmailAddresses ? items.EmailAddresses.Entry[0].attributes.Key : '')
                         let currentEntry = {
                         name: {
                             firstName: items.CompleteName.FirstName,
@@ -121,6 +193,7 @@ module.exports = {
                             lastName: items.CompleteName.LastName,
                         },
                             email: items.EmailAddresses ? items.EmailAddresses.Entry[0]['$value'] : undefined,
+                            emailUse: items.EmailAddresses ? items.EmailAddresses.Entry[0].attributes.Key === 'EmailAddress1' ? true : false : false,
                             phones: [],
                             
                             address: {
@@ -201,69 +274,54 @@ module.exports = {
         }
     },
 
-    
-    // resendEmail: async (req, res)=>{
-    //     try{
-    //         const reservationData = await ReservedSlotDB.findOne({linkId: req.body.idFromJSFile})
-    //         //let durationTime = reservationData.duration
-
-    //         const optionsEmailClient = {
-    //             'Name': reservationData.name,
-    //             'Body': `Hello ${reservationData.name},\n\nOur office needs to meet with you to complete some documentation or discuss a topic pertinate to your case. Please use the following link to schedule your appointment. \n\nIf none of these times/dates work with your schedule then please email or call us so we can find a time that works. \n\nWe will be discussing: ${reservationData.subject} and we estimate the meeting will be ${reservationData.duration}\n\n http://localhost:3000/setDates/selectTimeSlot/${reservationData.linkId}\n\n`, //Body: name email
-    //             'Email': reservationData.email,
-    //             'Subject': 'We need you to schedule an appointment',
-    //         }
-
-    //         ewsOptions.sendEmail(req.user.calendarPassword, req.user.calendarEmail, optionsEmailClient)
-
-    //         console.log('Email Sent')
-    //         res.json('Email Sent')
-    //     }catch(err){
-    //         console.log(err)
-    //     }
-    // },
-
     consolidateData: async (req, res)=>{
         try{
-            console.log('body', req.body)
-            //const await HistoricImportDB.find({}, 'name accessLink');
+            const historicData = await HistoricImportDB.findOne({accessLink: req.body.accessLink});
             //const submitID = req.body.id ? req.body.id : ''
 
             const address = req.body.address ? req.body.address.split('$') : ''
             const names = req.body.fullName ? req.body.fullName.split('$') : ''
-            const email = req.body.email ? req.body.email.split('$') : ''
+            const email = req.body.email ? req.body.email.split('$') : ['', false]
             
             const verifiedData = {
                 name: {
-                    firstName: names[0],
-                    middleInitial: names[1],
-                    lastName: names[2],
+                    firstName: names[0] ? names[0] : historicData.name.firstName,
+                    middleInitial: names[1] ? names[1] : historicData.name.middleInitial ? historicData.name.middleInitial : '',
+                    lastName: names[2] ? names[2] : historicData.name.lastName,
                 },
             
                 phones: [],
             
-                email: req.body.email[0],
-                emailUse: req.body.emailuse[1],
+                email: email[0] ? email[0] : historicData.email,
+                emailUse: email[1] ? email[1] : historicData.emailUse,
             
                 address: {
-                    street: address[0],
-                    city: address[1],
-                    state: address[2],
-                    zipcode: address[3],
+                    street: address[0] ? address[0] : historicData.address.street,
+                    city: address[1] ? address[1] : historicData.address.city,
+                    state: address[2] ? address[2] : historicData.address.state,
+                    zipcode: address[3] ? address[3] : historicData.address.zipcode,
                 },
             
                 accessLink: req.body.accessLink,
-            
+
                 timestamp: new Date(),
             }
 
-            for(let i=0; i<req.body.phoneNumber.length; i++){
-                let numberInfo = req.body.phoneNumber[i].split('$')
-                //console.log(numberInfo)
-                verifiedData.phones.push({ number: numberInfo[0], numberType: numberInfo[1]})
-            }
 
-            VerifiedDataDB.create(verifiedData)
+            if(req.body.phoneNumber && req.body.phoneNumber.length > 0 && typeof req.body.phoneNumber !== 'string'){
+                for(let i=0; i<req.body.phoneNumber.length; i++){
+                    let numberInfo = req.body.phoneNumber[i].split('$')
+                    verifiedData.phones.push({ number: numberInfo[0], numberType: numberInfo[1]})
+                }
+              } else if(req.body.phoneNumber){
+                let numberInfo = req.body.phoneNumber.split('$')
+                verifiedData.phones.push({ number: numberInfo[0], numberType: numberInfo[1]})
+              }else{
+                verifiedData.phones = historicData.phones
+              }
+            
+
+            await VerifiedDataDB.create(verifiedData)
 
             for(let i=0; i<req.body.id.length; i++){
                 //this is for changing the status or verified of submitted data
@@ -273,67 +331,13 @@ module.exports = {
             //console.log('verified', req.body.id)
 
             console.log('Data Verified')
-            res.json('Data Verfied')
+            //res.json('Data Verified')
+            res.redirect(req.get('referer'));
+
         }catch(err){
             console.log(err)
         }
     },
 
-    // assignTimeSlot: async (req, res)=>{
-    //     try{
-    //         // await TimeSlotDB.findOneAndUpdate({linkId: req.body.idFromJSFile},{
-    //         //     selectedSlot: new Date(req.body.dateTimeFromJSFile),
-    //         // })
-
-    //         const reservationData = await ReservedSlotDB.findOne({linkId: req.body.idFromJSFile})
-    //         let durationTime = reservationData.duration
-    //         const endDate = new Date(req.body.dateTimeFromJSFile).getTime() + (Number(durationTime) * 60000) //TODO use the duration but first set a standard for definition
-
-    //         const options = {
-    //             'Name': reservationData.name,
-    //             'Subject': reservationData.subject,
-    //             'Body': `${reservationData.name} ${reservationData.email}`,
-    //             'Start': new Date(req.body.dateTimeFromJSFile).toISOString(),
-    //             'End': new Date(endDate).toISOString(),
-    //             'Location': reservationData.location,
-    //             'Email': reservationData.email,
-    //         }
-
-    //         const optionsEmailUser = {
-    //             'Name': reservationData.name,
-    //             'Subject': 'An Appointment Date and Time has Been Reserved',
-    //             'Body': `Hello ${req.user.email},\n\n${options.Name} has selected the date ${new Date(req.body.dateTimeFromJSFile).toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} ${new Date(options.Start).toLocaleString('en-US', { hour: '2-digit', minute: '2-digit'})} - ${new Date(endDate).toLocaleString('en-US', { hour: '2-digit', minute: '2-digit'})} for their appointment. \n\nThe apppointment will be at ${reservationData.location} and you will be discussing: ${reservationData.subject}.\n\n`, //Body: name email
-    //             'Start': new Date(req.body.dateTimeFromJSFile).toISOString(),
-    //             'End': new Date(endDate).toISOString(),
-    //             'Location': reservationData.location,
-    //             'Email': req.user.calendarEmail,
-    //         }
-
-    //         const optionsEmailClient = {
-    //             'Name': 'Your Appointment Date and Time has Been Reserved',
-    //             'Body': `Hello ${options.Name},\n\nYou have selected the date ${new Date(req.body.dateTimeFromJSFile).toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} ${new Date(options.Start).toLocaleString('en-US', { hour: '2-digit', minute: '2-digit'})} - ${new Date(endDate).toLocaleString('en-US', { hour: '2-digit', minute: '2-digit'})} for your appointment. \n\nLike the selection page indicated the apppointment will be at ${reservationData.location}. \n\nWe will be discussing: ${reservationData.subject}.\n\n`, //Body: name email
-    //             'Email': reservationData.email,
-    //         }
-    //         //save to calendar
-    //         ewsOptions.addDates(req.user.calendarPassword, req.user.calendarEmail, options)
-    //         ewsOptions.sendEmail(req.user.calendarPassword, req.user.calendarEmail, optionsEmailClient)
-    //         ewsOptions.sendEmail(req.user.calendarPassword, req.user.calendarEmail, optionsEmailUser)
-
-    //         console.log('Time Slot Selected')
-    //         res.json('Time Slot Selected')
-    //     }catch(err){
-    //         console.log(err)
-    //     }
-    // },
-
-    // deleteDates: async (req, res)=>{
-    //     console.log(req.body.todoIdFromJSFile)
-    //     try{
-    //         await TimeSlotDB.findOneAndDelete({_id:req.body.todoIdFromJSFile})
-    //         console.log('Deleted Todo')
-    //         res.json('Deleted It')
-    //     }catch(err){
-    //         console.log(err)
-    //     }
-    // }
+    // export end
 }    

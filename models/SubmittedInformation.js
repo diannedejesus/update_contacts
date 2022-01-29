@@ -48,6 +48,10 @@ const SubmittedInformationSchema = new mongoose.Schema({
   verifiedDate: {
     type: Date,
   },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 module.exports = mongoose.model('SubmittedInformation', SubmittedInformationSchema)

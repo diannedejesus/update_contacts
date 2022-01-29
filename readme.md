@@ -109,41 +109,36 @@ illustration of people working together
 Learn how to create a low-fidelity wireframe in Lucidchart to include within your software design document. -->
 
 ## Goals and milestones
-- [completed] Credentials: add or remove access to your contacts credentials.
-    - [] Might eliminate the storage of this data and just ask user to verify everytime they want to access
-- [completed] Delete and/or replace the local list of contacts (will erase all data)
-- [completed] add a reference for empty link counting when database is first created
-- [completed] Allow user to add a new entry to historic list (data can be added or disabled/enabled)
-    - [][additional feature] allow for adding a reason for disabling
-- [completed] Format the p tag that confirms the of deletion of credentials to the user on the configure page
+- [completed]Modify the admin view / dashboard / update the dashboard view to have needed data, historical data list view might not be the most pertinent
+- [completed]How will the verified list page handle a disabled accesslink/contact. Disable further action for the item.
+- [partial]Make accessLink code on lists clickable to have it ![send an email] or display a printable page.
+    -[]format and redact printable page
 
-- [completed] Add confirmation or page for when calendar access is added
-- [] Fix form for submitting email on receipt page (move submit button)
-- [] view for the verified data (most likey a list)
+- [completed]Add the count of items to the submitlist page view and if the info has been verified already. Perhaps order it by verification status
+- [completed]Modify the submitlist view to not include data since we will only be display unique values and won't represent all changes made. This includes timestamp.
 
 
 
 ### Secondary Goals
-- [ ]Format phones numbers to a standard representation
 - [ ]Add input verification to receipt page for after the fact email entry
 
-- [ ]Modify the admin view / dashboard
+- [ ]Rename pages and routes
 
-- [ ]Possibly track who enter an email after the fact for a receipt but does not want it associated to its account.
+- [] {extra} create process to verfiy credentials for reading and editiong contacts
 - [ ]Have a button to add credentials that leads to a form page; if this part remains in the app.
     - [ ]Pretty sure the app will only use one set of credentials so we wont need the form unless the user want to replace their credetials or modify.
+- [completed] Credentials: add or remove access to your contacts credentials.
+    - [][additional feature] Might eliminate the storage of this data and just ask user to verify everytime they want to access
 
-- [completed] Setup a verification for cases submitted without a link to associate it to an entry
-    - [partial]make an option to permit the user to eliminate the non-relevant link
-        -[ ]figure out how to make mongoose update / replace a field with similar data
-    - [completed]include more information with the link to make it easier to identify the correct one from the incorrect one
+- [][additional feature] allow for adding a reason for disabling
 
--[ ]Rename pages and routes
+
 
 ### Wishlist Feature
 - [ ][additional Feature] Collect submit fails with reason for fail
 - [ ][additional Feature] Click through handler, session detection
-- [ ][additional Feature] Compare and submit contact changes
+- [ ][additional Feature] Submit contact changes to exchange
+- [ ][additional Feature]Possibly track who enters an email after the fact for a receipt but does not want it associated to its account.
 - [ ][Wishlist] Dashboard with visualizations
 - [ ][wishlist] find the structure of the information to use for limiting the import. Try to implement dynamicly.
     - [ ][wishist] will also be used to define the information to select from the data.    
@@ -168,8 +163,26 @@ Learn how to create a low-fidelity wireframe in Lucidchart to include within you
     - [completed]Add an option after the fact to include an email to send the confirmation.
 - [partial] Click through handler
     - [completed] Implement display of data
+- [completed] Format the p tag that confirms the of deletion of credentials to the user on the configure page
+- [completed] Add confirmation or page for when calendar access is added
+- [completed] Fix form for submitting email on receipt page (move submit button)
+- [completed] view for the verified data (most likey a list)
+- [completed][Bug] Adding to historic page, formats the phone number incorrectly.
+- [conpleted][Bug] verifing contact information, formats the phone number incorrectly.
+- [completed] Delete and/or replace the local list of contacts (will erase all data)
+- [completed] add a reference for empty link counting when database is first created
+- [completed] confirmation page for verified data (redirect was sufficient)
+- [completed][bug]when verifing information make sure if an option is not select that data is pulled from the historic record.
+- [completed][bug]fix empty email produces a $ value
+- [completed][bug]fix empty address produces a , value
+- [completed] Setup a verification for cases submitted without a link to associate it to an entry
+    - [partial]make an option to permit the user to eliminate the non-relevant link
+        -[completed]figure out how to make mongoose update / replace a field with similar data
+    - [completed]include more information with the link to make it easier to identify the correct one from the incorrect one
+-[completed]can we get data from mongo and not have it in a single array wrapper???
+- [completed] Allow user to add a new entry to historic list (data can be added or disabled/enabled)
 
-## Bugs and Issues
+## Issues
 - EWS Restriction filter not working
 - EWS Selecting only needed properties not clear when mutiple are needed
 
@@ -264,18 +277,21 @@ Once you’ve written your software design document and gotten approval from sta
 [] {SORT OF EXTRA} obscure password entry
 [] {SORT OF EXTRA} possibly change the comparison to the verified data when present
 
-[] {extra} fix the display of comma when no address is present
-[] {extra} update the dashboard view to have needed data, historical data list view might not be the most pertinent
-- {extra} Import only works if no data is present, this to avoid duplicates
+
+
+- done{extra} Import only works if no data is present, this to avoid duplicates
         - [additional] add duplicate detector
 [] {extra} ensure the verified data db doesnt have duplicates
 [] {extra} review ux to ensure it is understandable by user
-[] {extra} create process to verfiy credentials for reading and editiong contacts
-[] {extra} add the count of items to the submitlist page view and if the info has been verified already. Perhaps order it by verification status
-[] {extra} modify the submitlist view to not include data since we will only be display unique values and won't represent all changes made. This includes timestamp.
+
+
+
+
+- [ ]Format phones numbers to a standard representation
 - {extra} permit user to post a name to associate number phone number too
     - [additional] Limit the type of phone numbers to match outlooks limits
 - {extra} unify number and type array to avoid errors match number and type
+
 - {extra} modify form verification code, either integrate a pgk or move it to make it more cleaner and change the way it process information to make it more intuitive for the user. Posible not use sessions for this data.
 
 

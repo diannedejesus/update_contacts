@@ -10,7 +10,8 @@
 <body>
     <header>
         <a href='/'>dashboard</a> | 
-        <a href='/login/configure'>configure</a> | 
+        <a href='/login/configure'>configure</a> |
+        <a href='/dashboard/verifiedList'>verified list</a> |  
         <a href='/signup/logout' class='signout'>signout</a>
     </header>
    
@@ -20,27 +21,28 @@
             <table>
                 <tr>
                     <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone Numbers</th>
-                    <th>Mailing Address</th>
+                    <th>Accessed</th>
+                    <th>Submits</th>
+                    <th>verified</th>
                     <th>linkId / compare</th>
                     <th>timestamp</th>
                 </tr>
                 <% submitData.forEach( (el) => { %>
                 <tr class="<%= el.disabled ? 'disabled' : 'enabled' %>">
                     <td><%= el.name.firstName %> <%= el.name.middleInitial %> <%= el.name.lastName %> <%= el.name.secondLastName %></td>
-                    <td><%= el.email %></td>
-                    <td>
-                        <% el.phones.forEach( phone => { %>
-                            <p class='table'><%= phone.numberType %>: <%= phone.number %></p>
-                        <% }) %>
-                    </td>
-                    <td>
-                        <% if(el.address) { %>
-                            <p class='table'><%= el.address.street %></p>
-                            <p class='table'><%= el.address.city %>, <%= el.address.state %> <%= el.address.zipcode %></p>
+                    <% collectedData.forEach( (item) =>{ %>
+                        <% if(item.linkID === el.accessLink){ %>
+                            <td>
+                                <%= item.accessed %>
+                            </td>
+                            <td>
+                                <%= item.submits %>
+                            </td>
+                            <td>
+                                <%= item.verified %>
+                            </td>
                         <% } %>
-                    </td>
+                    <% }) %>
                     <td>
                         <% if(el.accessLink.includes(' ')){ %>
                         <ul>
@@ -56,14 +58,13 @@
                             <% }) %>
                         </ul>
                         <% } else{ %>
-                            <a href="/dashboard/compare/<%= el.accessLink %>"><%= el.accessLink %></a>
+                            <% if (el.disabled === false || !el.disabled) { %>
+                                <a href="/dashboard/compare/<%= el.accessLink %>"><%= el.accessLink %></a>
+                            <% } else { %>
+                                Disabled <%= el.accessLink %>
+                            <% } %>
+                            
                         <% } %>
-                       
-                        <!-- <% if (el.disabled === false) { %> -->
-                            <!-- <%= el.accessLink %> -->
-                        <!-- <% } else { %> -->
-                            <!-- Disabled -->
-                        <!-- <% } %> -->
                     </td>
                     <td><%= el.timestamp.toDateString() %> - <%= el.timestamp.toLocaleTimeString() %></td>
                 </tr>

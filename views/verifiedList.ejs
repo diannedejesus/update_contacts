@@ -9,23 +9,15 @@
 </head>
 <body>
     <header>
+        <a href='/'>dashboard</a> | 
+        <a href='/dashboard/submitList'>submit list</a> | 
         <a href='/login/configure'>configure</a> | 
-        <a href='/dashboard/verifiedList'>verified list</a> | 
         <a href='/signup/logout' class='signout'>signout</a>
     </header>
    
-    <main>
+    <main>        
         <section>
-            <div>Contacts with emails: <%= emailCount %></div>
-            <div><a href="/dashboard/submitList">Submitted: <%= submitCount %></a></div>
-            <div>Unique Submits: <%= uniqueSubmitCount %></div>
-            <div>Form accessed through custom link: <%= linkedAccessed %></div>
-            <div>Form accessed without custom link: <%= noLinkAccessed %></div>
-            <div>Contacts verified: <%= verifiedContacts %></div>
-        </section>
-        
-        <section>
-            <h1>Contact List</h1>
+            <h1>List of Verified Contact Information</h1>
             <section class='contactTable'>
                 <table>
                     <tr>
@@ -35,8 +27,6 @@
                         <th>Mailing Address</th>
                         <th>LinkId</th>
                         <th>Timestamp</th>
-                        <th>Status</th>
-                        <th>Accessed</th>
                     </tr>
                     <% reservations.forEach( (el) => { %>
                     <tr class="<%= el.disabled ? 'disabled' : 'enabled' %>">
@@ -55,20 +45,12 @@
                         </td>
                         <td>
                             <% if (el.disabled === false) { %>
-                                <a href="/dashboard/letter/<%= el.accessLink %>"><%= el.accessLink %></a>
+                                <%= el.accessLink %>
                             <% } else { %>
                                 Disabled <%= el.accessLink %>
                             <% } %>
                         </td>
                         <td><%= el.timestamp.toDateString() %> - <%= el.timestamp.toLocaleTimeString() %></td>
-                        <td>
-                            <% if(el.status.includes('submits')){ %>
-                                <a href='/dashboard/compare/<%= el.accessLink %>'><%= el.status %></a>
-                            <% }else { %>
-                                <%= el.status %>
-                            <% } %>
-                        </td>
-                        <td><%= el.accessed %></td>
                     </tr>
                     <% }) %>
                 </table>

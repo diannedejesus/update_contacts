@@ -12,68 +12,69 @@
     <header>
         <a href='/'>dashboard</a> | 
         <a href='/dashboard/submitList'>submit list</a> | 
+        <a href='/dashboard/verifiedList'>verified list</a> | 
         <a href='/login/configure'>configure</a> | 
         <a href='/signup/logout' class='signout'>signout</a>
     </header>
    
     <h1>Compare Data</h1>  
-    <h3>Identifier: <%= originalData[0].accessLink %></h3>
-    <% if(originalData[0].disabled){ %> 
+    <h3>Identifier: <%= originalData.accessLink %></h3>
+    <% if(originalData.disabled){ %> 
         <h3 class="disabled">This contact has been disabled. You can enable it in the configure menu under the edit list option.</h3> 
     <% } %>
     <section class="container">
         <section>
             <h2>Original Data</h2>
             <p>Full Name:
-                <% if(originalData[0].name && originalData[0].name.middleInitial && originalData[0].name.middleInitial.includes('/')){ %>
+                <% if(originalData.name && originalData.name.middleInitial && originalData.name.middleInitial.includes('/')){ %>
                     <span <% submitData.every(el => { %>
-                        <%= el.name.firstName.trim() === (originalData[0].name.firstName +' '+ originalData[0].name.middleInitial +' '+ originalData[0].name.lastName).split('/')[0].trim() ? '' : 'class=strike' %> 
-                    <% }) %> > <%= (originalData[0].name.firstName +' '+ originalData[0].name.middleInitial +' '+ originalData[0].name.lastName).split('/')[0] %></span>
+                        <%= el.name.firstName.trim() === (originalData.name.firstName +' '+ originalData.name.middleInitial +' '+ originalData.name.lastName).split('/')[0].trim() ? '' : 'class=strike' %> 
+                    <% }) %> > <%= (originalData.name.firstName +' '+ originalData.name.middleInitial +' '+ originalData.name.lastName).split('/')[0] %></span>
     /
                     <span <% submitData.every(el => { %>
-                        <%= el.name.lastName.trim() === (originalData[0].name.firstName +' '+ originalData[0].name.middleInitial +' '+ originalData[0].name.lastName).split('/')[1].trim() ? '' : 'class=strike' %> 
-                    <% }) %> > <%= (originalData[0].name.firstName +' '+ originalData[0].name.middleInitial +' '+ originalData[0].name.lastName).split('/')[1] %></span>
+                        <%= el.name.lastName.trim() === (originalData.name.firstName +' '+ originalData.name.middleInitial +' '+ originalData.name.lastName).split('/')[1].trim() ? '' : 'class=strike' %> 
+                    <% }) %> > <%= (originalData.name.firstName +' '+ originalData.name.middleInitial +' '+ originalData.name.lastName).split('/')[1] %></span>
 
 
                 <% } else { %>
                     <span <% submitData.every(el => { %>
-                        <%= el.name.firstName === originalData[0].name.firstName ? '' : 'class=strike' %> 
-                    <% }) %> > <%= originalData[0].name.firstName %></span> 
+                        <%= el.name.firstName === originalData.name.firstName ? '' : 'class=strike' %> 
+                    <% }) %> > <%= originalData.name.firstName %></span> 
                 
                     <span <% submitData.every(el => { %>
-                        <%= el.name.middleInitial === originalData[0].name.middleInitial ? '' : 'class=strike' %> 
-                    <% }) %> > <%= originalData[0].name.middleInitial %> </span>
+                        <%= el.name.middleInitial === originalData.name.middleInitial ? '' : 'class=strike' %> 
+                    <% }) %> > <%= originalData.name.middleInitial %> </span>
                 
                     <span <% submitData.every(el => { %>
-                        <%= el.name.lastName === originalData[0].name.lastName ? '' : 'class=strike' %> 
-                    <% }) %> ><%= originalData[0].name.lastName %> </span>
+                        <%= el.name.lastName === originalData.name.lastName ? '' : 'class=strike' %> 
+                    <% }) %> ><%= originalData.name.lastName %> </span>
                 <% } %>
                 
             </p>
             <p>email: 
                 <span <% submitData.every(el => { %>
-                    <%= el.name.email === originalData[0].name.email ? '' : 'class=strike' %> 
-                <% }) %> ><%= originalData[0].email %> </span>
+                    <%= el.name.email === originalData.name.email ? '' : 'class=strike' %> 
+                <% }) %> ><%= originalData.email %> </span>
             </p>
             <p>address: 
                 <span <% submitData.every(el => { %>
-                    <%= el.address.street === originalData[0].address.street ? '' : 'class=strike' %> 
-                <% }) %> ><%= originalData[0].address.street %> </span>
+                    <%= el.address.street === originalData.address.street ? '' : 'class=strike' %> 
+                <% }) %> ><%= originalData.address.street %> </span>
 
                 <span <% submitData.every(el => { %>
-                    <%= el.address.city === originalData[0].address.city ? '' : 'class=strike' %> 
-                <% }) %> ><%= originalData[0].address.city %> </span>
+                    <%= el.address.city === originalData.address.city ? '' : 'class=strike' %> 
+                <% }) %> ><%= originalData.address.city %> </span>
                 
                 <span <% submitData.every(el => { %>
-                    <%= el.address.state === originalData[0].address.state ? '' : 'class=strike' %> 
-                <% }) %> ><%= originalData[0].address.state %> </span>
+                    <%= el.address.state === originalData.address.state ? '' : 'class=strike' %> 
+                <% }) %> ><%= originalData.address.state %> </span>
 
                 <span <% submitData.every(el => { %>
-                    <%= el.address.zipcode === originalData[0].address.zipcode ? '' : 'class=strike' %> 
-                <% }) %> ><%= originalData[0].address.zipcode %> </span>
+                    <%= el.address.zipcode === originalData.address.zipcode ? '' : 'class=strike' %> 
+                <% }) %> ><%= originalData.address.zipcode %> </span>
             </p>
             <p>
-                phone number: <% originalData[0].phones.forEach(numbers => { %>
+                phone number: <% originalData.phones.forEach(numbers => { %>
                     <span <%= submitPhones.includes(numbers.number) ? '' : 'class=strike' %> > 
                         <%= numbers.number %> <%= numbers.numberType %> 
                     </span>
@@ -113,23 +114,23 @@
     <section class="container">
         <form action='/dashboard/confirm' method="POST">
             <% submitData.forEach((el, current) => { %>
-                <section class="submitData <%= el.verifiedDate || originalData[0].disabled ? 'disabled' : '' %>">
+                <section class="submitData <%= el.verifiedDate || originalData.disabled ? 'disabled' : '' %>">
                     <h2>Submitted Data</h2>
                     <p>
-                        <input type="radio" name="fullName" <%= el.verifiedDate || originalData[0].disabled ? 'disabled' : '' %> value="<%= el.name.firstName %>$<%= el.name.middleInitial %>$<%= el.name.lastName %>"> Full Name: <%= el.name.firstName %> <%= el.name.middleInitial %> <%= el.name.lastName %>
+                        <input type="radio" name="fullName" <%= el.verifiedDate || originalData.disabled ? 'disabled' : '' %> value="<%= el.name.firstName %>$<%= el.name.middleInitial %>$<%= el.name.lastName %>"> Full Name: <%= el.name.firstName %> <%= el.name.middleInitial %> <%= el.name.lastName %>
                     </p>
 
                     <p>
-                        <input class="email" type="radio" name="email" <%= el.verifiedDate || originalData[0].disabled ? 'disabled' : '' %> value="<%= el.email %>$<%= el.emailUse %>"> email: <%= el.email %>
+                        <input class="email" type="radio" name="email" <%= el.verifiedDate || originalData.disabled ? 'disabled' : '' %> value="<%= el.email ? `${el.email}$${el.emailUse}`: '' %>"> email: <%= el.email %>
                         email use: <%= el.emailUse %>
                     </p>
 
                     <p>
-                        <input type="radio" name="address" <%= el.verifiedDate || originalData[0].disabled ? 'disabled' : '' %> value="<%= el.address.street %>$<%= el.address.city %>$<%= el.address.state %>$<%= el.address.zipcode %>"> address: <%= el.address.street %> <%= el.address.city %> <%= el.address.state %> <%= el.address.zipcode %>
+                        <input type="radio" name="address" <%= el.verifiedDate || originalData.disabled ? 'disabled' : '' %> value="<%= el.address.street %>$<%= el.address.city %>$<%= el.address.state %>$<%= el.address.zipcode %>"> address: <%= el.address.street %> <%= el.address.city %> <%= el.address.state %> <%= el.address.zipcode %>
                     </p>
 
                     <p>phone number: <% el.phones.forEach((numbers, i) => { %>
-                        <input type="checkbox" name="phoneNumber" <%= el.verifiedDate || originalData[0].disabled ? 'disabled' : '' %> 
+                        <input type="checkbox" name="phoneNumber" <%= el.verifiedDate || originalData.disabled ? 'disabled' : '' %> 
                         value="<%= numbers.number %>$<%= numbers.numberType %>"> <%= numbers.number %> <%= numbers.numberType %>
                     <% }) %></p>
                     
@@ -141,8 +142,8 @@
 
             <% let alreadyVerified = submitData.every((el) => el.verifiedDate  )%>
 
-            <input type="hidden" name="accessLink" value="<%= originalData[0].accessLink %>">
-            <input type="submit" <%= originalData[0].disabled || alreadyVerified ? 'disabled' : '' %>>
+            <input type="hidden" name="accessLink" value="<%= originalData.accessLink %>">
+            <input type="submit" <%= originalData.disabled || alreadyVerified ? 'disabled' : '' %>>
         </form>
     </section>
 
