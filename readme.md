@@ -109,43 +109,49 @@ illustration of people working together
 Learn how to create a low-fidelity wireframe in Lucidchart to include within your software design document. -->
 
 ## Goals and milestones
-- [completed]Modify the admin view / dashboard / update the dashboard view to have needed data, historical data list view might not be the most pertinent
-- [completed]How will the verified list page handle a disabled accesslink/contact. Disable further action for the item.
 - [partial]Make accessLink code on lists clickable to have it ![send an email] or display a printable page.
     -[]format and redact printable page
-
-- [completed]Add the count of items to the submitlist page view and if the info has been verified already. Perhaps order it by verification status
-- [completed]Modify the submitlist view to not include data since we will only be display unique values and won't represent all changes made. This includes timestamp.
-
-
+-[]Verify if the receipt page works with cases that have two names divided by the slash symbol
+-[]Implement the forget password option
+-[]Implement password obscurity and option for showing
+-[]Change the comparison on the compare page, in the data has been verified then compare the historic with the verified data but only if no unverified submits exist
 
 ### Secondary Goals
-- [ ]Add input verification to receipt page for after the fact email entry
+-[]Find an alternative method for handling names and other data without seperating with $ and splitting
+-[]test failed conditions of each section and implement a fix
+    -[]create a plan for this
 
-- [ ]Rename pages and routes
-
-- [] {extra} create process to verfiy credentials for reading and editiong contacts
-- [ ]Have a button to add credentials that leads to a form page; if this part remains in the app.
-    - [ ]Pretty sure the app will only use one set of credentials so we wont need the form unless the user want to replace their credetials or modify.
-- [completed] Credentials: add or remove access to your contacts credentials.
-    - [][additional feature] Might eliminate the storage of this data and just ask user to verify everytime they want to access
-
-- [][additional feature] allow for adding a reason for disabling
-
+- [ ]Format phones numbers to a standard representation (if needed)
+    - [additional] permit user to post a name to associate number phone number too
+    - [additional] Limit the type of phone numbers to match outlooks limits 
+    - [] unify number and type array to avoid errors match number and type
 
 
 ### Wishlist Feature
-- [ ][additional Feature] Collect submit fails with reason for fail
-- [ ][additional Feature] Click through handler, session detection
+- [ ][additional Feature] Collect submit fails with reason for fail (imcomplete information, missing name, etc.)
 - [ ][additional Feature] Submit contact changes to exchange
-- [ ][additional Feature]Possibly track who enters an email after the fact for a receipt but does not want it associated to its account.
+- [ ][additional feature] allow for adding a reason for disabling
+- [ ][additional Feature] Possibly track who enters an email after-the-fact for a receipt but does not want it associated to their account.
+- [ ][additional Feature] Add a field for the access-link to be filled in manually if none is provided.
 - [ ][Wishlist] Dashboard with visualizations
-- [ ][wishlist] find the structure of the information to use for limiting the import. Try to implement dynamicly.
-    - [ ][wishist] will also be used to define the information to select from the data.    
 - [ ][wishlist] integrate USPS address validity verification
+- [ ][wishlist] Click through handler, session detection
+- [ ][wishlist] Eliminate or have the storage of credentials as optional and just ask user to verify everytime they want to access
+    --Might not be possible since it is needed to send emails from that account
+- [ ][wishlist] find the structure of the information to use for limiting the import. Try to implement dynamicly.
+    - [ ][wishist] will also be used to define the information to select from the data.  
+
+### Future
+-[]Refactor application:
+    -[]Rename pages and routes
+    -[]Review ux to ensure it is understandable by user
+    -[]Modify form verification code, either integrate a pgk or move it to make it more cleaner and change the way it processes information to make it more intuitive for the user. Possible not use sessions for this data.
+    -[]Determine how to handle account creation, seperate data, teams...
+    -[]create two separate apps that interact through databases.
+
 
 ### Completed
-- [partial] Filter data (selection from outlook not working
+- [partial] Filter data (selection from outlook not working)
 - [completed] Review changes view
 - [completed] Database implementation
 - [completed] User view / form 
@@ -181,6 +187,20 @@ Learn how to create a low-fidelity wireframe in Lucidchart to include within you
     - [completed]include more information with the link to make it easier to identify the correct one from the incorrect one
 -[completed]can we get data from mongo and not have it in a single array wrapper???
 - [completed] Allow user to add a new entry to historic list (data can be added or disabled/enabled)
+- [completed]Add the count of items to the submitlist page view and if the info has been verified already. Perhaps order it by verification status
+- [completed]Modify the submitlist view to not include data since we will only be display unique values and won't represent all changes made. This includes timestamp.
+- [completed]Modify the admin view / dashboard / update the dashboard view to have needed data, historical data list view might not be the most pertinent
+- [completed]How will the verified list page handle a disabled accesslink/contact. Disable further action for the item.
+- [completed] The user can choose to disable the contact and enable when necesary and submits will work | What happens when an items is verified? Should user be able to keep submitting data or should the case be disabled. 
+    - [completed] have dashboard show if a verified entry has a new/unverified submit
+    - [complete] posible have dashboard be able to disable a contact
+- [completed]Add input verification to receipt page for after the fact email entry
+- [completed]Ensure the verified data db doesnt have duplicates
+- [completed] Create process to verfiy credentials for reading and editiong contacts
+- [completed]Have a button to add credentials that leads to a form page.
+    - [completed]Pretty sure the app will only use one set of credentials so we wont need the form unless the user wants to replace their credetials or modify.
+- [completed] Credentials: add or remove access to your contacts credentials.
+
 
 ## Issues
 - EWS Restriction filter not working
@@ -267,33 +287,8 @@ Once you’ve written your software design document and gotten approval from sta
 
 <!-- 
 ------------- Look in to ------------------
-[]perhap add a field for access link to be filled in manual if none is provided.
-[]find a better method for names that is not seperating with $ and splitting
-[]what if data failed to retrieve or not found?
-
-[] {verify} What happens when an items is verified? Should user be able to keep submitting data or should the case be disabled.
-
-[] {SORT OF EXTRA} add forget password option
-[] {SORT OF EXTRA} obscure password entry
-[] {SORT OF EXTRA} possibly change the comparison to the verified data when present
 
 
-
-- done{extra} Import only works if no data is present, this to avoid duplicates
-        - [additional] add duplicate detector
-[] {extra} ensure the verified data db doesnt have duplicates
-[] {extra} review ux to ensure it is understandable by user
-
-
-
-
-- [ ]Format phones numbers to a standard representation
-- {extra} permit user to post a name to associate number phone number too
-    - [additional] Limit the type of phone numbers to match outlooks limits
-- {extra} unify number and type array to avoid errors match number and type
-
-- {extra} modify form verification code, either integrate a pgk or move it to make it more cleaner and change the way it process information to make it more intuitive for the user. Posible not use sessions for this data.
-
-
+--look into security of email credetial on user side of app, what happens if email can't be sent?
 
 -->

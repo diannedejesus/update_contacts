@@ -12,6 +12,7 @@
     <header>
         <a href='/'>dashboard</a> | 
         <a href='/dashboard/submitList'>submit list</a> | 
+        <a href='/dashboard/verifiedList'>verified list</a> | 
         <a href='/signup/logout' class='signout'>signout</a>
     </header>
    
@@ -21,17 +22,20 @@
     <% } %>
     <p>MS Exchange Credentials</p>
     <p>Currently stored credentials: <%= accountName %>  <% if (accountName){ %> <a href="/login/deleteCredentials">remove</a><% } else { %> no saved credential found <% } %></p> 
-    <form class="login-form" action="../login/configure" method="POST">
-        <input type="text" name='email' placeholder="email">
-        <input type="text" name='password' placeholder="password">
-        <input type="submit">
-    </form>
+    <% if(!accountName){ %> 
+        <p>Use this form to access your contact list information.</p>
+        <form class="login-form" action="../login/configure" method="POST">
+            <input type="text" name='email' placeholder="email">
+            <input type="text" name='password' placeholder="password">
+            <input type="submit">
+        </form>
+    <% } %>
     <h2>Import</h2>
     <p>You have <%= dataCount %> contacts. Do you wish to add new contacts to this list, edit the current contacts or replace the list?</p>
-    <a href='#' class='button showSection'>Add Contacts</a> 
-    <a href='/login/editList' class='button'>Edit List</a> 
-    <a href='#' class='button'>Replace Data</a> 
-    <a href='/dashboard/import' class='button'>Import Data</a>
+    <a href='#' class='button showSection'>Add Contacts</a> |
+    <a href='/login/editList' class='button'>Edit List</a> |
+    <!-- <a href='#' class='button'>Replace Data</a>  -->
+    <% if (accountName){ %> <a href='/dashboard/import' class='button'>Import Data</a> | <% } else { %> add credentials to import data |  <% } %>
     <a href='/login/confirmDelete' class='button'>Delete Data</a>
     <section class='addContact'>
         <form method='POST' action='/login/addContact'>

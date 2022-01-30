@@ -135,8 +135,11 @@
                     <% }) %></p>
                     
                     <p> date: <%= el.timestamp.toDateString() %> - <%= el.timestamp.toLocaleTimeString() %></p>
-
-                    <input type="hidden" name="id" value="<%= el._id %>">
+                    <% if(el.verifiedDate || originalData.disabled){ %>
+                        
+                    <% }else { %>
+                        <input type="hidden" name="id" value="<%= el._id %>">
+                    <% } %>
                 </section>
             <% }) %>
 

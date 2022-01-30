@@ -31,12 +31,16 @@ module.exports = {
             //compile information for dashboard
             for(items of historicData){
                 const contactVerified = await VerifiedDataDB.findOne({accessLink: items.accessLink})
-                const contactSubmits = await SubmittedInformationDB.find({accessLink: items.accessLink}).count()
+                const contactSubmits = await SubmittedInformationDB.find({accessLink: items.accessLink, verifiedDate: {$exists: false}}).count()
+                const newSubmit = await SubmittedInformationDB.findOne({accessLink: items.accessLink, verifiedDate: {$exists: false}})
                 const accessed = await NameReferenceDB.findOne({accessLink: items.accessLink, accessCount: {$exists: true}})
 
-                if(contactVerified){
+                if(contactVerified && !newSubmit){
                     items = Object.assign(items, contactVerified)
                     items.status = 'verified'
+                } else if(contactVerified && newSubmit) {
+                    items = Object.assign(items, contactVerified)
+                    items.status = 'verified data and ' + contactSubmits + ' new submits'
                 }else if(contactSubmits > 0){
                     items.status = contactSubmits + ' submits'
                 } else {
@@ -179,7 +183,7 @@ module.exports = {
         try{
             const dbFilled = await HistoricImportDB.count()
 
-            if(dbFilled <= 0){
+            if(dbFilled <= 0 && req.user.calendarEmail){
                 const contact = await ewsOptions.getContacts(req.user.calendarPassword, req.user.calendarEmail)
                 let collection = []
 
@@ -231,10 +235,10 @@ module.exports = {
                 await module.exports.fillReference()
 
                 console.log('imported')
-                //res.json('imported')
-                res.redirect('/dashboard')
+                res.redirect('/login/configure?messages=' + encodeURIComponent('Data Imported Successfully'))
             }else{
-                //error do you wish to replace database
+                console.log('not imported')
+                res.redirect('/login/configure?messages=' + encodeURIComponent('Could not import data'))
             }
         }catch(err){
             console.log(err)
@@ -321,12 +325,20 @@ module.exports = {
               }
             
 
-            await VerifiedDataDB.create(verifiedData)
-
-            for(let i=0; i<req.body.id.length; i++){
-                //this is for changing the status or verified of submitted data
-                await SubmittedInformationDB.findOneAndUpdate({_id: req.body.id[i]}, {verifiedDate: new Date()})
+            await VerifiedDataDB.findOneAndUpdate({accessLink: verifiedData.accessLink}, verifiedData, {
+                new: true,
+                upsert: true // Make this update into an upsert
+              })
+            
+            if(typeof req.body.id !== 'string'){
+                for(let i=0; i<req.body.id.length; i++){
+                    //this is for changing the status or verified of submitted data
+                    await SubmittedInformationDB.findOneAndUpdate({_id: req.body.id[i]}, {verifiedDate: new Date()})
+                }
+            }else{
+                await SubmittedInformationDB.findOneAndUpdate({_id: req.body.id}, {verifiedDate: new Date()})
             }
+            
 
             //console.log('verified', req.body.id)
 

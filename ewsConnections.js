@@ -203,4 +203,57 @@ module.exports = {
       });
   },
 
+  verifyCredentials: async function(password, email, options) {
+    const algorithm = "aes-256-cbc"; 
+    // the decipher function
+    const decipher = crypto.createDecipheriv(algorithm, process.env.Skey, process.env.initVector);
+    let decryptedData = decipher.update(password, "hex", "utf-8");
+
+    decryptedData += decipher.final("utf8");
+
+
+    // store the ntHashedPassword and lmHashedPassword to reuse later for reconnecting
+    const ntHashedPassword = NTLMAuth.create_NT_hashed_password(decryptedData);
+    const lmHashedPassword = NTLMAuth.create_LM_hashed_password(decryptedData);
+
+    // exchange server connection info
+    const ewsConfig = {
+        username: email,
+        nt_password: ntHashedPassword,
+        lm_password: lmHashedPassword,
+        host: 'https://east.exch032.serverdata.net/'
+    };
+
+    // initialize node-ews
+    const ews = new EWS(ewsConfig);
+
+    const ewsFunction = 'FindFolder';
+    const ewsArgs = {
+        'FolderShape': {
+          'BaseShape': 'IdOnly',
+        },
+
+        'ParentFolderIds': {
+          'DistinguishedFolderId' : {
+            'attributes': {
+              'Id': "inbox"
+            }
+          }
+        },
+    };
+
+
+    // query EWS and print resulting JSON to console
+   return ews.run(ewsFunction, ewsArgs)
+    .then(result => {
+        return result
+    })
+    .catch(err => {
+      if(err.message === 'NTLM StatusCode 401: Unauthorized.'){
+        return 'unauthorized' 
+      }
+        console.log(err.message);
+    });
+},
+
 }

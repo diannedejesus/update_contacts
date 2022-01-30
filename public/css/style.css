@@ -351,3 +351,10 @@ input[type='submit']:hover{
     border: 1px solid darkgray;
     background-color: aquamarine;
 }
+
+.errors{
+    color:crimson;
+    font-weight: 900;
+    font-size: x-large;
+    border: 1px solid darkgray;
+}

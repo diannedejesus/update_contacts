@@ -15,7 +15,7 @@
     </header>
    
     <main>
-        <h1>Contact List</h1>
+        <h1>Historic List</h1>
         <section>
             <table>
                 <tr>
@@ -28,7 +28,7 @@
                     <th>Enable/Disable</th>
                 </tr>
                 <% allContacts.forEach( (el) => { %>
-                <tr>
+                <tr class="<%= el.disabled ? 'disabled' : 'enabled' %>">
                     <td><%= el.name.firstName %> <%= el.name.middleInitial %> <%= el.name.lastName %> <%= el.name.secondLastName %></td>
                     <td><%= el.email %></td>
                     <td>

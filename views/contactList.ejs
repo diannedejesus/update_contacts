@@ -37,6 +37,7 @@
                         <th>Timestamp</th>
                         <th>Status</th>
                         <th>Accessed</th>
+                        <th>Disable/Enable</th>
                     </tr>
                     <% reservations.forEach( (el) => { %>
                     <tr class="<%= el.disabled ? 'disabled' : 'enabled' %>">
@@ -69,6 +70,13 @@
                             <% } %>
                         </td>
                         <td><%= el.accessed %></td>
+                        <td>
+                            <% if (el.disabled === false) { %>
+                                <a href='/login/toggleContact?accessLink=<%= el.accessLink %>' class='button'>Disable Access</a>
+                            <% } else { %>
+                                <a href='/login/toggleContact?accessLink=<%= el.accessLink %>' class='button'>Enable Access</a>
+                            <% } %>
+                        </td>
                     </tr>
                     <% }) %>
                 </table>

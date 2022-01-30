@@ -40,6 +40,7 @@ const VerifiedDataSchema = new mongoose.Schema({
 
   accessLink: {
     type: String,
+    unique: true,
   },
 
   timestamp: {

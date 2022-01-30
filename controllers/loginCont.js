@@ -6,6 +6,7 @@ const HistoricImportDB = require('../models/HistoricImport')
 const NameReferenceDB = require('../models/NameReference')
 const SubmittedInformationDB = require('../models/SubmittedInformation')
 const VerifiedDataDB = require('../models/VerifiedData')
+const ewsOptions = require('../ewsConnections')
 const { nanoid } = require('nanoid')
 
 module.exports = {
@@ -113,7 +114,7 @@ module.exports = {
     console.log('editList')
     res.render('import_database', { allContacts });
   },
-
+ 
   toggleContact: async (req, res) => {
       const contactState = await HistoricImportDB.findOne({accessLink: req.query.accessLink}, 'disabled')
 
@@ -127,6 +128,8 @@ module.exports = {
 
   submitCredentials: async (req, res) => {
     const errors = [];
+    let messages = ''
+
     if(!validator.isEmail(req.body.email)) errors.push({msg: 'email is invalid'});
     if(validator.isEmpty(req.body.password)) errors.push({msg: 'password field cant be blank'});
 
@@ -148,13 +151,19 @@ module.exports = {
     let encryptedData = cipher.update(message, "utf-8", "hex");
     encryptedData += cipher.final("hex");
 
-    // console.log("Encrypted message: " + encryptedData);
     
+    const contact = await ewsOptions.verifyCredentials(encryptedData, req.body.email)
+    console.log(contact)
     //add to user info
-    await User.findOneAndUpdate({email: req.user.email}, {calendarEmail: req.body.email, calendarPassword: encryptedData})
-    const messages = encodeURIComponent('contact access was saved')
-    console.log('contact access added')
-    //res.json('Calendar access added')
+    if(contact === 'unauthorized'){
+      messages = encodeURIComponent('access was not authorized, verify your login')
+      console.log('contact access not added')
+    }else if(contact.ResponseMessages.FindFolderResponseMessage.attributes.ResponseClass === 'Success'){
+      await User.findOneAndUpdate({email: req.user.email}, {calendarEmail: req.body.email, calendarPassword: encryptedData})
+      messages = encodeURIComponent('contact access was saved')
+      console.log('contact access added')
+    }
+
     res.redirect('/login/configure?messages=' + messages)
   },
 

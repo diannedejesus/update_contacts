@@ -13,76 +13,90 @@
  
    
     <h2>1. Contact Name</h2>
-    <h3><%= bodyFill.firstname ? bodyFill.firstname : bodyFill.names[0] %> 
-        <%= bodyFill.middleinitial ? bodyFill.middleinitial : ' / ' %>
+    <h4><%= bodyFill.firstname ? bodyFill.firstname : bodyFill.names[0] %> 
+        <%= bodyFill.middleinitial ? bodyFill.middleinitial : '' %>
         <%= bodyFill.lastname ? bodyFill.lastname : bodyFill.names[1] %>
-    </h3>
+    </h4>
 
     <h2>2. Postal Address</h2>
-    <p><%= bodyFill.urbName ? bodyFill.urbName : 'n/a' %><br>
-    <%= bodyFill.streetaddr ? bodyFill.streetaddr : 'n/a' %><br>
-    <%= bodyFill.city ? `${bodyFill.city},` : 'n/a' %> <%= bodyFill.state ? bodyFill.state : 'n/a' %> <%= bodyFill.zip ? bodyFill.zip : 'n/a' %></p>
-
+    <% if(bodyFill.urbName || bodyFill.streetaddr){ %>
+        <p><%= bodyFill.urbName ? bodyFill.urbName : '' %><br>
+            <%= bodyFill.streetaddr ? bodyFill.streetaddr : '' %><br>
+            <%= bodyFill.city ? `${bodyFill.city},` : '' %> <%= bodyFill.state ? bodyFill.state : '' %> <%= bodyFill.zip ? bodyFill.zip : '' %></p>
+        
+    <% }else{ %>
+        <p>No postal address provided</p>
+    <% } %>
+    
     <h2>3. Phone Numbers</h2>
-
         <% if( typeof bodyFill.number === 'object'){ %>     
             <% for(let i=0; i<bodyFill.number.length; i++) { %>
                 <p><%= bodyFill.type[i] ? `${bodyFill.type[i]}:` : 'n/a' %> <%= bodyFill.number[i] %></p>
             <% } %>
-        <% } else { %>
+        <% } else if(bodyFill.number) { %>
             <p><%= bodyFill.type ? `${bodyFill.type}:` : 'n/a' %> <%= bodyFill.number ? bodyFill.number : 'n/a' %></p>
+        <% } else { %>
+            <p>No phone number provided</p>
         <% } %>
 
-
     <h2>4. Email Address</h2>
-    <p><%= bodyFill.email ? bodyFill.email : 'n/a' %></p>
-    <p>Can we use this email to comunicate with you for official purposes? <%= bodyFill.selector ?  bodyFill.selector : 'n/a' %></p>
+    <p><%= bodyFill.email ? bodyFill.email : 'email not provided' %></p>
+    <p>Can we use this email to comunicate with you for official purposes? <%= bodyFill.selector ?  bodyFill.selector : 'no selection made' %></p>
     
-    <% if(!bodyFill.email) { %>
-        <p>We could not send a confirmation email because you did not provide an email with your data. If you wish to recieve a confirmation email you can use the following form to do so now.</p>
-        <form action="/updateInfo/sendReceipt" method="post">
-            <input type='hidden' name='firstname' value='<%= bodyFill.firstname ? bodyFill.firstname : bodyFill.names[0] %>'>
-            <input type='hidden' name='middleinitial' value='<%= bodyFill.middleinitial ? bodyFill.middleinitial : ' / ' %>'>
-            <input type='hidden' name='lastname' value='<%= bodyFill.lastname ? bodyFill.lastname : bodyFill.names[1] %>'>
-            <input type='hidden' name='urbName' value='<%= bodyFill.urbName ? bodyFill.urbName : 'n/a' %>'>
-            <input type='hidden' name='streetaddr' value='<%= bodyFill.streetaddr ? bodyFill.streetaddr : 'n/a' %>'>
-            <input type='hidden' name='city' value='<%= bodyFill.city ? `${bodyFill.city},` : 'n/a' %>'>
-            <input type='hidden' name='state' value='<%= bodyFill.state ? bodyFill.state : 'n/a' %>'>
-            <input type='hidden' name='zip' value='<%= bodyFill.zip ? bodyFill.zip : 'n/a' %>'>
-
-            <% if( typeof bodyFill.number === 'object'){ %>     
-                <% for(let i=0; i<bodyFill.number.length; i++) { %>
-                    <input type='hidden' name='type' value='<%= bodyFill.type[i] ? `${bodyFill.type[i]}:` : 'n/a' %>'>
-                    <input type='hidden' name='number' value='<%= bodyFill.number[i] %>'>
+    <section>
+        <% if(!bodyFill.email || errors.length > 0) { %>
+            <% if(errors) { %> 
+                <% for (items of errors) { %>
+                    <p class="errors"><%= items %></p>
                 <% } %>
-            <% } else { %>
-                <input type='hidden' name='type' value='<%= bodyFill.type ? `${bodyFill.type}:` : 'n/a' %>'>
-                <input type='hidden' name='number' value='<%= bodyFill.number ? bodyFill.number : 'n/a' %>'>
             <% } %>
+            <p>We could not send a confirmation email because you did not provide an email with your data. If you wish to recieve a confirmation email you can use the following form to do so now.</p>
+           
+            <form action="/updateInfo/sendReceipt" method="post">
+                <input type='hidden' name='firstname' value='<%= bodyFill.firstname ? bodyFill.firstname : bodyFill.names[0] %>'>
+                <input type='hidden' name='middleinitial' value='<%= bodyFill.middleinitial ? bodyFill.middleinitial : '' %>'>
+                <input type='hidden' name='lastname' value='<%= bodyFill.lastname ? bodyFill.lastname : bodyFill.names[1] %>'>
+                <input type='hidden' name='urbName' value='<%= bodyFill.urbName ? bodyFill.urbName : '' %>'>
+                <input type='hidden' name='streetaddr' value='<%= bodyFill.streetaddr ? bodyFill.streetaddr : '' %>'>
+                <input type='hidden' name='city' value='<%= bodyFill.city ? `${bodyFill.city}` : '' %>'>
+                <input type='hidden' name='state' value='<%= bodyFill.state ? bodyFill.state : '' %>'>
+                <input type='hidden' name='zip' value='<%= bodyFill.zip ? bodyFill.zip : '' %>'>
 
-            <input type='hidden' name='accessLink' value='<%= bodyFill.accessLink %>'>
-            <input type='hidden' name='id' value='<%= id %>'>
+                <% if( typeof bodyFill.number === 'object'){ %>     
+                    <% for(let i=0; i<bodyFill.number.length; i++) { %>
+                        <input type='hidden' name='type' value='<%= bodyFill.type[i] ? `${bodyFill.type[i]}:` : '' %>'>
+                        <input type='hidden' name='number' value='<%= bodyFill.number[i] %>'>
+                    <% } %>
+                <% } else if(bodyFill.number) { %>
+                    <input type='hidden' name='type' value='<%= bodyFill.type ? `${bodyFill.type}:` : '' %>'>
+                    <input type='hidden' name='number' value='<%= bodyFill.number ? bodyFill.number : '' %>'>
+                <% } else { %>
+
+                <% } %>
+
+                <input type='hidden' name='accessLink' value='<%= bodyFill.accessLink %>'>
+                <input type='hidden' name='id' value='<%= id %>'>
+                
+
+                <input id='email' name='email' type='text' placeholder="email@email.com" value="<%= bodyFill.email ? bodyFill.email : '' %>">
+                <p>Can we use associate this email to your contact information (if it is not already included)?</p>
+                <label for="huey">Yes</label>
+                <input type="radio" id="huey" name="associate" value="yes" <%= bodyFill.associate === 'yes' ? 'Checked' : '' %>>
             
+                <label for="dewey">No</label>
+                <input type="radio" id="dewey" name="associate" value="no" <%= bodyFill.associate === 'no' ? 'Checked' : '' %>>
 
-            <input id='email' name='email' type='text' placeholder="email@email.com">
-            <p>Can we use associate this email to your contact information (if it is not already included)?</p>
-            <label for="huey">Yes</label>
-            <input type="radio" id="huey" name="associate" value="yes">
-        
-            <label for="dewey">No</label>
-            <input type="radio" id="dewey" name="associate" value="no">
+                <p>Can we use this email to comunicate with you for official purposes?</p>
+                <label for="huey">Yes</label>
+                <input type="radio" id="huey" name="selector" value="yes">
+            
+                <label for="dewey">No</label>
+                <input type="radio" id="dewey" name="selector" value="no">
 
-            <p>Can we use this email to comunicate with you for official purposes?</p>
-            <label for="huey">Yes</label>
-            <input type="radio" id="huey" name="selector" value="yes">
-        
-            <label for="dewey">No</label>
-            <input type="radio" id="dewey" name="selector" value="no">
-
-            <input type="submit" name='submit' value='Submit'>
-        </form>
-    <% } %>
-
+                <input type="submit" name='submit' value='Submit'>
+            </form>
+        <% } %>
+    </section>
 
 
 

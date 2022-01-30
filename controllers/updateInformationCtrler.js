@@ -33,37 +33,50 @@ module.exports = {
     sendReceipt: async (req,res)=>{
         try{
             let compiledInfo = {}
-            //let phoneNumbers = []
-            if(req.body.associate.toLowerCase() === 'yes'){
-                console.log('update')
-                await SubmittedInformationDB.findOneAndUpdate({_id: req.body.id}, {email: req.body.email, emailUse: req.body.selector})
-            } //if yes add email to submitted data
+            req.session.error = []
 
-
-            if(req.body.number.length > 0 && req.body.number.length === req.body.type.length){
-                for(let i=0; i<req.body.number.length; i++){
-                    //phoneNumbers.push({number: req.body.number[i], numberType: req.body.type[i]}) 
-                    compiledInfo.phoneNumbers = compiledInfo.phoneNumbers ? compiledInfo.phoneNumbers + '<br>' + req.body.type[i] + ' ' + req.body.number[i] + ' ' : req.body.type[i] + ' ' + req.body.number[i] + ' '
-                }
-            }else if(req.body.number){
-                //phoneNumbers.push({number: req.body.number, numberType: req.body.type})
-                compiledInfo.phoneNumbers = req.body.type + ' ' + req.body.number
+            //email field
+            if(validator.isEmpty(req.body.email.trim())){
+                req.session.error.push('Error: Email field is empty')
+            }else if(!validator.isEmail(req.body.email.trim())){
+                req.session.error.push('Error: not a valid email')
+                req.body.email = ''
+            }else if(!req.body.associate || validator.isEmpty(req.body.associate)){
+                req.session.error.push('Error: Please select if we can add this email to you contacte information')
+            }else if(!req.body.selector || validator.isEmpty(req.body.selector)){
+                req.session.error.push('Error: Please select how we may use the submitted email')
             }
-            
-            
+
+            if(req.session.error.length > 0){
+                console.log('error sending receipt')
+                res.render('receipt.ejs', { bodyFill: req.body, id: req.body.id, errors: req.session.error })
+            }else{
+                if(req.body.associate.toLowerCase() === 'yes'){
+                    console.log('update')
+                    await SubmittedInformationDB.findOneAndUpdate({_id: req.body.id}, {email: req.body.email, emailUse: req.body.selector})
+                } //if yes add email to submitted data
+    
+                if(req.body.number.length > 0 && req.body.number.length === req.body.type.length){
+                    for(let i=0; i<req.body.number.length; i++){
+                        compiledInfo.phoneNumbers = compiledInfo.phoneNumbers ? compiledInfo.phoneNumbers + '<br>' + req.body.type[i] + ' ' + req.body.number[i] + ' ' : req.body.type[i] + ' ' + req.body.number[i] + ' '
+                    }
+                }else if(req.body.number){
+                    compiledInfo.phoneNumbers = req.body.type + ' ' + req.body.number
+                }
+                
+                
                 compiledInfo.name = req.body.firstname ? `${req.body.firstname} ${req.body.middleinitial} ${req.body.lastname}` : `${req.body.names[0]} / ${req.body.names[1]}`
                 if(!compiledInfo.phoneNumbers) { compiledInfo.phoneNumbers = 'No phone numbers provided' }
                 compiledInfo.email = req.body.email ? `${req.body.email}` : 'no email provided'
                 compiledInfo.emailUse = req.body.selector ? req.body.selector === 'no' ? 'Oficial use only' : 'Oficial use and contacting' : 'nothing selected'
                 compiledInfo.address = req.body.streetaddr ? `<br>${req.body.urbName} <br>${req.body.streetaddr} <br>${req.body.city}, ${req.body.state} ${req.body.zip}` : 'No postal address provided'
-
-                res.render('receipt.ejs', {bodyFill: req.body})
+    
                 if(req.body.email){ module.exports.sendEmail(req.user, compiledInfo) }
+    
+                console.log('receipt sent')
+                res.render('receipt.ejs', { bodyFill: req.body, id: req.body.id, errors: req.session.error })
+            }
             
-
-            console.log('receipt sent')
-
-            //res.render('updateInformation.ejs', {name: contactName, errors: currentErrors, bodyFill: formInformation, id: req.params.id, disabled: data[0].disabled})
         }catch(err){
             console.log(err)
         }
@@ -71,6 +84,7 @@ module.exports = {
 
     sendEmail: async (user, formInformation)=>{
         try{
+            if(req.user.calendarEmail){
             const optionsEmailClient = {
                 'Name': formInformation.name,
                 'Body': `Hello ${formInformation.name},<br><br>
@@ -96,7 +110,9 @@ Feel free to contact our office with questions or concerns by emailing or callin
             ewsOptions.sendEmail(user.calendarPassword, user.calendarEmail, optionsEmailClient)
 
             console.log('Email Sent')
-            //res.json('Email Sent')
+        }else{
+            //counld not send reciept missing user info
+        }
         }catch(err){
             console.log(err)
         }
@@ -258,11 +274,11 @@ Feel free to contact our office with questions or concerns by emailing or callin
                     accessLink: req.body.accessLink,
                 })
 
-                res.render('receipt.ejs', {bodyFill: req.body, id: submission._id})
+                res.render('receipt.ejs', {bodyFill: req.body, id: submission._id, errors:''})
                 if(req.body.email){ module.exports.sendEmail(req.user, compiledInfo) }
             }else if(dataSubmit === true) {
                 //for testing without submitting to database
-                res.render('receipt.ejs', {bodyFill: req.body})
+                res.render('receipt.ejs', {bodyFill: req.body, errors:''})
                 module.exports.sendEmail(req.user, compiledInfo)
             }
 
