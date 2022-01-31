@@ -24,7 +24,7 @@
             <h2>1. Contact Name</h2>
             
 
-            <% if(name && name.middle && name.middle.includes('/')){ %>
+            <% if(name && name.middle && name.middle.includes('/') || name && name.first.includes('/')){ %>
                 <label for='firstname1'>Name 1</label>
                 <input id='firstname1' name='names' type='text' placeholder="Juana" value="<%= (name.first +' '+ name.middle +' '+ name.last).split('/')[0] %>">
                 <label for='firstname2'>Name 2</label>

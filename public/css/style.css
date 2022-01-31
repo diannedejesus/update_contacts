@@ -358,3 +358,37 @@ input[type='submit']:hover{
     font-size: x-large;
     border: 1px solid darkgray;
 }
+
+.letter{
+    padding: 1.5em;
+    height: 84%;
+}
+
+.letter address{
+    margin-bottom: 4em;
+}
+
+.signature {
+    margin: 2em 0;
+}
+.signature p, footer p{
+    margin: 0;
+}
+footer p{
+    text-align: center;
+}
+.letterHeader li{
+    display: inline-block;
+    text-decoration: none;
+    padding: 0 1em;
+    border-left: 1px solid black;
+}
+.letterHeader li a{
+    text-decoration: none;
+}
+
+@media print {
+    .noprint {
+       visibility: hidden;
+    }
+ }

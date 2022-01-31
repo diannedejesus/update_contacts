@@ -82,7 +82,7 @@ In the comparison and verification process the historical data will be displayed
 ![signup page](https://github.com/diannedejesus/update_contacts/blob/main/signup-login.PNG?raw=true "Signup Page")
 ***
 ### Dashboard
-![dashboard](https://github.com/diannedejesus/update_contacts/blob/main/dashboard.PNG?raw=true "Dashboard")
+![dashboard](https://github.com/diannedejesus/update_contacts/blob/main/imageReadme/dashboard.PNG?raw=true "Dashboard")
 ***
 ### Configure Page
 ![configure page](https://github.com/diannedejesus/update_contacts/blob/main/configure.PNG?raw=true "Configure Page")
@@ -110,29 +110,24 @@ Learn how to create a low-fidelity wireframe in Lucidchart to include within you
 
 ## Goals and milestones
 - [partial]Make accessLink code on lists clickable to have it ![send an email] or display a printable page.
-    -[]format and redact printable page
--[]Verify if the receipt page works with cases that have two names divided by the slash symbol
--[]Implement the forget password option
--[]Implement password obscurity and option for showing
--[]Change the comparison on the compare page, in the data has been verified then compare the historic with the verified data but only if no unverified submits exist
+    -[completed]format and redact printable page
+-[completed]Verify if the receipt page works with cases that have two names divided by the slash symbol
+-[Completed]Implement password obscurity
+-[completed]Change the comparison on the compare page, in the data has been verified then compare the historic with the verified data but only if no unverified submits exist
 
 ### Secondary Goals
--[]Find an alternative method for handling names and other data without seperating with $ and splitting
 -[]test failed conditions of each section and implement a fix
     -[]create a plan for this
 
-- [ ]Format phones numbers to a standard representation (if needed)
-    - [additional] permit user to post a name to associate number phone number too
-    - [additional] Limit the type of phone numbers to match outlooks limits 
-    - [] unify number and type array to avoid errors match number and type
-
-
 ### Wishlist Feature
-- [ ][additional Feature] Collect submit fails with reason for fail (imcomplete information, missing name, etc.)
 - [ ][additional Feature] Submit contact changes to exchange
-- [ ][additional feature] allow for adding a reason for disabling
+- [ ][additional Feature] Collect submit fails with reason for fail (incomplete information, missing name, etc.)
 - [ ][additional Feature] Possibly track who enters an email after-the-fact for a receipt but does not want it associated to their account.
+- [ ][additional feature] allow for adding a reason for disabling
 - [ ][additional Feature] Add a field for the access-link to be filled in manually if none is provided.
+- [ ][additional Feature] option for showing password
+- [ ][additional Feature] Implement the forget password option
+
 - [ ][Wishlist] Dashboard with visualizations
 - [ ][wishlist] integrate USPS address validity verification
 - [ ][wishlist] Click through handler, session detection
@@ -148,6 +143,11 @@ Learn how to create a low-fidelity wireframe in Lucidchart to include within you
     -[]Modify form verification code, either integrate a pgk or move it to make it more cleaner and change the way it processes information to make it more intuitive for the user. Possible not use sessions for this data.
     -[]Determine how to handle account creation, seperate data, teams...
     -[]create two separate apps that interact through databases.
+    -[]Find an alternative method for handling names and other data without seperating with $ and splitting
+    - []Format phones numbers to a standard representation (if needed)
+    - [][additional] permit user to post a name to associate number phone number too
+    - [][additional] Limit the type of phone numbers to match outlooks limits 
+    - [] unify number and type array to avoid errors match number and type
 
 
 ### Completed

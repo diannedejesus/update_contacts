@@ -129,11 +129,8 @@ module.exports = {
                 const accessed = await NameReferenceDB.findOne({accessLink: linkID})
                 const verified = await VerifiedDataDB.findOne({accessLink: linkID})
                 const submits = await SubmittedInformationDB.find({accessLink: linkID}).count()
-                collectedData.push({linkID, accessed: accessed.accessCount ? accessed.accessCount : 0, verified: verified ? true : false, submits})
-                //console.log(' this' , accessed.accessCount)
+                collectedData.push({linkID, accessed: accessed ? accessed.accessCount : 0, verified: verified ? true : false, submits})
             }
-            console.log(collectedData)
-            // search data submits verified accessed count
 
             res.render('submitList.ejs', {submitData: submitData, collectedData })
         }catch(err){
@@ -189,7 +186,6 @@ module.exports = {
 
                 for(items of contact.ResponseMessages.FindItemResponseMessage.RootFolder.Items.Contact){
                     if(items.JobTitle === 'Landlord'){
-                        console.log(items.EmailAddresses ? items.EmailAddresses.Entry[0].attributes.Key : '')
                         let currentEntry = {
                         name: {
                             firstName: items.CompleteName.FirstName,
