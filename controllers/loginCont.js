@@ -8,6 +8,7 @@ const SubmittedInformationDB = require('../models/SubmittedInformation')
 const VerifiedDataDB = require('../models/VerifiedData')
 const ewsOptions = require('../ewsConnections')
 const { nanoid } = require('nanoid')
+const bcrypt = require('bcrypt');
 
 module.exports = {
   getPage: async (req, res) => {
@@ -216,4 +217,133 @@ deleteCredentials: async (req,res)=>{
 
     }
 },
+
+resetEmail: async (req,res)=>{
+  try{
+    //verifiy that email was enter else resend to page with error
+    let error = ""
+    const resetCode = nanoid(8)
+    const currentDate = new Date()
+    const validateEmail = await User.findOne({email: req.body.email})
+    req.session.resetCode = {code: resetCode, date: currentDate, email: req.body.email}
+console.log(resetCode)
+    //send email
+    if(!!validateEmail){
+      const optionsEmailClient = {
+          'Name': req.body.email,
+          'Body': `Hello ${req.body.email},<br><br>
+              
+We are sorry you are having trouble with your email. Please use the included link to reset your password.  
+<br><br>
+<hr>
+<b>Link:</b> <a href='localhost:3000/login/resetPassword/${resetCode}/'>Reset Password</a> <br>
+<b>Code:</b> ${resetCode} <br>
+<hr>`,
+
+          'Email': 'djs.dianne@gmail.com',
+          'Subject': 'Password Reset',
+      }
+
+     ewsOptions.sendEmail(validateEmail.calendarPassword, validateEmail.calendarEmail, optionsEmailClient)
+
+      console.log('password reset link sent')
+      res.render('enterCode', {message: 'code sent to ' + req.body.email})
+    }else{
+      error = 'error with email'
+      console.log('error with email')
+      res.render('forgotPassword', {message: error})
+    }
+    
+  }catch(err){
+      console.log(err)
+  }
+},
+
+verifyCode: async (req,res)=>{
+  try{
+    //error messages
+    const currDate = new Date()
+    const timeDiff = (Date.parse(currDate) - Date.parse(req.session.resetCode.date)) / 1000
+    console.log(timeDiff, 'seconds')
+console.log(currDate, req.session.resetCode.date)
+console.log(req.session.resetCode.code, req.body.code)
+    if(timeDiff < 600 && req.session.resetCode.code === req.body.code){
+      console.log('code verified')
+      req.session.resetCode.verified = true
+      res.redirect('resetPassword')
+    }else if(timeDiff >= 600){
+      console.log('code timed out')
+      res.redirect('/')
+    }else{
+      console.log('wrong code')
+      res.render('enterCode', {message: 'wrong code'})
+    }
+  }catch(err){
+      console.log(err)
+  }
+},
+
+resetPassword: async (req,res)=>{
+  try{
+    //error messages
+    if(req.session.resetCode.verified){
+      if(req.body.password !== req.body.confirmPassword) {
+        console.log('Error: passwords do not match')
+        res.render('resetPassword', {message: 'passwords do not match', user: {email: req.session.resetCode.email}})
+      }else{
+        const hashPass = await bcrypt.hash(req.body.password, 10);
+        const userInfo = await User.findOneAndUpdate({email: req.session.resetCode.email}, {password: hashPass})
+
+        req.session.resetCode = ''
+
+        console.log('password reset')
+        res.redirect('/')
+      } 
+    }else{
+      console.log('Error: code not verified')
+      res.render('enterCode', {message: 'code not verified'})
+    }
+  }catch(err){
+      console.log(err)
+  }
+},
+
+getEnterCode: async (req,res)=>{
+  try{
+    console.log('enterCode')
+    res.render('enterCode' , {message: ''})
+  }catch(err){
+      console.log(err)
+  }
+},
+
+getResetPassword: async (req,res)=>{
+  try{
+    //error messages
+    if(req.session.resetCode.verified){
+      console.log('ResetPassword')
+      res.render('resetPassword', {message: '', user: {email: req.session.resetCode.email}})
+    }else{
+      console.log('Error: code not verified')
+      res.render('enterCode', {})
+    }
+    
+  }catch(err){
+      console.log(err)
+  }
+},
+
+getForgot: async (req,res)=>{
+  try{
+    //error messages
+    let error = ""
+
+    console.log('Forgot')
+    res.render('forgotPassword', {message: error})
+  }catch(err){
+      console.log(err)
+  }
+},
+
+//end export
 }

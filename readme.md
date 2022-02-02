@@ -111,13 +111,19 @@ Learn how to create a low-fidelity wireframe in Lucidchart to include within you
 ## Goals and milestones
 - [partial]Make accessLink code on lists clickable to have it ![send an email] or display a printable page.
     -[completed]format and redact printable page
--[completed]Verify if the receipt page works with cases that have two names divided by the slash symbol
--[Completed]Implement password obscurity
--[completed]Change the comparison on the compare page, in the data has been verified then compare the historic with the verified data but only if no unverified submits exist
+    - []Send an email
+- [completed][additional Feature] Implement the forget password option
+    - {resetEmail} send reset email with code
+    - {enterCode} redirect to page to enter code
+    - {codeVerification} send code to page for verification
+    - {resetPassword} if code is good send to page to enter new password
+    - if code is bad send errors
 
 ### Secondary Goals
 -[]test failed conditions of each section and implement a fix
     -[]create a plan for this
+- [] figure out why link in password reset email is not working
+
 
 ### Wishlist Feature
 - [ ][additional Feature] Submit contact changes to exchange
@@ -126,7 +132,7 @@ Learn how to create a low-fidelity wireframe in Lucidchart to include within you
 - [ ][additional feature] allow for adding a reason for disabling
 - [ ][additional Feature] Add a field for the access-link to be filled in manually if none is provided.
 - [ ][additional Feature] option for showing password
-- [ ][additional Feature] Implement the forget password option
+
 
 - [ ][Wishlist] Dashboard with visualizations
 - [ ][wishlist] integrate USPS address validity verification
@@ -148,6 +154,8 @@ Learn how to create a low-fidelity wireframe in Lucidchart to include within you
     - [][additional] permit user to post a name to associate number phone number too
     - [][additional] Limit the type of phone numbers to match outlooks limits 
     - [] unify number and type array to avoid errors match number and type
+    - [] dashboard load speed
+    - []module for sending emails for password reset
 
 
 ### Completed
@@ -200,7 +208,9 @@ Learn how to create a low-fidelity wireframe in Lucidchart to include within you
 - [completed]Have a button to add credentials that leads to a form page.
     - [completed]Pretty sure the app will only use one set of credentials so we wont need the form unless the user wants to replace their credetials or modify.
 - [completed] Credentials: add or remove access to your contacts credentials.
-
+-[completed]Verify if the receipt page works with cases that have two names divided by the slash symbol
+-[Completed]Implement password obscurity
+-[completed]Change the comparison on the compare page, in the data has been verified then compare the historic with the verified data but only if no unverified submits exist
 
 ## Issues
 - EWS Restriction filter not working
@@ -288,7 +298,7 @@ Once you’ve written your software design document and gotten approval from sta
 <!-- 
 ------------- Look in to ------------------
 
-
+--have reset password log user in
 --look into security of email credetial on user side of app, what happens if email can't be sent?
 
 -->
