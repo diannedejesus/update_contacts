@@ -31,15 +31,15 @@ html, body{
 h1{
     color:black;
     background-color:lightcoral;
-    height: 2em;
-    line-height: 2em;
+    /* height: 2rem; */
+    line-height: 2rem;
     padding-left: .5em;
     margin: 0;
 }
 
 h3, h2{
-    height: 2em;
-    line-height: 2em;
+    /* height: 2em; */
+    line-height: 2rem;
     margin: 0;
     margin-bottom: .5em;;
     padding-left: .5em;
@@ -242,18 +242,20 @@ main{
    float: left;
    margin: 0;
    padding: 0;
+   padding-top: 2em;
    height: 100%;
 }
 
-.signin h1{
+.signin h2{
     background-color: transparent;
+    color: black;
 }
 
 .signup a{
     display:inline-block;
     margin-top: 1em;
     border: 2px solid white;
-    padding: .5em 4em;
+    padding: 4% 20%;
     border-radius: 20px;
     color: white;
     text-transform: uppercase;

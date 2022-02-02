@@ -21,7 +21,8 @@
         <p class='message'><%= messages %></p>
     <% } %>
     <p>MS Exchange Credentials</p>
-    <p>Currently stored credentials: <%= accountName %>  <% if (accountName){ %> <a href="/login/deleteCredentials">remove</a><% } else { %> no saved credential found <% } %></p> 
+    <!-- <%= accountName %> -->
+    <p>Currently stored credentials: thisemail@gmail.com   <% if (accountName){ %> <a href="/login/deleteCredentials">remove</a><% } else { %> no saved credential found <% } %></p> 
     <% if(!accountName){ %> 
         <p>Use this form to access your contact list information.</p>
         <form class="login-form" action="../login/configure" method="POST">

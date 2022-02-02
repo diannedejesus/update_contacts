@@ -112,18 +112,14 @@ Learn how to create a low-fidelity wireframe in Lucidchart to include within you
 - [partial]Make accessLink code on lists clickable to have it ![send an email] or display a printable page.
     -[completed]format and redact printable page
     - []Send an email
-- [completed][additional Feature] Implement the forget password option
-    - {resetEmail} send reset email with code
-    - {enterCode} redirect to page to enter code
-    - {codeVerification} send code to page for verification
-    - {resetPassword} if code is good send to page to enter new password
-    - if code is bad send errors
+
 
 ### Secondary Goals
 -[]test failed conditions of each section and implement a fix
     -[]create a plan for this
 - [] figure out why link in password reset email is not working
-
+- [] verify emails in verified list and posibly submit and include in count
+- [] error handling for login page
 
 ### Wishlist Feature
 - [ ][additional Feature] Submit contact changes to exchange
@@ -132,6 +128,7 @@ Learn how to create a low-fidelity wireframe in Lucidchart to include within you
 - [ ][additional feature] allow for adding a reason for disabling
 - [ ][additional Feature] Add a field for the access-link to be filled in manually if none is provided.
 - [ ][additional Feature] option for showing password
+- [ ][additional Feature] mass email and letter printing
 
 
 - [ ][Wishlist] Dashboard with visualizations
@@ -211,7 +208,15 @@ Learn how to create a low-fidelity wireframe in Lucidchart to include within you
 -[completed]Verify if the receipt page works with cases that have two names divided by the slash symbol
 -[Completed]Implement password obscurity
 -[completed]Change the comparison on the compare page, in the data has been verified then compare the historic with the verified data but only if no unverified submits exist
+- [completed][additional Feature] Implement the forget password option
+    - {resetEmail} send reset email with code
+    - {enterCode} redirect to page to enter code
+    - {codeVerification} send code to page for verification
+    - {resetPassword} if code is good send to page to enter new password
+    - if code is bad send errors
 
+
+    
 ## Issues
 - EWS Restriction filter not working
 - EWS Selecting only needed properties not clear when mutiple are needed

@@ -10,45 +10,74 @@ const { each } = require('mongodb/lib/operations/cursor_ops')
 module.exports = { 
     index: async (req,res)=>{
         try{
+            const verifiedData = await VerifiedDataDB.find()
             const historicData = await HistoricImportDB.find()
-            const emailCount = await HistoricImportDB.find({email: {$exists: true}}).count()
-            const submitCount = await SubmittedInformationDB.find().count()
-            const uniqueSubmitCount = (await SubmittedInformationDB.distinct('accessLink')).length
-            const accessCount = await NameReferenceDB.find({accessCount: {$exists: true}})
-            const verifiedContacts = await VerifiedDataDB.find().count()
-
+            const nameReferenceData = await NameReferenceDB.find({accessCount: {$exists: true}})
+            const submitData = await SubmittedInformationDB.find({}, 'accessLink verifiedDate')
+            let verifiedContacts = 0 //await VerifiedDataDB.find().count()
+            //.const accessCount = 0 //await NameReferenceDB.find({accessCount: {$exists: true}})
+            let emailCount = 0 //await HistoricImportDB.find({email: {$exists: true}}).count()
+            let submitCount = 0 //await SubmittedInformationDB.find().count()
+            let uniqueSubmitCount = [] //(await SubmittedInformationDB.distinct('accessLink')).length
             let linkedAccessed = 0
             let noLinkAccessed = 0
 
-            for(items of accessCount){
+            const buildData = {}
+
+            for(items of historicData){
+                if(items.email){
+                    emailCount++
+                }
+            }
+
+            for(items of verifiedData){
+                if(!buildData[items.accessLink]) { buildData[items.accessLink] = {} }
+                buildData[items.accessLink]['verifiedData'] = items
+                verifiedContacts++
+            }
+
+            for(items of submitData){
+                if(!items.verifiedDate){
+                    if(!buildData[items.accessLink]) { buildData[items.accessLink] = {} }
+                    buildData[items.accessLink]['submitAmount'] =  buildData[items.accessLink]['submitAmount'] ? buildData[items.accessLink]['submitAmount']++ : 1
+                }
+                submitCount++
+                if(!uniqueSubmitCount.includes(items.accessLink)){
+                    uniqueSubmitCount.push(items.accessLink)
+                }
+            }
+
+            for(items of nameReferenceData){
+                if(!buildData[items.accessLink]) { buildData[items.accessLink] = {} }
+                buildData[items.accessLink]['accessCount'] = items.accessCount
                 if(items.name.firstName.toLowerCase() !== 'empty'){
                     linkedAccessed += items.accessCount
                 }else{
                     noLinkAccessed = items.accessCount
                 }
             }
-
+           console.log(buildData) 
             //compile information for dashboard
             for(items of historicData){
-                const contactVerified = await VerifiedDataDB.findOne({accessLink: items.accessLink})
-                const contactSubmits = await SubmittedInformationDB.find({accessLink: items.accessLink, verifiedDate: {$exists: false}}).count()
-                const newSubmit = await SubmittedInformationDB.findOne({accessLink: items.accessLink, verifiedDate: {$exists: false}})
-                const accessed = await NameReferenceDB.findOne({accessLink: items.accessLink, accessCount: {$exists: true}})
+                const contactVerified = '' //await VerifiedDataDB.findOne({accessLink: items.accessLink})
+                //const contactSubmits = '' //await SubmittedInformationDB.find({accessLink: items.accessLink, verifiedDate: {$exists: false}}).count()
+                //const newSubmit = '' //await SubmittedInformationDB.findOne({accessLink: items.accessLink, verifiedDate: {$exists: false}})
+                //const accessed = '' //await NameReferenceDB.findOne({accessLink: items.accessLink, accessCount: {$exists: true}})
 
-                if(contactVerified && !newSubmit){
-                    items = Object.assign(items, contactVerified)
+                if(buildData[items.accessLink] && buildData[items.accessLink]['verifiedData'] && !buildData[items.accessLink]['submitAmount']){
+                    items = Object.assign(items, buildData[items.accessLink]['verifiedData'])
                     items.status = 'verified'
-                } else if(contactVerified && newSubmit) {
+                } else if(buildData[items.accessLink] && buildData[items.accessLink]['verifiedData'] && buildData[items.accessLink]['submitAmount']) {
                     items = Object.assign(items, contactVerified)
-                    items.status = 'verified data and ' + contactSubmits + ' new submits'
-                }else if(contactSubmits > 0){
-                    items.status = contactSubmits + ' submits'
+                    items.status = 'verified data and ' + buildData[items.accessLink]['submitAmount'] + ' new submits'
+                }else if(buildData[items.accessLink] && buildData[items.accessLink]['submitAmount'] > 0){
+                    items.status = buildData[items.accessLink]['submitAmount'] + ' submits'
                 } else {
                     items.status = 'pending'
                 }
 
-                if(accessed){
-                    items.accessed = accessed.accessCount
+                if(buildData[items.accessLink]){
+                    items.accessed = buildData[items.accessLink].accessCount
                 }else{
                     items.accessed = 0
                 }
@@ -61,7 +90,7 @@ module.exports = {
                 reservations: historicData, 
                 emailCount, 
                 submitCount, 
-                uniqueSubmitCount, 
+                uniqueSubmitCount: uniqueSubmitCount.length, 
                 linkedAccessed, 
                 noLinkAccessed,
                 verifiedContacts
