@@ -111,25 +111,30 @@ Learn how to create a low-fidelity wireframe in Lucidchart to include within you
 ## Goals and milestones
 - [partial]Make accessLink code on lists clickable to have it ![send an email] or display a printable page.
     -[completed]format and redact printable page
-    - []Send an email
-
+    - [completed]Send an email
+- [completed][additional Feature] mass email and letter printing
 
 ### Secondary Goals
 -[]test failed conditions of each section and implement a fix
     -[]create a plan for this
-- [] figure out why link in password reset email is not working
-- [] verify emails in verified list and posibly submit and include in count
-- [] error handling for login page
+- [partial] figure out why link in password reset email is not working {displayed link}
+- [completed] verify emails in verified list and posibly submit and include in count
+- [completed] error handling for login page, signup page
+
+
 
 ### Wishlist Feature
 - [ ][additional Feature] Submit contact changes to exchange
-- [ ][additional Feature] Collect submit fails with reason for fail (incomplete information, missing name, etc.)
-- [ ][additional Feature] Possibly track who enters an email after-the-fact for a receipt but does not want it associated to their account.
-- [ ][additional feature] allow for adding a reason for disabling
-- [ ][additional Feature] Add a field for the access-link to be filled in manually if none is provided.
-- [ ][additional Feature] option for showing password
-- [ ][additional Feature] mass email and letter printing
+- [ ][additional Feature] Select/deselect person from mass/batch mail send
 
+- [*][additional Feature] Collect submit fails with reason for fail (incomplete information, missing name, etc.)
+- [*][additional Feature] Possibly track who enters an email after-the-fact for a receipt but does not want it associated to their account.
+
+- [ ][additional feature] allow for adding a reason for disabling
+- [ ][additional Feature] option for showing password
+
+
+- [ ][additional Feature] Add a field for the access-link to be filled in manually if none is provided.
 
 - [ ][Wishlist] Dashboard with visualizations
 - [ ][wishlist] integrate USPS address validity verification
@@ -141,6 +146,7 @@ Learn how to create a low-fidelity wireframe in Lucidchart to include within you
 
 ### Future
 -[]Refactor application:
+    -[]verify login page reference I have various / routes to same page
     -[]Rename pages and routes
     -[]Review ux to ensure it is understandable by user
     -[]Modify form verification code, either integrate a pgk or move it to make it more cleaner and change the way it processes information to make it more intuitive for the user. Possible not use sessions for this data.
@@ -151,7 +157,7 @@ Learn how to create a low-fidelity wireframe in Lucidchart to include within you
     - [][additional] permit user to post a name to associate number phone number too
     - [][additional] Limit the type of phone numbers to match outlooks limits 
     - [] unify number and type array to avoid errors match number and type
-    - [] dashboard load speed
+    - [completed] dashboard load speed
     - []module for sending emails for password reset
 
 
@@ -216,9 +222,9 @@ Learn how to create a low-fidelity wireframe in Lucidchart to include within you
     - if code is bad send errors
 
 
-    
+
 ## Issues
-- EWS Restriction filter not working
+- EWS Restriction filter not working (pretty sure it is because the npm package for ews does not support it.)
 - EWS Selecting only needed properties not clear when mutiple are needed
 
 

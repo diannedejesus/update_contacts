@@ -14,11 +14,11 @@ module.exports = {
             const historicData = await HistoricImportDB.find()
             const nameReferenceData = await NameReferenceDB.find({accessCount: {$exists: true}})
             const submitData = await SubmittedInformationDB.find({}, 'accessLink verifiedDate')
-            let verifiedContacts = 0 //await VerifiedDataDB.find().count()
-            //.const accessCount = 0 //await NameReferenceDB.find({accessCount: {$exists: true}})
-            let emailCount = 0 //await HistoricImportDB.find({email: {$exists: true}}).count()
-            let submitCount = 0 //await SubmittedInformationDB.find().count()
-            let uniqueSubmitCount = [] //(await SubmittedInformationDB.distinct('accessLink')).length
+
+            let verifiedContacts = 0
+            let emailCount = 0
+            let submitCount = 0
+            let uniqueSubmitCount = []
             let linkedAccessed = 0
             let noLinkAccessed = 0
 
@@ -56,19 +56,17 @@ module.exports = {
                     noLinkAccessed = items.accessCount
                 }
             }
-           console.log(buildData) 
+
             //compile information for dashboard
             for(items of historicData){
-                const contactVerified = '' //await VerifiedDataDB.findOne({accessLink: items.accessLink})
-                //const contactSubmits = '' //await SubmittedInformationDB.find({accessLink: items.accessLink, verifiedDate: {$exists: false}}).count()
-                //const newSubmit = '' //await SubmittedInformationDB.findOne({accessLink: items.accessLink, verifiedDate: {$exists: false}})
-                //const accessed = '' //await NameReferenceDB.findOne({accessLink: items.accessLink, accessCount: {$exists: true}})
-
-                if(buildData[items.accessLink] && buildData[items.accessLink]['verifiedData'] && !buildData[items.accessLink]['submitAmount']){
+                 if(buildData[items.accessLink] && buildData[items.accessLink]['verifiedData'] && !buildData[items.accessLink]['submitAmount']){
+                    if(!items.email && buildData[items.accessLink]['verifiedData'].email){
+                        emailCount++
+                    }
                     items = Object.assign(items, buildData[items.accessLink]['verifiedData'])
                     items.status = 'verified'
                 } else if(buildData[items.accessLink] && buildData[items.accessLink]['verifiedData'] && buildData[items.accessLink]['submitAmount']) {
-                    items = Object.assign(items, contactVerified)
+                    items = Object.assign(items, buildData[items.accessLink]['verifiedData'])
                     items.status = 'verified data and ' + buildData[items.accessLink]['submitAmount'] + ' new submits'
                 }else if(buildData[items.accessLink] && buildData[items.accessLink]['submitAmount'] > 0){
                     items.status = buildData[items.accessLink]['submitAmount'] + ' submits'
@@ -104,24 +102,8 @@ module.exports = {
     letterView: async (req,res)=>{
         try{
             const info = await HistoricImportDB.findOne({accessLink: req.params.idCode})
-            // const emailCount = await HistoricImportDB.find({email: {$exists: true}}).count()
-            // const submitCount = await SubmittedInformationDB.find().count()
-            // const uniqueSubmitCount = (await SubmittedInformationDB.distinct('accessLink')).length
-            // const accessCount = await NameReferenceDB.find({accessCount: {$exists: true}})
-            // const verifiedContacts = await VerifiedDataDB.find().count()
 
-            // let linkedAccessed = 0
-            // let noLinkAccessed = 0
-
-            // for(items of accessCount){
-            //     if(items.name.firstName.toLowerCase() !== 'empty'){
-            //         linkedAccessed += items.accessCount
-            //     }else{
-            //         noLinkAccessed = items.accessCount
-            //     }
-            // }
-
-            res.render('letter.ejs', { info })
+            res.render('letter.ejs', { info, messages: req.query.messages })
 
         }catch(err){
             console.log(err)

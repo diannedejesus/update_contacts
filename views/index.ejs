@@ -11,6 +11,9 @@
 <body>
     <main class='signin clearfix'>
         <section class='logon'>
+            <% if (typeof messages !== 'undefined'){ %> 
+                <p class='message'><%= messages %></p>
+            <% } %>
             <h2>Sign in to Update Contacts</h2> 
 
             <form class="login-form" action="../login" method="POST">

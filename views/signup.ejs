@@ -12,12 +12,15 @@
     <main class='signin clearfix'>
 
         <section class='logon'>
+            <% if (typeof messages !== 'undefined'){ %> 
+                <p class='message'><%= messages %></p>
+            <% } %>
             <h2>Create an account</h2>
 
             <form class="signup-form" action="/signup" method="POST">
                 <input type="text" name='email' placeholder="email">
-                <input type="text" name='password' placeholder="password">
-                <input type="text" name='confirmPassword' placeholder="confirm password">
+                <input type="password" name='password' placeholder="password">
+                <input type="password" name='confirmPassword' placeholder="confirm password">
                 <input type="submit">
             </form>
 

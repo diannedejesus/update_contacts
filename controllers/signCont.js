@@ -5,22 +5,24 @@ const bcrypt = require('bcrypt');
 
 module.exports = {
   getPage: async (req, res) => {
-    res.render('signup', {msg: 'none'});
+    let currentMessages = req.query.messages ? req.query.messages : ''
+    res.render('signup', {messages: currentMessages});
   },
   postUser: async (req, res, next) => {
     const errors = [];
     if(!validator.isEmail(req.body.email)) {
-      errors.push({msg: 'not a valid email for reg'});
+      errors.push('not a valid email for registration');
     }
-    if(!validator.isLength(req.body.password, {min: 0})) {
-      errors.push({msg: 'password must be at least 8 chars long'});
+    if(!validator.isLength(req.body.password, {min: 8})) {
+      errors.push('password must be at least 8 chars long');
     }
     if(req.body.password !== req.body.confirmPassword) {
-      errors.push({msg: 'passwords do not match'});
+      errors.push('passwords do not match');
     }
     if(errors.length) {
-      req.flash('errors', errors);
-      return res.redirect('../signup');
+      //req.flash('errors', errors);
+      let currentMessages = encodeURIComponent(errors.join(' | '))
+      return res.redirect('../signup?messages=' + currentMessages);
     }
     req.body.email = validator.normalizeEmail(req.body.email, {gmail_remove_dots: false});
     const hashPass = await bcrypt.hash(req.body.password, 10);
@@ -36,8 +38,9 @@ module.exports = {
     ]}, (err, doc) => {
       if(err) return next(err);
       if(doc) {
-        req.flash('errors', {msg: 'an account with that email/username already exists'});
-        return res.redirect('../signup')
+        //req.flash('errors', {msg: 'an account with that email/username already exists'});
+        let currentMessages = encodeURIComponent('an account with that email/username already exists')
+        return res.redirect('../signup?messages=' + currentMessages)
       }
       user.save((err) => {
         if (err) { return next(err) }

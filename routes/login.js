@@ -17,6 +17,10 @@ router.post('/newPassword', ensureGuest, loginCont.resetPassword)
 router.get('/configure', ensureAuth, loginCont.getConfigure);
 router.post('/configure', ensureAuth, loginCont.submitCredentials);
 router.post('/addContact', ensureAuth, loginCont.addContact);
+router.get('/configure/letters', ensureAuth, loginCont.massLetter)
+
+router.get('/massEmail', ensureAuth, loginCont.massEmail)
+router.get('/singleEmail/:id', ensureAuth, loginCont.singleEmail)
 
 
 router.get('/confirmDelete', ensureAuth, loginCont.verifyDeleteData)

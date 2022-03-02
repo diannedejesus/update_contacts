@@ -10,35 +10,71 @@
 <body>
     <section class="letterHeader noprint">
         <h1>Letter Model</h1>
-        <ul><li><a href='#'>Print</a></li><li><a href='#'>Send as email</a></li></ul>
+        <ul><li><a href="javascript:if(window.print)window.print()">Print</a></li><li><a href="../<%= (typeof massSend === 'undefined') ? `../login/singleEmail/${info.accessLink}` : 'massEmail' %>">Send as email</a></li></ul>
+        <% if (typeof messages !== 'undefined'){ %> 
+            <p class='message'><%= messages %></p>
+        <% } %>
     </section>
-    <main class="letter">
-        <address>
-            <%= `${info.name.firstName} ${info.name.middleInitial ? info.name.middleInitial : ''} ${info.name.lastName}` %><br>
-            <%= info.address.street %><br>
-            <%= info.address.city %>, <%= info.address.state %> <%= info.address.zipcode %>
-        </address>
+    <main>
+        <% if(typeof massSend === 'undefined'){ %>
+        <section class="letter">
+            <address>
+                <%= `${info.name.firstName} ${info.name.middleInitial ? info.name.middleInitial : ''} ${info.name.lastName}` %><br>
+                <%= info.address.street %><br>
+                <%= info.address.city %>, <%= info.address.state %> <%= info.address.zipcode %>
+            </address>
 
-        <h2>RE: Information Update</h2>
+            <h2>RE: Information Update</h2>
 
-        <section class="">
-            <p>In order to process the ontract you have with our agency, we are being required to provide an email address for the signees. This email is exclusively for the use of registering your contract. You will recieve a confirmation that the contact was register and nothing else if that is your wish. For this reason our agency has decided to take advantage of this change in requierement to ask you to update your contact information. This way we have your most recent information, which will avoid problems with compliance and payments with our agency. We are using an online method for this process. Please scan the code or enter the link in a browser to update your info.</p>
-            
-            <p>If you wish to provide this information in an alternate matter you may pass by our office or call us and will we be happy to manually add you information.</p>
+            <section class="letterBody">
+                <p>In order to process the ontract you have with our agency, we are being required to provide an email address for the signees. This email is exclusively for the use of registering your contract. You will recieve a confirmation that the contact was register and nothing else if that is your wish. For this reason our agency has decided to take advantage of this change in requierement to ask you to update your contact information. This way we have your most recent information, which will avoid problems with compliance and payments with our agency. We are using an online method for this process. Please scan the code or enter the link in a browser to update your info.</p>
+                
+                <p>If you wish to provide this information in an alternate matter you may pass by our office or call us and will we be happy to manually add your information.</p>
+            </section>
+
+            <section class="signature">
+                <p>Sincerly</p>
+                <p>officials name</p> 
+            </section>
+            <h3>www.localhost:3000/updateInformation/<%= info.accessLink %></h3>
         </section>
-
-        <section class="signature">
-            <p>Sincerly</p>
-            <p>officials name</p> 
-        </section>
-        <h3>www.localhost:3000/updateInformation/<%= info.accessLink %></h3>
+        <footer>
+            <p>This company name</p>
+            <p>our address city, st 000###</p>
+        </footer>
+        <% }else{ %>
+            <% massSend.forEach( items => { %> 
+            <section class="letter">
+                <address>
+                    <%= `${items.name.firstName} ${items.name.middleInitial ? items.name.middleInitial : ''} ${items.name.lastName}` %><br>
+                    <%= items.address.street %><br>
+                    <%= items.address.city %>, <%= items.address.state %> <%= items.address.zipcode %>
+                </address>
+    
+                <h2>RE: Information Update</h2>
+    
+                <section class="letterBody">
+                    <p>In order to process the ontract you have with our agency, we are being required to provide an email address for the signees. This email is exclusively for the use of registering your contract. You will recieve a confirmation that the contact was register and nothing else if that is your wish. For this reason our agency has decided to take advantage of this change in requierement to ask you to update your contact information. This way we have your most recent information, which will avoid problems with compliance and payments with our agency. We are using an online method for this process. Please scan the code or enter the link in a browser to update your info.</p>
+                    
+                    <p>If you wish to provide this information in an alternate matter you may pass by our office or call us and will we be happy to manually add you information.</p>
+                </section>
+    
+                <section class="signature">
+                    <p>Sincerly</p>
+                    <p>officials name</p> 
+                </section>
+                <h3>www.localhost:3000/updateInformation/<%= items.accessLink %></h3>
+            </section>
+            <footer>
+                <p>This company name</p>
+                <p>our address city, st 000###</p>
+            </footer>
+        <% }) %>
+        <% } %>
     </main>
  
-    <footer class="letter">
-        <p>This company name</p>
-        <p>our address city, st 000###</p>
-    </footer>
-<!-- Cancel rest -->
+    
+
 
     <script src="../../js/main.js"></script>
 </body>

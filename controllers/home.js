@@ -1,5 +1,6 @@
 module.exports = {
     getIndex: (req,res)=>{
-        res.render('index.ejs')
+        let currentMessages = req.query.messages ? req.query.messages : ''
+        res.render('index', {messages: currentMessages});
     }
 }

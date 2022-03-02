@@ -363,11 +363,11 @@ input[type='submit']:hover{
 
 .letter{
     padding: 1.5em;
-    height: 84%;
+    height: 90%;
 }
 
-.letter address{
-    margin-bottom: 4em;
+address{
+    margin: 4.5em 0;
 }
 
 .signature {
@@ -391,6 +391,7 @@ footer p{
 
 @media print {
     .noprint {
-       visibility: hidden;
+       display: none;
     }
+    footer {page-break-after: always;}
  }

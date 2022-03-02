@@ -12,18 +12,20 @@ const bcrypt = require('bcrypt');
 
 module.exports = {
   getPage: async (req, res) => {
-    res.render('index', {msg: 'none'});
+    let currentMessages = req.query.messages ? req.query.messages : ''
+    res.render('index', {messages: currentMessages});
   },
 
   postLogin: async (req, res, next) => {
     const errors = [];
-    if(!validator.isEmail(req.body.email)) errors.push({msg: 'email is invalid'});
-    if(validator.isEmpty(req.body.password)) errors.push({msg: 'password field cant be blank'});
+    if(!validator.isEmail(req.body.email)) errors.push('email is invalid');
+    if(validator.isEmpty(req.body.password)) errors.push('password field cant be blank');
 
     if(errors.length) {
       //req.flash('errors', errors);
+      let currentMessages = encodeURIComponent(errors.join(' | '))
       console.log('errors', errors)
-      return res.redirect('/');
+      return res.redirect('/?messages=' + currentMessages);
     }
     req.body.email = validator.normalizeEmail(req.body.email, { gmail_remove_dots: false });
 
@@ -154,7 +156,7 @@ module.exports = {
 
     
     const contact = await ewsOptions.verifyCredentials(encryptedData, req.body.email)
-    console.log(contact)
+
     //add to user info
     if(contact === 'unauthorized'){
       messages = encodeURIComponent('access was not authorized, verify your login')
@@ -233,10 +235,10 @@ console.log(resetCode)
           'Name': req.body.email,
           'Body': `Hello ${req.body.email},<br><br>
               
-We are sorry you are having trouble with your email. Please use the included link to reset your password.  
+<p>We are sorry you are having trouble with your email. Please use the included link to reset your password. </p> 
 <br><br>
 <hr>
-<b>Link:</b> <a href='localhost:3000/login/resetPassword/${resetCode}/'>Reset Password</a> <br>
+<b>Link:</b> localhost:3000/login/resetPassword/${resetCode}/ <br>
 <b>Code:</b> ${resetCode} <br>
 <hr>`,
 
@@ -344,6 +346,92 @@ getForgot: async (req,res)=>{
       console.log(err)
   }
 },
+
+massLetter: async (req,res)=>{
+  try {
+    const historicData = await HistoricImportDB.find({}, 'name address accessLink')
+
+    res.render('letter', {massSend: historicData})
+  } catch (err) {
+    console.log(err)
+  }
+},
+
+massEmail: async (req,res)=>{
+  try {
+    const historicData = await HistoricImportDB.find({}, 'name email accessLink')
+    let noEmailCounter = 0
+    let emailCounter = 0
+    let currentMessage = ''
+
+    for(items of historicData){
+      if(!items.email){ noEmailCounter++; continue }
+      const optionsEmailClient = {
+        'Name': `${items.name.firstName} ${items.name.lastName}`,
+        'Body': `Hello ${items.name.lastName},<br><br>
+          
+<p>In order to process the ontract you have with our agency, we are being required to provide an email address for the signees. This email is for the use of registering your contract. You will recieve a confirmation that the contact was register and nothing else if that is your wish. For this reason our agency has decided to take advantage of this change in requierement to ask you to update your contact information. This way we have your most recent information, which will avoid problems with compliance and payments with our agency. We are using an online method for this process. Please scan the code or enter the link in a browser to update your info.</p> 
+<p>If you wish to provide this information in an alternate matter you may pass by our office or call us and will we be happy to manually add your information.</p>
+<br><br>${items.email}
+<hr>
+<b>Link:</b> localhost:3000/updateInfo/${items.accessLink}/ <br>
+<hr>`,
+
+        'Email': 'djs.dianne@gmail.com',
+        'Subject': 'Update Contact Information',
+      }
+      //await ewsOptions.sendEmail(req.user.calendarPassword, req.user.calendarEmail, optionsEmailClient)
+      emailCounter++
+    }
+    
+    if(noEmailCounter > 0 && emailCounter > 0){
+      currentMessage = encodeURIComponent(`${emailCounter} emails sent and ${noEmailCounter} emails were missing`)
+    }else if(noEmailCounter === 0 && emailCounter > 0){
+      currentMessage = encodeURIComponent(`${emailCounter} emails were sent`)
+    }else if(noEmailCounter > 0 && emailCounter === 0){
+      currentMessage = encodeURIComponent(`no emails were sent and ${noEmailCounter} emails were missing`)
+    }else{
+      currentMessage = encodeURIComponent(`nothing happened`)
+    }
+    console.log("email sent to all")
+    res.redirect(req.get('referer').split('?')[0] + '?messages=' + currentMessage)
+  } catch (err) {
+    console.log(err)
+  }
+},
+
+singleEmail: async (req,res)=>{
+  try {
+    const historicData = await HistoricImportDB.findOne({accessLink: req.params.id})
+    let currentMessage = ''
+
+    if(historicData.email){
+      const optionsEmailClient = {
+        'Name': `${historicData.name.firstName} ${historicData.name.lastName}`,
+        'Body': `Hello ${historicData.name.lastName},<br><br>
+          
+<p>In order to process the ontract you have with our agency, we are being required to provide an email address for the signees. This email is for the use of registering your contract. You will recieve a confirmation that the contact was register and nothing else if that is your wish. For this reason our agency has decided to take advantage of this change in requierement to ask you to update your contact information. This way we have your most recent information, which will avoid problems with compliance and payments with our agency. We are using an online method for this process. Please scan the code or enter the link in a browser to update your info.</p> 
+<p>If you wish to provide this information in an alternate matter you may pass by our office or call us and will we be happy to manually add your information.</p>
+<br><br>${historicData.email}
+<hr>
+<b>Link:</b> localhost:3000/updateInfo/${historicData.accessLink}/ <br>
+<hr>`,
+
+        'Email': 'djs.dianne@gmail.com',
+        'Subject': 'Update Contact Information',
+      }
+      await ewsOptions.sendEmail(req.user.calendarPassword, req.user.calendarEmail, optionsEmailClient)
+      currentMessage = encodeURIComponent('email was sent')
+    }else{
+      currentMessage = encodeURIComponent('contact does not have an email')
+    }
+    
+    console.log("sent email")
+    res.redirect(req.get('referer').split('?')[0] + '?messages=' + currentMessage)
+  } catch (err) {
+    console.log(err)
+  }
+}
 
 //end export
 }
